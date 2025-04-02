@@ -1,12 +1,18 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import './App.css'
-import Card from './components/Card'
+import Categories from './components/Categories'
 
 function App() {
-  const apiKey = import.meta.env.VITE_API_KEY;
+  //const apiKey = import.meta.env.VITE_API_KEY;
   const apiKeyReadAccess = import.meta.env.VITE_API_KEY_READ_ACCESS;
-  const [movies, setMovies] = useState([]);
+  const [data, setData] = useState({
+    movies:[],
+    topMovies:[],
+    tv: [],
+    topTv: [],
+  })
+
   const options = {
     method: 'GET',
     headers: {
@@ -15,27 +21,35 @@ function App() {
     }
   };
   
-  // fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
-  //   .then(res => res.json())
-  //   .then(res => console.log(res))
-  //  .catch(err => console.error(err));
   useEffect(() => {
-    fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
-    .then(res => res.json())
-    .then(data => setMovies(data.results))
-    .catch(err => console.error(err));
-  }, [])
+    const fetchData = async () => {
+      try {
+        const urls = [
+          'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
+          'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
+          'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
+          'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1'
+        ]
+        const [movieRes, topMovieRes, tvRes, topTvRes] = await Promise.all(
+          urls.map(url => fetch(url, options).then(res => res.json()))
+        )
 
-  const renderMovies = () => {
-    return movies.map((movie) => <Card key={movie.id} movie={movie} />)
-  }
+        setData({
+          movies: movieRes.results,
+          topMovies: topMovieRes.results,
+          tv: tvRes.results,
+          topTv: topTvRes.results,
+        })
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    fetchData()
+  }, []);
 
   return (
     <>
-      <div>
-        <h1>Now Playing</h1>
-        {renderMovies()}
-      </div>
+      <Categories data={data}/>
     </>
   )
 }
