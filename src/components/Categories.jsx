@@ -2,7 +2,8 @@ import React from 'react'
 import Card from './Card'
 
 export default function Categories({data}) {
-    console.log(data.movies, "movies")
+    console.log(data.tv, "tv")
+    console.log(data.movies, "movie")
     const categories = [
         {title: "Trending Movies", key: "movies"},
         {title: "Trending TV Series", key: "tv"},
@@ -12,7 +13,7 @@ export default function Categories({data}) {
     return (
         <>
             {categories.map(({title, key}) => (
-                <section key={key}>
+                <section className="categories--section" key={key}>
                     <h2>{title}</h2>
                     <div className="categories--cards-container">
                         {data[key].map(item => (
