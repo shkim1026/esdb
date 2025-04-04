@@ -4,8 +4,14 @@
   padding: 2rem;
 }
 
+/* Categories */
 .categories--section{
   margin: 2rem 0;
+}
+
+.categories--title {
+  font-size: 2.5rem;
+  margin: .5rem 0rem;
 }
 
 .categories--cards-container {
@@ -14,13 +20,14 @@
   gap: 1rem;
 }
 
+/* Card */
 .card--image {
   border-radius: 5px;
   max-width: 300px;
   cursor: pointer;
 }
 
-/* Popup Styles */
+/* Popup */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -39,6 +46,12 @@
   border-radius: 8px;
   max-width: 1200px;
   position: relative;
+  background-size: "cover";
+  background-position: "300px center";
+  background-repeat: "no-repeat";
+  color: "white";
+  padding: "20px";
+  border-radius: "8px";
 }
 
 .popup-content--flex {
@@ -62,4 +75,26 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.popup-content--title {
+  font-size: 2.5rem;
+  margin-bottom: -0.8rem;
+}
+
+.popup-content--original-title {
+  margin: 0rem;
+}
+
+.popup-content--facts {
+  margin: 0.5rem auto;
+}
+
+.popup-content--facts--release-date,
+.popup-content--facts--genres {
+  margin: 0;
+}
+
+.popup-content--tagline {
+  font-style: italic;
 }

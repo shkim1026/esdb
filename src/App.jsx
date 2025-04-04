@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 import Categories from './components/Categories'
 
@@ -13,14 +13,15 @@ function App() {
     topTv: [],
   })
 
-  const options = {
+  const options = useMemo(() => ({
     method: 'GET',
     headers: {
       accept: 'application/json',
       Authorization: `Bearer ${apiKeyReadAccess}`
     }
-  };
+  }), [apiKeyReadAccess])
   
+  //Initial fetch to display Categories.jsx on landing page
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,7 +34,10 @@ function App() {
         const [movieRes, topMovieRes, tvRes, topTvRes] = await Promise.all(
           urls.map(url => fetch(url, options).then(res => res.json()))
         )
-
+        console.log("Fetched Movies:", movieRes.results);
+        console.log("Fetched TV Shows:", tvRes.results);
+        console.log("Fetched Top Movies:", topMovieRes.results);
+        console.log("Fetched Top TV Shows:", topTvRes.results);
         setData({
           movies: movieRes.results,
           topMovies: topMovieRes.results,
@@ -49,7 +53,9 @@ function App() {
 
   return (
     <>
-      <Categories data={data}/>
+      <Categories 
+        data={data} 
+      />
     </>
   )
 }
