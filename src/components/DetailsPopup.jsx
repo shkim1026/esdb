@@ -1,4 +1,5 @@
 import React from 'react'
+//Reminder: Remove React Icons from dependencies if not used!
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
   console.log("Selected Item in DetailsPopup", item)
@@ -18,6 +19,8 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
     const minutes = min % 60
     return `${hours}h ${minutes}m`
   }
+
+  const rating = Math.floor(item.vote_average * 10) / 10
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -48,13 +51,15 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                   <div className="popup-content--facts">
                     <span className="popup-content--facts--release-date">{releaseDate} &#x2022; </span>
                     <span className="popup-content--facts--genres">{genres}</span>
-                    {item.runtime !== null && item.runtime !== 0 && (
+                    {item.runtime !== 0 && item.runtime && (
                       <span> &#x2022; {convertRuntimeToHours(item.runtime)}</span>
                     )}
                   </div>
                   {item.tagline !== "" && <p className="popup-content--tagline">"{item.tagline}"</p>}
                   <p><strong>Overview:</strong> {item.overview}</p>
-                  <p><strong>Rating:</strong> ⭐ {item.vote_average}</p>
+                  <p>Rating: 
+                    <span className={`rating ${rating > 7 ? 'high' : rating >= 4 ? 'medium' : 'low'}`}>{rating}/10</span>
+                  </p>
               </div>
           </div>
       </div>

@@ -1,4 +1,9 @@
 import Card from './Card'
+import DetailsPopup from './DetailsPopup'
+import LoadingSpinner from './LoadingSpinner'
+import { useState, useCallback } from 'react'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css'
 
 export default function Categories({data}) {
   console.log(data.tv, "tv")
@@ -11,22 +16,85 @@ export default function Categories({data}) {
     {title: "Top Rated Movies", key: "topMovies", mediaType: "movie"},
     {title: "Top Rated TV Series", key: "topTv", mediaType: "tv"},
   ]
+
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const apiKeyReadAccess = import.meta.env.VITE_API_KEY_READ_ACCESS;
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${apiKeyReadAccess}`
+    }
+  }
+  
+  const fetchDetails = useCallback(async (id, mediaType) => {
+    console.log(`Fetching details for ${mediaType} with ID: ${id}`);
+    if (loading) return;
+    setLoading(true)
+    try {
+      const res = await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?language=en-US`, options)
+      const data = await res.json()
+      console.log("Fetched details:", data);
+      setSelectedItem({...data, mediaType});
+    } catch (error) {
+      console.log("Error fetching details:", error)
+    } finally {
+      setLoading(false)
+    }
+  },[])
+
+  const closePopup = () => {
+    setSelectedItem(null)
+  }
+
+  const handleClick = useCallback((id, mediaType, e) => {
+    e.stopPropagation();
+    console.log("Card is clicked");
+    fetchDetails(id, mediaType)
+  }, [fetchDetails]);
+
+
   return (
     <>
       {categories.map(({title, key, mediaType}) => (
         <section className="categories--section" key={key}>
           <h2 className="categories--title">{title}</h2>
-          <div className="categories--cards-container">
+          <Splide 
+            className="categories--cards-container"
+            aria-label={title}
+            options={{
+              perPage: 6,
+              gap: '1rem',
+              pagination: true,
+              arrows: true,
+              breakpoints: {
+                1024: {
+                  perPage: 3,
+                },
+                640: {
+                  perPage: 1,
+                },
+              },
+            }}
+          >
             {data[key].map(item => (
-              <Card 
-                key={item.id} 
-                data={item} 
-                mediaType={mediaType}
-              />
+              <SplideSlide key={item.id}>
+                <Card 
+                  key={item.id} 
+                  data={item} 
+                  mediaType={mediaType}
+                  handleClick={(e) => handleClick(item.id, mediaType, e)}
+                />
+              </SplideSlide>
             ))}
-          </div>
+          </Splide>
         </section>
       ))}
+      {loading && <LoadingSpinner />}
+      {selectedItem && <DetailsPopup item={selectedItem} onClose={closePopup} mediaType={selectedItem.mediaType}/>}
     </>
   )
 }
