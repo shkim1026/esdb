@@ -29,7 +29,7 @@ export default function Categories({data}) {
       Authorization: `Bearer ${apiKeyReadAccess}`
     }
   }
-  
+
   const fetchDetails = useCallback(async (id, mediaType) => {
     console.log(`Fetching details for ${mediaType} with ID: ${id}`);
     if (loading) return;
@@ -66,16 +66,17 @@ export default function Categories({data}) {
             className="categories--cards-container"
             aria-label={title}
             options={{
-              perPage: 6,
+              mediaQuery: 'min',
               gap: '1rem',
-              pagination: true,
-              arrows: true,
+              type: 'loop',
+              arrows: false,
+              pagination: false,
+              autoWidth: true,
+              autoHeight: true,
               breakpoints: {
                 1024: {
-                  perPage: 3,
-                },
-                640: {
-                  perPage: 1,
+                  arrows: true,
+                  type: 'slide',
                 },
               },
             }}
