@@ -1,6 +1,7 @@
 import React from 'react'
 import { IoClose } from 'react-icons/io5'
 import EpisodeSelect from './EpisodeSelect'
+import EmbedVideoModal from './EmbedVideoModal'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
   console.log("Selected Item in DetailsPopup", item)
@@ -22,6 +23,8 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   }
 
   const rating = Math.floor(item.vote_average * 10) / 10
+
+  const movieUrl = `https://vidsrc.xyz/embed/movie/${item.id}/`
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -66,9 +69,13 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                 {mediaType === 'tv' && 
                   <EpisodeSelect 
                     seasons={item.seasons}
+                    showId={item.id}
+                    title={item.name}
                   />
                 }
-                <button><a href="https://vidsrc.xyz/embed/movie/tt5433140"/>Watch Now</button>
+                {mediaType === 'movie' && 
+                  <EmbedVideoModal url={movieUrl} title={item.name}/>
+                }
             </div>
           </div>
       </div>
