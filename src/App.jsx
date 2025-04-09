@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 import Categories from './components/Categories'
+import Header from './components/Header'
 
 function App() {
   //const apiKey = import.meta.env.VITE_API_KEY;
@@ -53,6 +54,7 @@ function App() {
 
   return (
     <>
+      <Header />
       <Categories 
         data={data} 
       />

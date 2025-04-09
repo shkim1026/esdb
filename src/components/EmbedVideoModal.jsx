@@ -25,10 +25,10 @@ export default function EmbedVideoModal({ url, title }) {
                 <iframe 
                     width="80%"
                     height="80%"
+                    onError={() => console.log("Video failed to load")}
                     src={url}
                     title={title}
                     frameborder="0"
-                    allow="autoplay; encrypted-media"
                     allowFullScreen
                 />
             </div>

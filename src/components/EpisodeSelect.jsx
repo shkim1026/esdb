@@ -40,11 +40,11 @@ export default function EpisodeSelect({ seasons, showId, title }) {
 
   console.log(selection, "URL PARAM FOR API")
   
-  const url = `https://vidsrc.xyz/embed/tv?tmdb=${selection.id}&season=${selection.season}&episode=${selection.episode}`
+  const url = `https://vidsrc.xyz/embed/tv?tmdb=${selection.id}&season=${selection.season}&episode=${selection.episode}&ds_lang=en`
 
   return (
     <>
-      <div>
+      <div className="episode-select--container">
         <label className="input-label">
           Season:
           <select className="input-select" onChange={handleSeasonChange}>

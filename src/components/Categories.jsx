@@ -58,7 +58,7 @@ export default function Categories({data}) {
 
 
   return (
-    <>
+    <main>
       {categories.map(({title, key, mediaType}) => (
         <section className="categories--section" key={key}>
           <h2 className="categories--title">{title}</h2>
@@ -96,6 +96,6 @@ export default function Categories({data}) {
       ))}
       {loading && <LoadingSpinner />}
       {selectedItem && <DetailsPopup item={selectedItem} onClose={closePopup} mediaType={selectedItem.mediaType}/>}
-    </>
+    </main>
   )
 }
