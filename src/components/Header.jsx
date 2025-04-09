@@ -58,7 +58,7 @@ export default function Header() {
                 placeholder="Search for a TV Show or Movie..." 
             />
             <nav className={`hamburger-nav ${isHamburgerVisible ? 'visible' : ''}`}>
-
+                <button className="header--login-btn">Log In</button>
             </nav>
         </>
     )

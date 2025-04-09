@@ -82,8 +82,9 @@ header {
 }
 
 .hamburger-nav.visible {
-  width: 95vw;
+  width: 90vw;
   opacity: 1;
+  padding-left: 1rem;
 }
 
 .searchbar-mobile {
