@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+
 import logo from '../assets/EsdbLogo.png'
+import noImage from '../assets/NoImage.png'
+
 import { FaSearch  } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import { GiHamburgerMenu } from "react-icons/gi";
+import { MdMovie, MdOutlineTv } from 'react-icons/md'
 
 export default function Header() {
 
     const [isSearchVisible, setIsSearchVisible] = useState(false)
     const [isHamburgerVisible, setIsHamburgerVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [query, setQuery] = useState('')
+    const [searchResults, setSearchResults] = useState({ results: [] })
 
     const toggleSearch = () => {
         setIsSearchVisible(!isSearchVisible)
@@ -15,6 +22,95 @@ export default function Header() {
     const toggleBurger = () => {
         setIsHamburgerVisible(!isHamburgerVisible)
     }
+
+    const apiKeyReadAccess = import.meta.env.VITE_API_KEY_READ_ACCESS;
+    const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${apiKeyReadAccess}`
+        }
+    }
+
+    const fetchItem = async (searchTerm) => {
+        console.log(`Fetching item that starts with: ${searchTerm}`);
+        if (loading) return;
+        setLoading(true)
+        try {
+            const res = await fetch(`https://api.themoviedb.org/3/search/multi?query=${searchTerm}&include_adult=false&language=en-US&page=1`, options)
+            const data = await res.json()
+            console.log("Fetched item:", data);
+            setSearchResults(data)
+        } catch (error) {
+            console.log("Error fetching details:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const debouncedFetch = useCallback(() => {
+        const handler = setTimeout(() => {
+            fetchItem(query)
+        }, 500)
+        return () => clearTimeout(handler)
+    }, [query])
+
+    useEffect(()=> {
+        const cleanup = debouncedFetch()
+        return cleanup
+    }, [debouncedFetch])
+
+    console.log(searchResults.results, "Input Search results")
+
+    const data = searchResults.results.map((result) => {
+        if (result.media_type === 'person') return null
+
+        const date = result.media_type === 'movie' ? result.release_date : result.first_air_date
+        const year = date.split("-")[0]
+
+        if (result.media_type === "tv") {
+            return (
+                <div className="search-results--container">
+                    <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
+                    <p key={result.id}><strong>{result.name}</strong> ({year})</p>
+                    <MdOutlineTv className="mediaType-icon"/>
+                </div>
+            )
+        } 
+        if (result.media_type === "movie") {
+            return (
+                <div className="search-results--container">
+                    <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
+                    <p key={result.id}><strong>{result.title}</strong> ({year})</p>
+                    <MdMovie className="mediaType-icon"/>
+                </div>
+            )
+        } else {
+            return null
+        }
+    })
+
+    // Hides search results when user clicks outside
+    const inputRef = useRef(null)
+    const resultsRef = useRef(null)
+
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (
+                resultsRef.current &&
+                !resultsRef.current.contains(e.target) &&
+                inputRef.current &&
+                !inputRef.current.contains(e.target)
+            ) {
+                setSearchResults({ results: [] })
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
     return (
         <>
             <header>
@@ -27,7 +123,15 @@ export default function Header() {
                             type="text" 
                             className={`header--searchbar ${isSearchVisible ? 'visible' : ''}`}
                             placeholder="Search for a TV Show or Movie..." 
+                            onChange={(e) => setQuery(e.target.value)}
+                            onFocus={() => { searchResults.results.length === 0 && fetchItem(query)}}
+                            ref={inputRef}
                         />
+                        {searchResults.results.length > 0 && 
+                            <div ref={resultsRef} className="header--search-results">
+                                {data}
+                            </div>
+                        }
                         { isSearchVisible
                             ? <IoClose  className="header--search-btn search-btn--close" onClick={toggleSearch} />
                             : <FaSearch className="header--search-btn" onClick={toggleSearch} />
@@ -56,7 +160,15 @@ export default function Header() {
                 type="text" 
                 className={`header--searchbar searchbar-mobile ${isSearchVisible ? 'visible' : ''}`}
                 placeholder="Search for a TV Show or Movie..." 
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => { searchResults.results.length === 0 && fetchItem(query)}}
+                ref={inputRef}
             />
+            {searchResults.results.length > 0 && 
+                <div ref={resultsRef} className="header--search-results results-mobile">
+                    {data}
+                </div>
+            }
             <nav className={`hamburger-nav ${isHamburgerVisible ? 'visible' : ''}`}>
                 <button className="header--login-btn">Log In</button>
             </nav>

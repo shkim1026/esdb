@@ -35,6 +35,7 @@ header {
 
 .header--login-btn {
   padding: 0.6em 1.2em;
+  color: white;
 }
 
 .header--search-btn {
@@ -56,6 +57,8 @@ header {
   width: 100%;
   opacity: 0;
   pointer-events: none;
+  background-color: #30303a;
+  color: white;
 }
 
 .header--searchbar.visible {
@@ -96,6 +99,38 @@ header {
 
 .header--full {
   display: none;
+}
+
+.header--search-results {
+  border: 1px solid #30303a;
+  position: fixed;
+  z-index: 1000;
+  top: 8.2rem;
+  width: 92vw;
+  background-color: #111;
+  max-height: 65vh;
+  overflow-y: scroll;
+}
+
+.search-results--container {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #30303a;
+  cursor: pointer;
+}
+
+.search-results--container:hover{
+  background-color: #30303a;
+}
+
+.header--search-results img{
+  width: 2rem;
+  margin: 0.5rem 1rem;
+}
+
+.mediaType-icon {
+  position: absolute;
+  right: 1rem;
 }
 
 /* Categories */
@@ -356,6 +391,15 @@ main {
     display: none;
   }
 
+  .header--searchbar {
+    left: 2rem;
+    width: 91.5vw;
+  }
+
+  .header--search-results {
+    width: 93vw;
+  }
+
   .splide__slide img {
     width: 25vw;
   }
@@ -399,6 +443,16 @@ main {
 }
 
 @media (min-width: 768px) and (min-height: 600px){
+  .header--searchbar {
+    left: 2rem;
+    width: 90vw;
+  }
+
+  .header--search-results {
+    left: 2rem;
+    width: 91.7vw;
+  }
+  
   .popup-content {
     height: auto;
   }
@@ -453,8 +507,15 @@ main {
     opacity: 1;
   }
 
+  .header--search-results {
+    width: 30.9rem;
+    top: 4.25rem;
+    left: auto;
+  }
+
   .header--mobile,
-  .searchbar-mobile {
+  .searchbar-mobile,
+  .results-mobile {
     display: none;
   }
   

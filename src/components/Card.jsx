@@ -4,7 +4,7 @@ export default function Card({ data, handleClick }) {
     <>  
       <img 
         className="card--image" 
-        src={`https://image.tmdb.org/t/p/original/${data.poster_path}`} 
+        src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} 
         alt={data.title}
         onClick={handleClick}
       />
