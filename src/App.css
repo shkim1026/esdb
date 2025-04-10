@@ -123,6 +123,10 @@ header {
   background-color: #30303a;
 }
 
+.search-results--container p {
+  max-width: 17rem;
+}
+
 .header--search-results img{
   width: 2rem;
   margin: 0.5rem 1rem;
@@ -174,7 +178,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 2000;
 }
 
 .fade-in {
@@ -293,7 +297,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 9999;
 }
 
 .modal-content {
@@ -398,6 +402,10 @@ main {
 
   .header--search-results {
     width: 93vw;
+  }
+
+  .search-results--container p {
+    max-width: fit-content;
   }
 
   .splide__slide img {
@@ -511,6 +519,10 @@ main {
     width: 30.9rem;
     top: 4.25rem;
     left: auto;
+  }
+
+  .search-results--container p{
+    max-width: 23rem;
   }
 
   .header--mobile,

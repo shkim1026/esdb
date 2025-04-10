@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import DetailsPopup from './DetailsPopup'
+import LoadingSpinner from './LoadingSpinner'
 
 import logo from '../assets/EsdbLogo.png'
 import noImage from '../assets/NoImage.png'
@@ -15,6 +17,7 @@ export default function Header() {
     const [loading, setLoading] = useState(false)
     const [query, setQuery] = useState('')
     const [searchResults, setSearchResults] = useState({ results: [] })
+    const [selectedItem, setSelectedItem] = useState(null)
 
     const toggleSearch = () => {
         setIsSearchVisible(!isSearchVisible)
@@ -70,18 +73,18 @@ export default function Header() {
 
         if (result.media_type === "tv") {
             return (
-                <div className="search-results--container">
+                <div key={result.id} className="search-results--container" onMouseDown={(e) => handleClick(result.id, result.media_type, e)}>
                     <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
-                    <p key={result.id}><strong>{result.name}</strong> ({year})</p>
+                    <p><strong>{result.name}</strong> ({year})</p>
                     <MdOutlineTv className="mediaType-icon"/>
                 </div>
             )
         } 
         if (result.media_type === "movie") {
             return (
-                <div className="search-results--container">
+                <div key={result.id} className="search-results--container" onMouseDown={(e) => handleClick(result.id, result.media_type, e)}>
                     <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
-                    <p key={result.id}><strong>{result.title}</strong> ({year})</p>
+                    <p><strong>{result.title}</strong> ({year})</p>
                     <MdMovie className="mediaType-icon"/>
                 </div>
             )
@@ -110,6 +113,33 @@ export default function Header() {
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
+
+    // Fetch when user clicks on search result item
+    const fetchDetails = useCallback(async (id, mediaType) => {
+        console.log(`Fetching details for ${mediaType} with ID: ${id}`);
+        if (loading) return;
+        setLoading(true)
+        try {
+          const res = await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?language=en-US`, options)
+          const data = await res.json()
+          console.log("Fetched details:", data);
+          setSelectedItem({...data, mediaType});
+        } catch (error) {
+          console.log("Error fetching details:", error)
+        } finally {
+          setLoading(false)
+        }
+      },[])
+    
+      const closePopup = () => {
+        setSelectedItem(null)
+      }
+    
+      const handleClick = useCallback((id, mediaType, e) => {
+        e.stopPropagation();
+        console.log("Card is clicked");
+        fetchDetails(id, mediaType)
+      }, [fetchDetails]);
 
     return (
         <>
@@ -172,6 +202,9 @@ export default function Header() {
             <nav className={`hamburger-nav ${isHamburgerVisible ? 'visible' : ''}`}>
                 <button className="header--login-btn">Log In</button>
             </nav>
+
+            {loading && <LoadingSpinner />}
+            {selectedItem && <DetailsPopup item={selectedItem} onClose={closePopup} mediaType={selectedItem.mediaType}/>}
         </>
     )
 }
