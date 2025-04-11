@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import './App.css'
-import Categories from './components/Categories'
-import Header from './components/Header'
+import Categories from './components/Categories/Categories'
+import Header from './components/Header/Header'
 
 function App() {
   //const apiKey = import.meta.env.VITE_API_KEY;

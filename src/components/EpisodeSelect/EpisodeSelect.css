@@ -1,0 +1,26 @@
+.input-label {
+    margin-right: 2rem;
+}
+
+.input-select,
+.input-select option {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.input-select {
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (min-width: 1024px) {
+    .episode-select--container {
+        margin-top: 2rem;
+    }
+}

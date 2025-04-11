@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import DetailsPopup from './DetailsPopup'
-import LoadingSpinner from './LoadingSpinner'
+import './Header.css'
+import DetailsPopup from '../DetailsPopup/DetailsPopup'
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 
-import logo from '../assets/EsdbLogo.png'
-import noImage from '../assets/NoImage.png'
+import logo from '../../assets/EsdbLogo.png'
+import noImage from '../../assets/NoImage.png'
 
 import { FaSearch  } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import EmbedVideoModal from './EmbedVideoModal'
+import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
+import './EpisodeSelect.css'
 
 export default function EpisodeSelect({ seasons, showId, title }) {
 

@@ -1,3 +1,5 @@
+import './Card.css'
+
 export default function Card({ data, handleClick }) {
 
   return (
