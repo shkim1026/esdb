@@ -18,6 +18,9 @@ export default function Header() {
     const [query, setQuery] = useState('')
     const [searchResults, setSearchResults] = useState({ results: [] })
     const [selectedItem, setSelectedItem] = useState(null)
+    const inputRef = useRef(null)
+    const resultsRef = useRef(null)
+    const [isInputFocused, setIsInputFocused] = useState(false)
 
     const toggleSearch = () => {
         setIsSearchVisible(!isSearchVisible)
@@ -65,38 +68,39 @@ export default function Header() {
 
     console.log(searchResults.results, "Input Search results")
 
-    const data = searchResults.results.map((result) => {
-        if (result.media_type === 'person') return null
+    const filteredResults = searchResults.results.filter(
+        (result) => result.media_type !== 'person'
+    )
+    let data; 
+    if (!loading && query.trim() !== '' && filteredResults.length === 0 && isInputFocused) {
+        data = (
+            <div className="search-results--container">
+                <p className="search-results--no-results">No results found.</p>
+            </div>
+        )
+    } else {
+        data = filteredResults.map((result) => {
+            const date = result.media_type === 'movie' ? result.release_date : result.first_air_date
+            const year = date.split("-")[0]
 
-        const date = result.media_type === 'movie' ? result.release_date : result.first_air_date
-        const year = date.split("-")[0]
-
-        if (result.media_type === "tv") {
             return (
-                <div key={result.id} className="search-results--container" onMouseDown={(e) => handleClick(result.id, result.media_type, e)}>
+                <div 
+                    key={result.id} 
+                    className="search-results--container" 
+                    onMouseDown={(e) => handleClick(result.id, result.media_type, e)}
+                >
                     <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
-                    <p><strong>{result.name}</strong> ({year})</p>
-                    <MdOutlineTv className="mediaType-icon"/>
+                    <p><strong>{result.title || result.name}</strong> ({year})</p>
+                    {result.media_type === 'movie' 
+                    ? (<MdMovie className="mediaType-icon" />) 
+                    : (<MdOutlineTv className="mediaType-icon"/> )
+                    }
                 </div>
             )
-        } 
-        if (result.media_type === "movie") {
-            return (
-                <div key={result.id} className="search-results--container" onMouseDown={(e) => handleClick(result.id, result.media_type, e)}>
-                    <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
-                    <p><strong>{result.title}</strong> ({year})</p>
-                    <MdMovie className="mediaType-icon"/>
-                </div>
-            )
-        } else {
-            return null
-        }
-    })
+        })
+    }
 
     // Hides search results when user clicks outside
-    const inputRef = useRef(null)
-    const resultsRef = useRef(null)
-
     useEffect(() => {
         function handleClickOutside(e) {
             if (
@@ -105,7 +109,9 @@ export default function Header() {
                 inputRef.current &&
                 !inputRef.current.contains(e.target)
             ) {
-                setSearchResults({ results: [] })
+                setTimeout (() => {
+                    setSearchResults({ results: [] })
+                }, 100)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
@@ -138,7 +144,9 @@ export default function Header() {
       const handleClick = useCallback((id, mediaType, e) => {
         e.stopPropagation();
         console.log("Card is clicked");
-        fetchDetails(id, mediaType)
+        fetchDetails(id, mediaType).then(() => {
+            setSearchResults({ results: [] })
+        })
       }, [fetchDetails]);
 
     return (
@@ -154,10 +162,18 @@ export default function Header() {
                             className={`header--searchbar ${isSearchVisible ? 'visible' : ''}`}
                             placeholder="Search for a TV Show or Movie..." 
                             onChange={(e) => setQuery(e.target.value)}
-                            onFocus={() => { searchResults.results.length === 0 && fetchItem(query)}}
+                            onFocus={() => {
+                                setIsInputFocused(true)
+                                if (query.trim() !== '' && searchResults.results.length === 0) {
+                                fetchItem(query)
+                                }
+                            }}
+                            onBlur={() => {
+                                setTimeout(() => setIsInputFocused(false), 100)
+                            }}
                             ref={inputRef}
                         />
-                        {searchResults.results.length > 0 && 
+                        {query.trim() !== '' && isInputFocused &&
                             <div ref={resultsRef} className="header--search-results">
                                 {data}
                             </div>
@@ -203,7 +219,7 @@ export default function Header() {
                 <button className="header--login-btn">Log In</button>
             </nav>
 
-            {loading && <LoadingSpinner />}
+            {/* {loading && <LoadingSpinner />} */}
             {selectedItem && <DetailsPopup item={selectedItem} onClose={closePopup} mediaType={selectedItem.mediaType}/>}
         </>
     )

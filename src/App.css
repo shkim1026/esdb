@@ -10,7 +10,7 @@ header {
   left: 0;
   right: 0;
   padding: 1rem 3.5rem;
-  z-index: 5000;
+  z-index: 2000;
   padding: 1rem 0rem;
   background: rgba(17, 17, 17, 0.8) url('/src/assets/asfalt-dark.png') repeat;
 }
@@ -127,6 +127,10 @@ header {
   max-width: 17rem;
 }
 
+.search-results--no-results {
+  padding-left: 1rem;
+}
+
 .header--search-results img{
   width: 2rem;
   margin: 0.5rem 1rem;
@@ -178,7 +182,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 3000;
 }
 
 .fade-in {
