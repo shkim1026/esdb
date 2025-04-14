@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { IoClose } from 'react-icons/io5'
-import './EmbedVideoModal.css'
 
 export default function EmbedVideoModal({ url, title }) {
     const [isOpen, setIsOpen] = useState(false)

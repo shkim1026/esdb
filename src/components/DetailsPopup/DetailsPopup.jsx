@@ -2,7 +2,6 @@ import React from 'react'
 import { IoClose } from 'react-icons/io5'
 import EpisodeSelect from '../EpisodeSelect/EpisodeSelect'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
-import './DetailsPopup.css'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
   console.log("Selected Item in DetailsPopup", item)

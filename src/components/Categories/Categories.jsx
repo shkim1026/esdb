@@ -1,5 +1,4 @@
 import Card from '../Card/Card'
-import './Categories.css'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import { useState, useCallback } from 'react'
@@ -21,7 +20,7 @@ export default function Categories({data}) {
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const apiKeyReadAccess = import.meta.env.VITE_API_KEY_READ_ACCESS;
+  const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
 
   const options = {
     method: 'GET',
@@ -59,7 +58,7 @@ export default function Categories({data}) {
 
 
   return (
-    <main>
+    <main className="categories">
       {categories.map(({title, key, mediaType}) => (
         <section className="categories--section" key={key}>
           <h2 className="categories--title">{title}</h2>

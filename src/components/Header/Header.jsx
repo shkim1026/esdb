@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import './Header.css'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
-
-import logo from '../../assets/EsdbLogo.png'
-import noImage from '../../assets/NoImage.png'
 
 import { FaSearch  } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
@@ -30,7 +26,7 @@ export default function Header() {
         setIsHamburgerVisible(!isHamburgerVisible)
     }
 
-    const apiKeyReadAccess = import.meta.env.VITE_API_KEY_READ_ACCESS;
+    const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
     const options = {
         method: 'GET',
         headers: {
@@ -90,7 +86,7 @@ export default function Header() {
                     className="search-results--container" 
                     onMouseDown={(e) => handleClick(result.id, result.media_type, e)}
                 >
-                    <img src={result.poster_path === null ? noImage : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
+                    <img src={result.poster_path === null ? '/images/NoImage.png' : `https://image.tmdb.org/t/p/w92/${result.poster_path}`} />
                     <p><strong>{result.title || result.name}</strong> ({year})</p>
                     {result.media_type === 'movie' 
                     ? (<MdMovie className="mediaType-icon" />) 
@@ -152,10 +148,10 @@ export default function Header() {
 
     return (
         <>
-            <header>
+            <header className="header">
                 <div className="header--full">
                     <a href="#">
-                        <img src={logo} alt="Entertainment Streaming Database logo" className="header--logo"/>
+                        <img src='/images/EsdbLogo.png' alt="Entertainment Streaming Database logo" className="header--logo"/>
                     </a>
                     <div className="header--flex-right-container">
                         <input 
@@ -194,7 +190,7 @@ export default function Header() {
                         }
                         
                         <a href="#">
-                            <img src={logo} alt="Entertainment Streaming Database logo" className="header--logo"/>
+                            <img src='/images/EsdbLogo.png' alt="Entertainment Streaming Database logo" className="header--logo"/>
                         </a>
                         { isSearchVisible
                             ? <IoClose  className="header--search-btn search-btn--close" onClick={toggleSearch} />

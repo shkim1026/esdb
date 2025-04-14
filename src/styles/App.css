@@ -1,0 +1,17 @@
+#__next {
+  max-width: calc(100vw - 2rem);
+  margin: 0 auto;
+}
+
+/* Media Queries */
+@media (min-width: 640px) {
+  #__next {
+    max-width: calc(100vw - 4rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  #__next {
+    max-width: calc(100vw - 8rem);
+  }
+}
