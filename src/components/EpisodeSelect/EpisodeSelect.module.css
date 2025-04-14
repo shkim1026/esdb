@@ -13,12 +13,6 @@
     margin-left: 0.5rem;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 @media (min-width: 1024px) {
     .episode-select--container {
         margin-top: 2rem;

@@ -2,6 +2,7 @@ import React from 'react'
 import { IoClose } from 'react-icons/io5'
 import EpisodeSelect from '../EpisodeSelect/EpisodeSelect'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
+import styles from './DetailsPopup.module.css'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
   console.log("Selected Item in DetailsPopup", item)
@@ -27,9 +28,9 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   const movieUrl = `https://vidsrc.xyz/embed/movie/${item.id}/`
 
   return (
-    <div className="popup-overlay" onClick={onClose}>
+    <div className={styles["popup-overlay"]} onClick={onClose}>
       <div 
-          className="popup-content fade-in" 
+          className={`${styles["popup-content"]} ${styles["fade-in"]}`}
           onClick={(e) => e.stopPropagation()}   
           style={{
               backgroundImage: `linear-gradient(to right, rgba(0, 0, 0), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original${item.backdrop_path})`,
@@ -41,28 +42,32 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
               borderRadius: "8px"
           }}
       >
-        <button className="close-btn" onClick={onClose} aria-label="Close"><IoClose /></button>
-          <div className="popup-content--flex">
-            <img src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt={item.title} />
+        <button className={styles["close-btn"]} onClick={onClose} aria-label="Close"><IoClose /></button>
+          <div className={styles["popup-content--flex"]}>
+            <img className={styles["popup-content--img"]} src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt={item.title} />
             <div>
-                <h2 className="popup-content--title">{item.title ? item.title : item.name} <span>({year})</span></h2>
+                <h2 className={styles["popup-content--title"]}>{item.title ? item.title : item.name} <span>({year})</span></h2>
                 {(item.original_name && item.original_name !== item.name && (
-                  <p className="popup-content--original-title">{item.original_name}</p>
+                  <p className={styles["popup-content--original-title"]}>{item.original_name}</p>
                 )) ||
                   (item.original_title && item.original_title !== item.title && (
-                    <p className="popup-content--original-title">{item.original_title}</p>
+                    <p className={styles["popup-content--original-title"]}>{item.original_title}</p>
                   ))}
-                <div className="popup-content--facts">
-                  <span className="popup-content--facts--release-date">{releaseDate} &#x2022; </span>
-                  <span className="popup-content--facts--genres">{genres}</span>
+                <div className={styles["popup-content--facts"]}>
+                  <span className={styles["popup-content--facts--release-date"]}>{releaseDate} &#x2022; </span>
+                  <span className={styles["popup-content--facts--genres"]}>{genres}</span>
                   {item.runtime !== 0 && item.runtime && (
                     <span> &#x2022; {convertRuntimeToHours(item.runtime)}</span>
                   )}
                 </div>
-                {item.tagline !== "" && <p className="popup-content--tagline">"{item.tagline}"</p>}
+                {item.tagline !== "" && <p className={styles["popup-content--tagline"]}>"{item.tagline}"</p>}
                 <p><strong>Overview:</strong><br/>{item.overview}</p>
                 <p>Rating: 
-                  <span className={`rating ${rating > 7 ? 'high' : rating >= 4 ? 'medium' : rating < 4 && rating !== 0 ? 'low' : ''}`}>
+                  <span className={`${styles.rating} ${
+                    rating > 7 ? styles.high : 
+                    rating >= 4 ? styles.medium : 
+                    rating < 4 && rating !== 0 ? styles.low : ''
+                  }`}>
                     {rating !== 0 ? `${rating}/10` : "N/A"}
                   </span>
                 </p>

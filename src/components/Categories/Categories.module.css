@@ -1,0 +1,13 @@
+/* Categories */
+.categories {
+    margin-top: 6rem;
+}
+
+.categories--section {
+    margin: 2rem 0;
+}
+
+.categories--title {
+    font-size: 2.5rem;
+    margin: .5rem 0rem;
+}

@@ -56,7 +56,7 @@ background-color: #30303a;
 color: white;
 }
 
-.header--searchbar.visible {
+.desktop-visible {
 height: 2rem;
 opacity: 1;
 pointer-events: auto;
@@ -79,7 +79,7 @@ left: 0;
 opacity: 0;
 }
 
-.hamburger-nav.visible {
+.mobile-visible {
 width: 90vw;
 opacity: 1;
 padding-left: 1rem;
@@ -198,7 +198,7 @@ right: 1rem;
         border-radius: 4px;
     }
 
-    .header--searchbar.visible {
+    .desktop-visible {
         width: 30rem;
         opacity: 1;
     }

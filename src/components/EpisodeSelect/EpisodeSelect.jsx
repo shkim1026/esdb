@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
+import styles from './EpisodeSelect.module.css'
 
 export default function EpisodeSelect({ seasons, showId, title }) {
 
@@ -44,10 +45,10 @@ export default function EpisodeSelect({ seasons, showId, title }) {
 
   return (
     <>
-      <div className="episode-select--container">
-        <label className="input-label">
+      <div className={styles["episode-select--container"]}>
+        <label className={styles["input-label"]}>
           Season:
-          <select className="input-select" onChange={handleSeasonChange}>
+          <select className={styles["input-select"]} onChange={handleSeasonChange}>
             {tvShow.map((show) => 
               show.seasonNo !== 0 && (
                 <option key={show.id} value={show.seasonNo}>{show.seasonNo}</option>
@@ -55,9 +56,9 @@ export default function EpisodeSelect({ seasons, showId, title }) {
             )}
           </select>
         </label>
-        <label className="input-label">
+        <label className={styles["input-label"]}>
           Episode:
-          <select className="input-select" onChange={handleEpisodeChange}>
+          <select className={styles["input-select"]} onChange={handleEpisodeChange}>
             {episodesList.length === 0 || episodesList === null ? (
               <option value="n/a">N/A</option>
             ) : (

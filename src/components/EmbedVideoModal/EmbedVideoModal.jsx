@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { IoClose } from 'react-icons/io5'
+import styles from './EmbedVideoModal.module.css'
 
 export default function EmbedVideoModal({ url, title }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -18,11 +19,12 @@ export default function EmbedVideoModal({ url, title }) {
     })
     
     const modal = (
-        <div className="modal-overlay" onClick={closeModal}>
-        <button className="modal--close-btn" onClick={closeModal}><IoClose /></button>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="video-wrapper">
+        <div className={styles["modal-overlay"]} onClick={closeModal}>
+        <button className={styles["modal--close-btn"]} onClick={closeModal}><IoClose /></button>
+        <div className={styles["modal-content"]} onClick={(e) => e.stopPropagation()}>
+            <div className={styles["video-wrapper"]}>
                 <iframe 
+                    className={styles["video-iframe"]}
                     width="80%"
                     height="80%"
                     onError={() => console.log("Video failed to load")}
@@ -37,7 +39,7 @@ export default function EmbedVideoModal({ url, title }) {
     )
     return (
         <>
-            <button onClick={openModal} className="open-video-btn">
+            <button onClick={openModal} className={styles["open-video-btn"]}>
                 Watch Now
             </button>
             {isOpen && ReactDOM.createPortal(modal, document.body)}

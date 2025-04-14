@@ -4,6 +4,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import { useState, useCallback } from 'react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
+import styles from './Categories.module.css'
 
 export default function Categories({data}) {
   console.log(data.tv, "tv")
@@ -58,12 +59,11 @@ export default function Categories({data}) {
 
 
   return (
-    <main className="categories">
+    <main className={styles['categories']}>
       {categories.map(({title, key, mediaType}) => (
-        <section className="categories--section" key={key}>
-          <h2 className="categories--title">{title}</h2>
+        <section className={styles['categories--section']} key={key}>
+          <h2 className={styles['categories--title']}>{title}</h2>
           <Splide 
-            className="categories--cards-container"
             aria-label={title}
             options={{
               mediaQuery: 'min',

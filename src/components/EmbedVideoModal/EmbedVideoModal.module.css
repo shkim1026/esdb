@@ -1,3 +1,23 @@
+.open-video-btn {
+    padding: 10px 16px;
+    background-color: #c6000a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4),
+        -6px -6px 12px rgba(255, 255, 255, 0.05);
+    transition: all 0.15s ease-in-out;
+}
+
+.open-video-btn:active {
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.4),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+    transform: scale(0.98);
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -28,7 +48,7 @@
     width: 100%;
 }
 
-.video-wrapper iframe {
+.video-iframe {
     position: fixed;
     top: 10vh;
     left: 10vw;
@@ -49,19 +69,23 @@
 
 /* Media Queries */
 @media (min-width: 640px) {
-    .video-wrapper iframe {
+    .open-video-btn {
+        margin-top: 1rem;
+    }
+
+    .video-iframe {
         max-height: 80%;
     }
 }
 
 @media (min-width: 768px) and (min-height: 600px) {
-    .video-wrapper iframe {
+    .video-iframe {
         max-height: 34%;
     }
 }
 
 @media (min-width: 1024px) {
-    .video-wrapper iframe {
+    .video-iframe {
         max-height: 100%;
     }
 }

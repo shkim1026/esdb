@@ -1,8 +1,9 @@
+import styles from './LoadingSpinner.module.css'
 
 export default function LoadingSpinner() {
     return (
-        <div className="loading-spinner-overlay">
-            <div className="loading-spinner" />
+        <div className={styles["loading-spinner-overlay"]}>
+            <div className={styles["loading-spinner"]} />
         </div>
     )
 }
