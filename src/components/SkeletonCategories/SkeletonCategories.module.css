@@ -1,0 +1,59 @@
+.container {
+    width: calc(100vw - 8rem);
+    margin: 7rem auto;
+}
+  
+  .categorySection {
+    margin-bottom: 32px;
+  }
+  
+  .title {
+    height: 24px;
+    width: 200px;
+    background: linear-gradient(90deg, #2c2c2c 25%, #3a3a3a 50%, #2c2c2c 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite ease-in-out;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .splideContainer {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 10px; /* Prevents cut-off of the last item */
+  }
+  
+  /* Hide horizontal scrollbar */
+  .splideContainer::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* This ensures Firefox doesn't show the scrollbar either */
+  .splideContainer {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;     /* Firefox */
+  }
+  
+  .card {
+    flex-shrink: 0;
+    width: 190px; /* Adjust to match the width of each Splide slide */
+    height: 290px; /* Adjust to match the height of the slide */
+    background: linear-gradient(90deg, #2c2c2c 25%, #3a3a3a 50%, #2c2c2c 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite ease-in-out;
+    border-radius: 12px;
+    scroll-snap-align: start;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  

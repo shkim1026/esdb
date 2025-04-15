@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Header from '../components/Header/Header';
 import Categories from '../components/Categories/Categories';
+import SkeletonCategories from '../components/SkeletonCategories/SkeletonCategories';
 
 export default function Home() {
   const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
@@ -12,6 +13,7 @@ export default function Home() {
     tv: [],
     topTv: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const options = useMemo(() => ({
     method: 'GET',
@@ -42,6 +44,8 @@ export default function Home() {
         });
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -50,11 +54,11 @@ export default function Home() {
 
   return (
     <>
-        <Head>
-            <title>Entertainment Streaming Database (ESDB)</title>
-        </Head>
-        <Header />
-        <Categories data={data} />
+      <Head>
+        <title>Entertainment Streaming Database (ESDB)</title>
+      </Head>
+      <Header />
+      {isLoading ? <SkeletonCategories /> : <Categories data={data} />}
     </>
   );
 }
