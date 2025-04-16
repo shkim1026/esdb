@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
-import Header from '../components/Header/Header';
 import Categories from '../components/Categories/Categories';
 import SkeletonCategories from '../components/SkeletonCategories/SkeletonCategories';
 
@@ -57,7 +56,6 @@ export default function Home() {
       <Head>
         <title>Entertainment Streaming Database (ESDB)</title>
       </Head>
-      <Header />
       {isLoading ? <SkeletonCategories /> : <Categories data={data} />}
     </>
   );

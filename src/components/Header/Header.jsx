@@ -225,7 +225,7 @@ export default function Header() {
                 onClick={toggleSearch}
               />
             )}
-            <button className={styles["header--login-btn"]}>Log In</button>
+            <button className={styles["header--login-btn"]}>Login</button>
           </div>
         </div>
 
@@ -290,7 +290,7 @@ export default function Header() {
           isHamburgerVisible ? styles["mobile-visible"] : ""
         }`}
       >
-        <button className={styles["header--login-btn"]}>Log In</button>
+        <button className={styles["header--login-btn"]}>Login</button>
       </nav>
 
       {/* {loading && <LoadingSpinner />} */}
