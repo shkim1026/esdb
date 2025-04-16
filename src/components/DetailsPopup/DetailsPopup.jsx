@@ -43,46 +43,46 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
           }}
       >
         <button className={styles["close-btn"]} onClick={onClose} aria-label="Close"><IoClose /></button>
-          <div className={styles["popup-content--flex"]}>
-            <img className={styles["popup-content--img"]} src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt={item.title} />
-            <div>
-                <h2 className={styles["popup-content--title"]}>{item.title ? item.title : item.name} <span>({year})</span></h2>
-                {(item.original_name && item.original_name !== item.name && (
-                  <p className={styles["popup-content--original-title"]}>{item.original_name}</p>
-                )) ||
-                  (item.original_title && item.original_title !== item.title && (
-                    <p className={styles["popup-content--original-title"]}>{item.original_title}</p>
-                  ))}
-                <div className={styles["popup-content--facts"]}>
-                  <span className={styles["popup-content--facts--release-date"]}>{releaseDate} &#x2022; </span>
-                  <span className={styles["popup-content--facts--genres"]}>{genres}</span>
-                  {item.runtime !== 0 && item.runtime && (
-                    <span> &#x2022; {convertRuntimeToHours(item.runtime)}</span>
-                  )}
-                </div>
-                {item.tagline !== "" && <p className={styles["popup-content--tagline"]}>"{item.tagline}"</p>}
-                <p><strong>Overview:</strong><br/>{item.overview}</p>
-                <p>Rating: 
-                  <span className={`${styles.rating} ${
-                    rating > 7 ? styles.high : 
-                    rating >= 4 ? styles.medium : 
-                    rating < 4 && rating !== 0 ? styles.low : ''
-                  }`}>
-                    {rating !== 0 ? `${rating}/10` : "N/A"}
-                  </span>
-                </p>
-                {mediaType === 'tv' && 
-                  <EpisodeSelect 
-                    seasons={item.seasons}
-                    showId={item.id}
-                    title={item.name}
-                  />
-                }
-                {mediaType === 'movie' && 
-                  <EmbedVideoModal url={movieUrl} title={item.name}/>
-                }
-            </div>
+        <div className={styles["popup-content--flex"]}>
+          <img className={styles["popup-content--img"]} src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt={item.title} />
+          <div>
+              <h2 className={styles["popup-content--title"]}>{item.title ? item.title : item.name} <span>({year})</span></h2>
+              {(item.original_name && item.original_name !== item.name && (
+                <p className={styles["popup-content--original-title"]}>{item.original_name}</p>
+              )) ||
+                (item.original_title && item.original_title !== item.title && (
+                  <p className={styles["popup-content--original-title"]}>{item.original_title}</p>
+                ))}
+              <div className={styles["popup-content--facts"]}>
+                <span className={styles["popup-content--facts--release-date"]}>{releaseDate} &#x2022; </span>
+                <span className={styles["popup-content--facts--genres"]}>{genres}</span>
+                {item.runtime !== 0 && item.runtime && (
+                  <span> &#x2022; {convertRuntimeToHours(item.runtime)}</span>
+                )}
+              </div>
+              {item.tagline !== "" && <p className={styles["popup-content--tagline"]}>"{item.tagline}"</p>}
+              <p><strong>Overview:</strong><br/>{item.overview}</p>
+              <p>Rating: 
+                <span className={`${styles.rating} ${
+                  rating > 7 ? styles.high : 
+                  rating >= 4 ? styles.medium : 
+                  rating < 4 && rating !== 0 ? styles.low : ''
+                }`}>
+                  {rating !== 0 ? `${rating}/10` : "N/A"}
+                </span>
+              </p>
+              {mediaType === 'tv' && 
+                <EpisodeSelect 
+                  seasons={item.seasons}
+                  showId={item.id}
+                  title={item.name}
+                />
+              }
+              {mediaType === 'movie' && 
+                <EmbedVideoModal url={movieUrl} title={item.name}/>
+              }
           </div>
+        </div>
       </div>
     </div>
   );

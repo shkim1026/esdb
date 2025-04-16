@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import DetailsPopup from "../DetailsPopup/DetailsPopup";
+import LoginModal from "../LoginModal/LoginModal"
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import styles from "./Header.module.css";
 
@@ -176,6 +177,14 @@ export default function Header() {
     [fetchDetails]
   );
 
+  // Login
+  const [showLogin, setShowLogin] = useState(false)
+
+  const handleLogin = (email, password) => {
+    console.log('Login attempt with:', email, password)
+    setShowLogin(false)
+  }
+
   return (
     <>
       <header className={styles["header"]}>
@@ -225,7 +234,12 @@ export default function Header() {
                 onClick={toggleSearch}
               />
             )}
-            <button className={styles["header--login-btn"]}>Login</button>
+            <button className={styles["header--login-btn"]} onClick={() => setShowLogin(true)}>Login</button>
+            <LoginModal 
+              open={showLogin}
+              onClose={() => setShowLogin(false)}
+              onLogin={handleLogin}
+            />
           </div>
         </div>
 
