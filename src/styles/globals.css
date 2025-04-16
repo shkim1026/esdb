@@ -1,0 +1,114 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* color-scheme: light dark; */
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/* Prevents carousel from overflowing while keeping hover effects */
+html, body {
+  overflow-x: hidden; 
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 350;
+  font-style: normal;
+  background: #111 url('/images/asfalt-dark.png') repeat;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+ 
+h1, h2, h3 {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  /* padding: 0.6em 1.2em; */
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #c6000a;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Splide */
+.splide__slide img {
+  height: 100%;
+}
+
+.splide__pagination {
+  bottom: -1.5em !important
+}
+
+
+/* Media Queries */
+@media (min-width: 640px) {
+  .splide__slide img {
+    width: 25vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .splide__slide,
+  .splide__track,
+  .splide__list {
+    overflow: visible !important;
+  }
+
+  .splide__slide {
+    margin-right: 1.3rem !important;
+  }
+
+  .splide__slide img {
+    width: 15vw;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .splide__slide img:hover {
+    transform: scale(1.1);
+    z-index: 10;
+    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
+    box-shadow: 0px 0px 100px black;
+  }
+}
