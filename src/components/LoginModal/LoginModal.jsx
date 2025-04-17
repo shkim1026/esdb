@@ -2,16 +2,31 @@ import { useState } from "react";
 import styles from "./LoginModal.module.css";
 import { IoClose } from 'react-icons/io5';
 import { FaUser, FaLock } from 'react-icons/fa';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase/firebase";
 
 export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   if (!open) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLogin(email, password);
+    setError('');
+    
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      console.log('Signed in as user:', user)
+
+      if (onLogin) {
+        onLogin(email, password)
+      }
+    } catch (err) {
+      setError("Incorrect username and/or password")
+    }
   };
 
   return (
@@ -66,11 +81,14 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
             </div>
           </div>
 
+          {error && <p className={styles.errorMessage} role="alert">{error}</p>}
+
           <button type="submit" className={styles.submitButton}>
             Sign In
           </button>
+        </form>
 
-          <p className={styles.noAccount}>
+        <p className={styles.noAccount}>
             <small>
               Don't have an account?{" "}
               <button
@@ -83,7 +101,6 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
               </button>
             </small>
           </p>
-        </form>
       </div>
     </div>
   );

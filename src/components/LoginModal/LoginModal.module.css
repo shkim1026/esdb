@@ -95,6 +95,11 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.errorMessage {
+  color: #e50914;
+  margin: 0;
+}
+
 .submitButton {
   padding: 12px;
   background-color: #e50914;

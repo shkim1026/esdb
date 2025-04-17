@@ -3,18 +3,59 @@ import styles from './SignUpModal.module.css'
 import { IoClose } from 'react-icons/io5'
 import { FaUser, FaLock, FaUnlock } from 'react-icons/fa'
 import { IoMdMail } from 'react-icons/io'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from '../../../firebase/firebase'
+import { doc, setDoc } from 'firebase/firestore'
 
 export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
 
   if (!open) return null
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSignup(username, email, password, confirmPassword)
+    setError('')
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match!')
+      return
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
+      console.log('Signed up user:', user)
+
+      await setDoc(doc(db, 'users', user.uid), {
+        username: username,
+        email: email,
+        createdAt: new Date(),
+      })
+
+      if (onSignup) {
+        onSignup(username, email)
+      }
+
+      if (onClose) {
+        console.log('Closing modal...')
+        onClose()
+      }
+    } catch (err) {
+      console.log(err)
+      if (err.message === "Firebase: Error (auth/invalid-email).") {
+        setError("Please enter a valid email address")
+      } else if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+        setError("Email is already in use")
+      } else if (err.message === "Firebase: Password should be at least 6 characters (auth/weak-password)."){
+        setError("Password must be at least 6 characters long")
+      } else {
+        setError(err.message)
+      }
+    }
   }
 
   return (
@@ -106,11 +147,13 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
             </div>
           </div>
 
+          {error && <p className={styles.errorMessage} role="alert">{error}</p>}
+
           <button type="submit" className={styles.submitButton}>
             Sign Up
           </button>
         </form>
-
+        
         <p className={styles.switchText}>
           <small>
             Already have an account?{' '}
