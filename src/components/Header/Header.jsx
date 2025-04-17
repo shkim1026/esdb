@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import DetailsPopup from "../DetailsPopup/DetailsPopup";
 import LoginModal from "../LoginModal/LoginModal"
+import SignUpModal from "../SignUpModal/SignUpModal"
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import styles from "./Header.module.css";
 
@@ -177,12 +178,18 @@ export default function Header() {
     [fetchDetails]
   );
 
-  // Login
+  // Login & Signup
   const [showLogin, setShowLogin] = useState(false)
+  const [showSignup, setShowSignup] = useState(false)
 
   const handleLogin = (email, password) => {
     console.log('Login attempt with:', email, password)
     setShowLogin(false)
+  }
+
+  const handleSignup = (username, email, password, confirmPassword) => {
+    console.log('Sign up:', username, email, password, confirmPassword)
+    setShowSignup(false)
   }
 
   return (
@@ -239,6 +246,19 @@ export default function Header() {
               open={showLogin}
               onClose={() => setShowLogin(false)}
               onLogin={handleLogin}
+              onSwitchToSignup={() => {
+                setShowLogin(false)
+                setShowSignup(true)
+              }}
+            />
+            <SignUpModal 
+              open={showSignup}
+              onClose={() => setShowSignup(false)}
+              onSignup={handleSignup}
+              onSwitchToLogin={() => {
+                setShowSignup(false)
+                setShowLogin(true)
+              }}
             />
           </div>
         </div>

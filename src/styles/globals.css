@@ -54,7 +54,6 @@ h1, h2, h3 {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  /* padding: 0.6em 1.2em; */
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -109,6 +108,6 @@ button:focus-visible {
     transform: scale(1.1);
     z-index: 10;
     /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
-    box-shadow: 0px 0px 100px black;
+    box-shadow: 0px 0px 50px black;
   }
 }
