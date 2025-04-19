@@ -1,12 +1,18 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore"
+import { auth, db } from "../../../firebase/firebase";
+
 import Link from "next/link";
+
 import DetailsPopup from "../DetailsPopup/DetailsPopup";
 import LoginModal from "../LoginModal/LoginModal"
 import SignUpModal from "../SignUpModal/SignUpModal"
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+
 import styles from "./Header.module.css";
 
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaUserCircle, FaChevronUp, FaRegUser } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdMovie, MdOutlineTv } from "react-icons/md";
@@ -21,6 +27,7 @@ export default function Header() {
   const inputRef = useRef(null);
   const resultsRef = useRef(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -169,6 +176,7 @@ export default function Header() {
 
   const handleClick = useCallback(
     (id, mediaType, e) => {
+      e.preventDefault();
       e.stopPropagation();
       console.log("Card is clicked");
       fetchDetails(id, mediaType).then(() => {
@@ -192,6 +200,52 @@ export default function Header() {
     setShowSignup(false)
   }
 
+  // Track user auth state
+  const [user, setUser] = useState(null)
+  const [username, setUsername] = useState(null)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser)
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid))
+        if (userDoc.exists()) {
+          console.log("username:", userDoc.data().username)
+          setUsername(userDoc.data().username)
+        }
+      } else {
+        setUser(null)
+        setUsername(null)
+      }
+    })
+
+    return () => unsubscribe();
+  }, [])
+
+  // User sign out
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth)
+      console.log("User signed out")
+      setIsHamburgerVisible(false)
+    } catch (error) {
+      console.log("Error signing out:", error)
+    }
+  }
+
+  // Delay dropdown with setTimeout
+  let dropdownTimeout = useRef(null)
+  const handleMouseEnter = () => {
+    clearTimeout(dropdownTimeout.current)
+    setShowDropdown(true)
+  }
+
+  const handleMouseLeave = () => {
+    dropdownTimeout.current = setTimeout(() => {
+      setShowDropdown(false)
+    }, 300)
+  }
+
   return (
     <>
       <header className={styles["header"]}>
@@ -204,11 +258,10 @@ export default function Header() {
             />
           </Link>
           <div className={styles["header--flex-right-container"]}>
+
             <input
               type="text"
-              className={`${styles["header--searchbar"]} ${
-                isSearchVisible ? styles["desktop-visible"] : ""
-              }`}
+              className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["desktop-visible"] : ""}`}
               placeholder="Search for a TV Show or Movie..."
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => {
@@ -222,14 +275,13 @@ export default function Header() {
               }}
               ref={inputRef}
             />
+
             {query.trim() !== "" && isInputFocused && (
-              <div
-                ref={resultsRef}
-                className={styles["header--search-results"]}
-              >
+              <div ref={resultsRef} className={styles["header--search-results"]}>
                 {data}
               </div>
             )}
+
             {isSearchVisible ? (
               <IoClose
                 className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
@@ -241,23 +293,55 @@ export default function Header() {
                 onClick={toggleSearch}
               />
             )}
-            <button className={styles["header--login-btn"]} onClick={() => setShowLogin(true)}>Login</button>
-            <LoginModal 
+
+            {user ? (
+              <div 
+                className={styles["header--profile-wrapper"]} 
+                onMouseEnter={handleMouseEnter} 
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className={styles["header--logged-in"]}>
+                  <FaUserCircle className={styles["header--user-profile"]} />
+                  <FaChevronUp className={`${styles["chevron-icon"]} ${showDropdown ? styles["rotate"] : ""}`}/>
+                </div>
+
+                {showDropdown && (
+                  <div className={styles["profile-dropdown"]}>
+                    <div className={styles["dropdown--account-container"]}>
+                      <FaRegUser className={styles["dropdown--account-icon"]}/>
+                      <Link href="/account" className={styles["dropdown--account"]}>My Account</Link>
+                    </div>
+
+                    <button onClick={handleSignOut} className={styles["desktop--sign-out-btn"]}>Sign Out</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                className={styles["header--login-btn"]}
+                onClick={() => setShowLogin(true)}
+              >
+                Login
+              </button>
+            )}
+
+            <LoginModal
               open={showLogin}
               onClose={() => setShowLogin(false)}
               onLogin={handleLogin}
               onSwitchToSignup={() => {
-                setShowLogin(false)
-                setShowSignup(true)
+                setShowLogin(false);
+                setShowSignup(true);
               }}
             />
-            <SignUpModal 
+
+            <SignUpModal
               open={showSignup}
               onClose={() => setShowSignup(false)}
               onSignup={handleSignup}
               onSwitchToLogin={() => {
-                setShowSignup(false)
-                setShowLogin(true)
+                setShowSignup(false);
+                setShowLogin(true);
               }}
             />
           </div>
@@ -266,6 +350,7 @@ export default function Header() {
         {/* Mobile Nav */}
         <div className={styles["header--mobile"]}>
           <div className={styles["header--mobile-inner-div"]}>
+
             {isHamburgerVisible ? (
               <IoClose
                 className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
@@ -274,7 +359,10 @@ export default function Header() {
             ) : (
               <GiHamburgerMenu
                 className={styles["header--mobile-hamburger"]}
-                onClick={toggleBurger}
+                onClick={() => {
+                  toggleBurger()
+                  setIsSearchVisible(false)
+                }}
               />
             )}
 
@@ -285,6 +373,7 @@ export default function Header() {
                 className={styles["header--logo"]}
               />
             </Link>
+
             {isSearchVisible ? (
               <IoClose
                 className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
@@ -293,12 +382,17 @@ export default function Header() {
             ) : (
               <FaSearch
                 className={styles["header--search-btn"]}
-                onClick={toggleSearch}
+                onClick={() => {
+                  toggleSearch();
+                  setIsHamburgerVisible(false)
+                }}
               />
             )}
+
           </div>
         </div>
       </header>
+
       <input
         type="text"
         className={`${styles["header--searchbar"]} ${
@@ -311,6 +405,7 @@ export default function Header() {
         }}
         ref={inputRef}
       />
+
       {searchResults.results.length > 0 && (
         <div
           ref={resultsRef}
@@ -319,15 +414,52 @@ export default function Header() {
           {data}
         </div>
       )}
-      <nav
-        className={`${styles["hamburger-nav"]} ${
-          isHamburgerVisible ? styles["mobile-visible"] : ""
-        }`}
-      >
-        <button className={styles["header--login-btn"]}>Login</button>
+
+      <nav className={`${styles["hamburger-nav"]} ${isHamburgerVisible ? styles["mobile-visible"] : ""}`}>
+
+        {user ? (
+          <>
+            <div className={styles["header--logged-in"]}>
+              <FaUserCircle className={styles["header--user-profile"]} />
+              <h2>{username}</h2>
+            </div>
+            <hr/>
+            <div className={styles["mobile--account-links-container"]}>
+              <Link href="/account" onClick={() => setShowDropdown(false)}>My Account</Link>
+              <button className={styles["mobile--sign-out-btn"]} onClick={handleSignOut}>Sign Out</button>
+            </div>
+          </>
+        ) : (
+          <button
+            className={styles["header--login-btn"]}
+            onClick={() => setShowLogin(true)}
+          >
+            Login
+          </button>
+        )}
+
       </nav>
 
-      {/* {loading && <LoadingSpinner />} */}
+      <LoginModal
+        open={showLogin}
+        onClose={() => setShowLogin(false)}
+        onLogin={handleLogin}
+        onSwitchToSignup={() => {
+          setShowLogin(false);
+          setShowSignup(true);
+        }}
+      />
+
+      <SignUpModal
+        open={showSignup}
+        onClose={() => setShowSignup(false)}
+        onSignup={handleSignup}
+        onSwitchToLogin={() => {
+          setShowSignup(false);
+          setShowLogin(true);
+        }}
+      />
+
       {selectedItem && (
         <DetailsPopup
           item={selectedItem}

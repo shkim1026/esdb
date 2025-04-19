@@ -33,9 +33,20 @@
     font-family: 'Bebas neue', sans-serif;
 }
 
+.header--logged-in {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header--user-profile {
+    font-size: 2.5rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
 .header--search-btn {
     padding: 1rem;
-    cursor: pointer;
 }
 
 .search-btn--close {
@@ -66,24 +77,43 @@
     width: 0;
     background-color: #111;
     height: 95vh;
-    z-index: 9999;
+    z-index: 2000;
     transition: opacity 0.3s ease, width 0.3s ease;
     margin-top: 5rem;
     left: 0;
     opacity: 0;
 }
 
+.mobile--account-links-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile--sign-out-btn {
+    margin-top: 1rem;
+}
+
+.mobile--sign-out-btn,
+.desktop--sign-out-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: white;
+    background-color: #c6000a;
+    width: fit-content;
+    font-family: "Bebas neue", sans-serif;
+}
+
 .mobile-visible {
-    width: 90vw;
+    width: 87vw;
     opacity: 1;
-    padding-left: 1rem;
+    padding: 1rem;
 }
 
 .searchbar-mobile {
     margin-top: 5rem;
     left: 0;
     position: fixed;
-    z-index: 9999;
+    z-index: 2000;
     padding: 1.5rem;
 }
 
@@ -178,6 +208,10 @@
         align-items: center;
     }
 
+    .header--search-btn {
+        cursor: pointer;
+    }
+    
     .search-btn--close {
         padding: 0rem 0.75rem;
     }
@@ -213,6 +247,44 @@
     .searchbar-mobile,
     .results-mobile {
         display: none;
+    }
+
+    .header--logged-in {
+        position: relative;
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 101%;
+        right: 4.5%;
+        background: rgba(17, 17, 17, 0.8);
+        border: 1px solid #464646;
+        border-radius: 5px;
+        padding: 1rem 0.5rem;
+        z-index: 99;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        min-width: 140px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chevron-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(-180deg);
+    }
+    
+    .dropdown--account-container {
+        display:flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .dropdown--account-icon {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
     }
 
 }

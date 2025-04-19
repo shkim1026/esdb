@@ -6,7 +6,11 @@ import styles from './EmbedVideoModal.module.css'
 export default function EmbedVideoModal({ url, title }) {
     const [isOpen, setIsOpen] = useState(false)
 
-    const openModal = () => setIsOpen(true)
+    const openModal = (e) => {
+        console.log('Opening video modal')
+        e.stopPropagation();
+        e.preventDefault();
+        setIsOpen(true)}
     const closeModal = () => setIsOpen(false)
 
     useEffect(() => {
@@ -39,7 +43,7 @@ export default function EmbedVideoModal({ url, title }) {
     )
     return (
         <>
-            <button onClick={openModal} className={styles["open-video-btn"]}>
+            <button type="button" onClick={(e) => {e.stopPropagation(); e.preventDefault(); setIsOpen(true)}} className={styles["open-video-btn"]}>
                 Watch Now
             </button>
             {isOpen && ReactDOM.createPortal(modal, document.body)}

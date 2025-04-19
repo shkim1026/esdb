@@ -1,0 +1,65 @@
+.container {
+    place-self: baseline;
+    margin-top: 5rem;
+}
+
+.title {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+    align-items: baseline;
+}
+
+.marginR {
+    font-size: 1.25rem;
+    margin-right: 1rem;
+}
+
+.userInfo {
+    margin-bottom: 0;
+}
+
+.changeBtn {
+    all: unset;
+    cursor: pointer;
+    color: #c6000a;
+}
+
+.changeBtn:hover {
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+.changeBtn:focus-visible {
+    outline: 2px solid #c6000a;
+    outline-offset: 2px;    
+}
+
+.signOutBtn {
+    margin-bottom: 1rem;
+}
+
+.deleteAccBtn {
+    margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        width: calc(50vw - 8rem)
+    }
+
+    .flex {
+        align-items: center;
+    }
+
+    .userInfo {
+        margin-bottom: revert;
+    }
+
+    .detailContainer {
+        display: flex;
+        justify-content: space-between;
+    }
+  }

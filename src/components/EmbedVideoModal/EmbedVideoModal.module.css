@@ -68,6 +68,10 @@
     cursor: pointer;
 }
 
+.modal--close-btn:hover {
+    background-color: transparent;
+}
+
 /* Media Queries */
 @media (min-width: 640px) {
     .video-iframe {
