@@ -46,6 +46,11 @@
   cursor: pointer;
 }
 
+.signUp:hover,
+.closeButton:hover {
+  background-color:transparent;
+}
+
 .logo {
   margin: 0 auto;
   width: 20%;
@@ -102,7 +107,6 @@
 
 .submitButton {
   padding: 12px;
-  background-color: #e50914;
   color: white;
   border: none;
   border-radius: 4px;

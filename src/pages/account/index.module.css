@@ -17,8 +17,29 @@
     margin-right: 1rem;
 }
 
+.vAlign {
+    vertical-align: text-top;
+    display: inline-flex;
+    font-size: 1.1rem;
+}
+
+.verified {
+    color: #048600;
+}
+
+.warning {
+    color: #df9d00;
+}
+
+.input {
+    padding: 0.3rem;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
 .userInfo {
     margin-bottom: 0;
+    margin-right: 0.3rem;
 }
 
 .changeBtn {
@@ -35,6 +56,15 @@
 .changeBtn:focus-visible {
     outline: 2px solid #c6000a;
     outline-offset: 2px;    
+}
+
+.changeCancelContainer {
+    display: flex;
+    text-align: center;
+}
+
+.confirmBtn {
+    margin-right: 1rem;
 }
 
 .signOutBtn {

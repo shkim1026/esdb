@@ -25,7 +25,8 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
         onLogin(email, password)
       }
     } catch (err) {
-      setError("Incorrect username and/or password")
+      console.log(err.message)
+      setError("Invalid email and/or password")
     }
   };
 
