@@ -106,6 +106,25 @@
     color: #d00;
 }
 
+.myList--btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.myList--btn:hover {
+    background-color: transparent;
+}
+.myList--icon {
+    font-size: 2rem;
+}
+.myList--text {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.25rem;
+    margin: 0 0 0 0.5rem;
+}
+
 /* Media Queries */
 @media (min-width: 640px) {
     .popup-content--flex {

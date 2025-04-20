@@ -1,10 +1,15 @@
 import React from 'react'
-import { IoClose } from 'react-icons/io5'
 import EpisodeSelect from '../EpisodeSelect/EpisodeSelect'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
 import styles from './DetailsPopup.module.css'
+import { doc, setDoc } from 'firebase/firestore'
+import { auth, db } from '../../../firebase/firebase'
+
+import { IoClose } from 'react-icons/io5'
+import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
+
   console.log("Selected Item in DetailsPopup", item)
   console.log("Selected Item in", mediaType)
 
@@ -26,6 +31,32 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   const rating = Math.floor(item.vote_average * 10) / 10
 
   const movieUrl = `https://vidsrc.xyz/embed/movie/${item.id}/`
+
+
+  // User adds to favorites
+  const [isFavorite, setIsFavorite] = React.useState(false)
+
+  const handleAddToFavorites = async () => {
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+      alert("Please sign in to add items to your list.")
+      return
+    }
+
+    const userFavoritesRef = doc(db, "users", currentUser.uid, "favorites", String(item.id))
+
+    try {
+      await setDoc(userFavoritesRef, {
+        ...item,
+        mediaType: mediaType,
+        addedAt: new Date().toISOString()
+      })
+      setIsFavorite(true)
+    } catch (error) {
+      console.log("Error adding to favorites:", error)
+    }
+  }
 
   return (
     <div className={styles["popup-overlay"]} onClick={onClose}>
@@ -71,6 +102,20 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                   {rating !== 0 ? `${rating}/10` : "N/A"}
                 </span>
               </p>
+              
+              <button 
+                className={styles["myList--btn"]} 
+                onClick={handleAddToFavorites}
+              >
+                {isFavorite 
+                  ? <BsCheckCircle className={styles["myList--icon"]}/> 
+                  : <BsPlusCircle className={styles["myList--icon"]}/>
+                }
+                <p className={styles["myList--text"]}>
+                  {isFavorite ? "On My List" : "Add to My List"}
+                </p>
+              </button>
+
               {mediaType === 'tv' && 
                 <EpisodeSelect 
                   seasons={item.seasons}
