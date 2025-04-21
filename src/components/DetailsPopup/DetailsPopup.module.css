@@ -182,6 +182,10 @@
         height: auto;
     }
 
+    .popup-content--img {
+        margin-bottom: 0;
+    }
+
     .popup-content--flex {
         grid-template-columns: 400px auto;
         gap: 2rem;

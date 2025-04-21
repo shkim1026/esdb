@@ -1,10 +1,12 @@
 import Card from '../Card/Card'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 import styles from './Categories.module.css'
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
 export default function Categories({data}) {
   console.log(data.tv, "tv")
@@ -17,6 +19,7 @@ export default function Categories({data}) {
     {title: "Top Rated Movies", key: "topMovies", mediaType: "movie"},
     {title: "Top Rated TV Series", key: "topTv", mediaType: "tv"},
   ]
+  const [favorites, setFavorites] = useState([])
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -57,9 +60,77 @@ export default function Categories({data}) {
     fetchDetails(id, mediaType)
   }, [fetchDetails]);
 
+  // Fetch favorites from firestore
+  const auth = getAuth()
+  const db = getFirestore()
+  const user = auth.currentUser
+
+  const fetchFavorites = useCallback(async () => {
+    if (!user) {
+      console.error("User not logged in")
+      return[];
+    }
+
+    try {
+      const favoritesRef = collection(db, "users", user.uid, "favorites")
+      const snapshot = await getDocs(favoritesRef)
+
+      const favorites = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+
+      setFavorites(favorites)
+      return favorites
+
+    } catch (error) {
+      console.log("Error fetching favorites:", error)
+      return[]
+    }
+  }, [user])
+
+  useEffect(() => {
+    fetchFavorites()
+    console.log("favorites", favorites)
+  },[fetchFavorites])
 
   return (
     <main className={styles['categories']}>
+      {user && favorites.length > 0 &&
+        <section className={styles['categories--section']}>
+          <h2 className={styles['categories--title']}>My List</h2>
+          <Splide 
+            aria-label='My list'
+            options={{
+              mediaQuery: 'min',
+              gap: '1rem',
+              type: 'loop',
+              arrows: false,
+              pagination: false,
+              autoWidth: true,
+              autoHeight: true,
+              breakpoints: {
+                1024: {
+                  arrows: true,
+                  type: 'slide',
+                },
+              },
+            }}
+          >
+            {favorites.map(item => (
+              <SplideSlide key={item.id}>
+                <Card 
+                  key={item.id}
+                  data={item}
+                  mediaType={item.mediaType}
+                  handleClick={(e) => handleClick(item.id, item.mediaType, e)}
+                />
+              </SplideSlide>
+            ))}
+          </Splide>
+        </section>
+      }
+
       {categories.map(({title, key, mediaType}) => (
         <section className={styles['categories--section']} key={key}>
           <h2 className={styles['categories--title']}>{title}</h2>
@@ -94,8 +165,17 @@ export default function Categories({data}) {
           </Splide>
         </section>
       ))}
+
       {loading && <LoadingSpinner />}
-      {selectedItem && <DetailsPopup item={selectedItem} onClose={closePopup} mediaType={selectedItem.mediaType}/>}
+
+      {selectedItem && 
+        <DetailsPopup 
+          item={selectedItem} 
+          onClose={closePopup} 
+          mediaType={selectedItem.mediaType} 
+          refreshFavorites={fetchFavorites}
+        />
+      }
     </main>
   )
 }

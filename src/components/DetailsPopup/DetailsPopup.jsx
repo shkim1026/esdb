@@ -8,7 +8,7 @@ import { auth, db } from '../../../firebase/firebase'
 import { IoClose } from 'react-icons/io5'
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
-const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType }) {
+const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType, refreshFavorites }) {
 
   console.log("Selected Item in DetailsPopup", item)
   console.log("Selected Item in", mediaType)
@@ -73,6 +73,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
         addedAt: new Date().toISOString()
       })
       setIsFavorite(true)
+      refreshFavorites()
     } catch (error) {
       console.log("Error adding to favorites:", error)
     }
@@ -88,6 +89,8 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
 
       const favRef = doc(db, "users", user.uid, "favorites", itemId.toString())
       await deleteDoc(favRef)
+      setIsFavorite(false)
+      refreshFavorites()
       console.log("Item removed from favorites!")
     } catch (error) {
       console.log("Error removing from favorites:", error.message)
@@ -143,7 +146,6 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
               <button 
                 className={styles["myList--btn"]} 
                 onClick={() => {
-                  setIsFavorite(!isFavorite)
                   if (isFavorite) {
                     removeFromFavorites(item.id)
                   } else {
