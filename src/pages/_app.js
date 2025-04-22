@@ -24,22 +24,21 @@ export default function App({ Component, pageProps }) {
 
   // Fetch favorites from firestore
   const fetchFavorites = useCallback(async () => {
-    const currentUser = auth.currentUser
-    if (!currentUser) {
+    if (!user) {
       console.error("User not logged in")
       setFavorites([])
       return [];
     }
 
     try {
-      const favoritesRef = collection(db, "users", currentUser.uid, "favorites")
+      const favoritesRef = collection(db, "users", user.uid, "favorites")
       const snapshot = await getDocs(favoritesRef)
 
       const fetchedFavorites = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
-
+      console.log("Favorites fetched from Firestore:", fetchedFavorites)
       setFavorites(fetchedFavorites)
       return fetchedFavorites
 
@@ -47,12 +46,14 @@ export default function App({ Component, pageProps }) {
       console.log("Error fetching favorites:", error)
       return []
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
-    fetchFavorites()
+    if (user) {
+      fetchFavorites()
+    }
     console.log("favorites", favorites)
-  }, [fetchFavorites])
+  }, [user, fetchFavorites])
 
   return (
     <>
