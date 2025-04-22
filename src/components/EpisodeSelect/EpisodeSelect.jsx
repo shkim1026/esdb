@@ -18,7 +18,7 @@ export default function EpisodeSelect({ seasons, showId, title }) {
     return validSeason ? validSeason.episodes : [];
   })
 
-  // Parameters for API call to VicSrc
+  // Parameters for API call to VidSrc
   const [selection, setSelection] = useState({
     id: showId,
     season: 1,

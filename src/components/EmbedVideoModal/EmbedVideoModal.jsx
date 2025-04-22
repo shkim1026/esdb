@@ -43,7 +43,7 @@ export default function EmbedVideoModal({ url, title }) {
     )
     return (
         <>
-            <button type="button" onClick={(e) => {e.stopPropagation(); e.preventDefault(); setIsOpen(true)}} className={styles["open-video-btn"]}>
+            <button type="button" onClick={openModal} className={styles["open-video-btn"]}>
                 Watch Now
             </button>
             {isOpen && ReactDOM.createPortal(modal, document.body)}

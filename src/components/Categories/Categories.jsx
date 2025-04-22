@@ -81,19 +81,27 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
               },
             }}
           >
-            {favorites.map(item => (
-              <SplideSlide key={item.id}>
-                <Card 
-                  key={item.id}
-                  data={item}
-                  mediaType={item.mediaType}
-                  handleClick={(e) => handleClick(item.id, item.mediaType, e)}
-                />
-              </SplideSlide>
-            ))}
+            {[...favorites]
+              .sort((a, b) => {
+                const dateA = a.addedAt?.toDate ? a.addedAt.toDate() : new Date(a.addedAt);
+                const dateB = b.addedAt?.toDate ? b.addedAt.toDate() : new Date(b.addedAt);
+                return dateB - dateA; // descending: newest first
+              })
+              .map(item => (
+                <SplideSlide key={item.id}>
+                  <Card 
+                    key={item.id}
+                    data={item}
+                    mediaType={item.mediaType}
+                    handleClick={(e) => handleClick(item.id, item.mediaType, e)}
+                  />
+                </SplideSlide>
+              ))
+            }
           </Splide>
         </section>
       }
+
 
       {categories.map(({title, key, mediaType}) => (
         <section className={styles['categories--section']} key={key}>

@@ -104,7 +104,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
           className={`${styles["popup-content"]} ${styles["fade-in"]}`}
           onClick={(e) => e.stopPropagation()}   
           style={{
-              backgroundImage: `linear-gradient(to right, rgba(0, 0, 0), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original${item.backdrop_path})`,
+              backgroundImage: `linear-gradient(to right, rgba(0, 0, 0), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/w1280/${item.backdrop_path})`,
               backgroundSize: "cover",
               backgroundPosition: "300px center",
               backgroundRepeat: "no-repeat",
@@ -115,7 +115,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
       >
         <button className={styles["close-btn"]} onClick={onClose} aria-label="Close"><IoClose /></button>
         <div className={styles["popup-content--flex"]}>
-          <img className={styles["popup-content--img"]} src={`https://image.tmdb.org/t/p/original${item.poster_path}`} alt={item.title} />
+          <img className={styles["popup-content--img"]} src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} alt={item.title} />
           <div>
               <h2 className={styles["popup-content--title"]}>{item.title ? item.title : item.name} <span>({year})</span></h2>
               {(item.original_name && item.original_name !== item.name && (
@@ -135,7 +135,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
               <p><strong>Overview:</strong><br/>{item.overview}</p>
               <p>Rating: 
                 <span className={`${styles.rating} ${
-                  rating > 7 ? styles.high : 
+                  rating >= 8 ? styles.high : 
                   rating >= 4 ? styles.medium : 
                   rating < 4 && rating !== 0 ? styles.low : ''
                 }`}>

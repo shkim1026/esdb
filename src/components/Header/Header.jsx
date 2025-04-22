@@ -45,6 +45,7 @@ export default function Header({ user, refreshFavorites}) {
     },
   };
 
+  // Fetch movie/tv show from searchbar
   const fetchItem = async (searchTerm) => {
     console.log(`Fetching item that starts with: ${searchTerm}`);
     if (loading) return;
@@ -64,6 +65,7 @@ export default function Header({ user, refreshFavorites}) {
     }
   };
 
+  // Debounce searchbar fetch requests
   const debouncedFetch = useCallback(() => {
     const handler = setTimeout(() => {
       fetchItem(query);
@@ -81,6 +83,8 @@ export default function Header({ user, refreshFavorites}) {
   const filteredResults = searchResults.results.filter(
     (result) => result.media_type !== "person"
   );
+
+  // Displays searchbar query results
   let data;
   if (
     !loading &&
@@ -130,7 +134,7 @@ export default function Header({ user, refreshFavorites}) {
     });
   }
 
-  // Hides search results when user clicks outside
+  // Hides search results when user clicks outside of results element
   useEffect(() => {
     function handleClickOutside(e) {
       if (
@@ -233,7 +237,7 @@ export default function Header({ user, refreshFavorites}) {
     }
   }
 
-  // Delay dropdown with setTimeout
+  // Delays dropdown with setTimeout
   let dropdownTimeout = useRef(null)
   const handleMouseEnter = () => {
     clearTimeout(dropdownTimeout.current)
@@ -350,7 +354,6 @@ export default function Header({ user, refreshFavorites}) {
         {/* Mobile Nav */}
         <div className={styles["header--mobile"]}>
           <div className={styles["header--mobile-inner-div"]}>
-
             {isHamburgerVisible ? (
               <IoClose
                 className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
@@ -416,7 +419,6 @@ export default function Header({ user, refreshFavorites}) {
       )}
 
       <nav className={`${styles["hamburger-nav"]} ${isHamburgerVisible ? styles["mobile-visible"] : ""}`}>
-
         {user ? (
           <>
             <div className={styles["header--logged-in"]}>
@@ -437,7 +439,6 @@ export default function Header({ user, refreshFavorites}) {
             Login
           </button>
         )}
-
       </nav>
 
       <LoginModal
