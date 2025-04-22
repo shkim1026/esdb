@@ -17,7 +17,7 @@ import { IoClose } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdMovie, MdOutlineTv } from "react-icons/md";
 
-export default function Header() {
+export default function Header({ user, refreshFavorites}) {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -201,20 +201,20 @@ export default function Header() {
   }
 
   // Track user auth state
-  const [user, setUser] = useState(null)
+  const [authUser, setAuthUser] = useState(null)
   const [username, setUsername] = useState(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        setUser(currentUser)
+        setAuthUser(currentUser)
         const userDoc = await getDoc(doc(db, "users", currentUser.uid))
         if (userDoc.exists()) {
           console.log("username:", userDoc.data().username)
           setUsername(userDoc.data().username)
         }
       } else {
-        setUser(null)
+        setAuthUser(null)
         setUsername(null)
       }
     })
@@ -465,6 +465,7 @@ export default function Header() {
           item={selectedItem}
           onClose={closePopup}
           mediaType={selectedItem.mediaType}
+          refreshFavorites={refreshFavorites}
         />
       )}
     </>

@@ -14,6 +14,7 @@ import {
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import { db, auth } from '../../../firebase/firebase'
 import styles from './index.module.css'
+import Head from 'next/head'
 
 import { FaUser, FaCalendarAlt } from 'react-icons/fa'
 import { IoMdMail } from 'react-icons/io'
@@ -152,70 +153,75 @@ export default function Account() {
     if (!user) return <p>Please log in to view your account.</p>
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Account Details</h1>
+        <>
+        <Head>
+            <title>My Account</title>
+        </Head>
+            <div className={styles.container}>
+                <h1 className={styles.title}>Account Details</h1>
 
-            <div className={styles.detailContainer}>
-                <div className={styles.flex}>
-                    <FaUser className={styles.marginR}/>
-                    <p className={styles.userInfo}><strong>Username:</strong></p>
-                    {showUsernameInput 
-                        ? <input type="text" className={styles.input} value={username} placeholder={username} onChange={(e) => setUsername(e.target.value)}/>
-                        : <p>{username}</p>
+                <div className={styles.detailContainer}>
+                    <div className={styles.flex}>
+                        <FaUser className={styles.marginR}/>
+                        <p className={styles.userInfo}><strong>Username:</strong></p>
+                        {showUsernameInput 
+                            ? <input type="text" className={styles.input} value={username} placeholder={username} onChange={(e) => setUsername(e.target.value)}/>
+                            : <p>{username}</p>
+                        }
+                    </div>
+                    {!showUsernameInput 
+                        ? <button className={styles.changeBtn} onClick={handleToggleUsernameInput}><small>Change username</small></button>
+                        : <div className={styles.changeCancelContainer}>
+                            <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleUsernameChange}><small>Confirm</small></button>
+                            <button className={styles.changeBtn} onClick={() => {setUsername(originalUsername); setShowUsernameInput(false)}}><small>Cancel</small></button>
+                        </div>
                     }
                 </div>
-                {!showUsernameInput 
-                    ? <button className={styles.changeBtn} onClick={handleToggleUsernameInput}><small>Change username</small></button>
-                    : <div className={styles.changeCancelContainer}>
-                        <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleUsernameChange}><small>Confirm</small></button>
-                        <button className={styles.changeBtn} onClick={() => {setUsername(originalUsername); setShowUsernameInput(false)}}><small>Cancel</small></button>
-                    </div>
-                }
-            </div>
 
-            <div className={styles.detailContainer}>
-                <div className={styles.flex}>
-                    <IoMdMail className={styles.marginR}/>
-                    <p className={styles.userInfo}><strong>Email:</strong></p>
-                    {showEmailInput 
-                        ? <input type="text" className={styles.input} value={email} placeholder={user.email} onChange={(e) => setEmail(e.target.value)}/> 
-                        : <p>{user.email}</p>
+                <div className={styles.detailContainer}>
+                    <div className={styles.flex}>
+                        <IoMdMail className={styles.marginR}/>
+                        <p className={styles.userInfo}><strong>Email:</strong></p>
+                        {showEmailInput 
+                            ? <input type="text" className={styles.input} value={email} placeholder={user.email} onChange={(e) => setEmail(e.target.value)}/> 
+                            : <p>{user.email}</p>
+                        }
+                    </div>
+                    {!showEmailInput 
+                        ? <button className={styles.changeBtn} onClick={handleToggleEmailInput}><small>Change email address</small></button>
+                        : <div className={styles.changeCancelContainer}>
+                            <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleEmailChange}><small>Confirm</small></button>
+                            <button className={styles.changeBtn} onClick={() => setShowEmailInput(false)}><small>Cancel</small></button>
+                        </div>
                     }
                 </div>
-                {!showEmailInput 
-                    ? <button className={styles.changeBtn} onClick={handleToggleEmailInput}><small>Change email address</small></button>
-                    : <div className={styles.changeCancelContainer}>
-                        <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleEmailChange}><small>Confirm</small></button>
-                        <button className={styles.changeBtn} onClick={() => setShowEmailInput(false)}><small>Cancel</small></button>
+
+                <div className={styles.detailContainer}>
+                    <div className={styles.flex}>
+                        <MdVerifiedUser className={styles.marginR}/>
+                        <p>
+                            <strong>Email status:</strong>{" "}
+                            {user.emailVerified ? (
+                                <> Verified <span className={`${styles.vAlign} ${styles.verified}`}><MdVerified className={styles.vAlign}/></span> </>
+                            ) : (
+                                <> Not verified <span className={`${styles.vAlign} ${styles.warning}`}><MdWarning /></span> </>
+                            )}
+                        </p>
                     </div>
-                }
-            </div>
-
-            <div className={styles.detailContainer}>
-                <div className={styles.flex}>
-                    <MdVerifiedUser className={styles.marginR}/>
-                    <p>
-                        <strong>Email status:</strong>{" "}
-                        {user.emailVerified ? (
-                            <> Verified <span className={`${styles.vAlign} ${styles.verified}`}><MdVerified className={styles.vAlign}/></span> </>
-                        ) : (
-                            <> Not verified <span className={`${styles.vAlign} ${styles.warning}`}><MdWarning /></span> </>
-                        )}
-                    </p>
+                    {!user.emailVerified && <button className={styles.changeBtn} onClick={sendEmailVerificationToUser}><small>Send Verification</small></button>}
                 </div>
-                {!user.emailVerified && <button className={styles.changeBtn} onClick={sendEmailVerificationToUser}><small>Send Verification</small></button>}
-            </div>
 
-            <div className={styles.flex}>
-                <FaCalendarAlt className={styles.marginR}/>
-                <p><strong>Account Created:</strong> {createdAt}</p>
-            </div>
-            
-            <button className={styles.signOutBtn} onClick={handleSignOut}>Sign Out</button>
-            <hr/>
-            <button className={styles.deleteAccBtn} onClick={handleDeleteAccount}>Delete Account</button>
+                <div className={styles.flex}>
+                    <FaCalendarAlt className={styles.marginR}/>
+                    <p><strong>Account Created:</strong> {createdAt}</p>
+                </div>
+                
+                <button className={styles.signOutBtn} onClick={handleSignOut}>Sign Out</button>
+                <hr/>
+                <button className={styles.deleteAccBtn} onClick={handleDeleteAccount}>Delete Account</button>
 
-            {status && <p>{status}</p>}
-        </div>
+                {status && <p>{status}</p>}
+            </div>
+        </>
     )
 }

@@ -1,14 +1,12 @@
 import Card from '../Card/Card'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 import styles from './Categories.module.css'
-import { getFirestore, collection, getDocs } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
 
-export default function Categories({data}) {
+export default function Categories({data, refreshFavorites, user, favorites}) {
   console.log(data.tv, "tv")
   console.log(data.movies, "movie")
   console.log(data.topMovies, "top movies")
@@ -19,7 +17,6 @@ export default function Categories({data}) {
     {title: "Top Rated Movies", key: "topMovies", mediaType: "movie"},
     {title: "Top Rated TV Series", key: "topTv", mediaType: "tv"},
   ]
-  const [favorites, setFavorites] = useState([])
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -60,39 +57,6 @@ export default function Categories({data}) {
     fetchDetails(id, mediaType)
   }, [fetchDetails]);
 
-  // Fetch favorites from firestore
-  const auth = getAuth()
-  const db = getFirestore()
-  const user = auth.currentUser
-
-  const fetchFavorites = useCallback(async () => {
-    if (!user) {
-      console.error("User not logged in")
-      return[];
-    }
-
-    try {
-      const favoritesRef = collection(db, "users", user.uid, "favorites")
-      const snapshot = await getDocs(favoritesRef)
-
-      const favorites = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-
-      setFavorites(favorites)
-      return favorites
-
-    } catch (error) {
-      console.log("Error fetching favorites:", error)
-      return[]
-    }
-  }, [user])
-
-  useEffect(() => {
-    fetchFavorites()
-    console.log("favorites", favorites)
-  },[fetchFavorites])
 
   return (
     <main className={styles['categories']}>
@@ -173,7 +137,7 @@ export default function Categories({data}) {
           item={selectedItem} 
           onClose={closePopup} 
           mediaType={selectedItem.mediaType} 
-          refreshFavorites={fetchFavorites}
+          refreshFavorites={refreshFavorites}
         />
       }
     </main>
