@@ -6,7 +6,7 @@
     padding: 1rem 3.5rem;
     z-index: 2000;
     padding: 1rem 0rem;
-    background: rgba(17, 17, 17, 0.8) url('/images/asfalt-dark.png') repeat;
+    background: #111111e8 url('/images/asfalt-dark.png') repeat;
 }
 
 .header--mobile {

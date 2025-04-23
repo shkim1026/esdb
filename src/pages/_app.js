@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import '../styles/App.css';
 import '../components/Header/Header.module.css';  //Prevents FOUC
 import Header from '../components/Header/Header'; //Prevents FOUC
+import Footer from '../components/Footer/Footer'
 import Head from 'next/head';
 import { onAuthStateChanged, getAuth } from 'firebase/auth'
 import { useState, useEffect, useCallback } from 'react'
@@ -52,7 +53,6 @@ export default function App({ Component, pageProps }) {
     if (user) {
       fetchFavorites()
     }
-    console.log("favorites", favorites)
   }, [user, fetchFavorites])
 
   return (
@@ -62,6 +62,7 @@ export default function App({ Component, pageProps }) {
       </Head>
       <Header refreshFavorites={fetchFavorites} user={user}/>
       <Component {...pageProps} user={user} refreshFavorites={fetchFavorites} favorites={favorites}/>
+      <Footer />
     </>
   );
 }
