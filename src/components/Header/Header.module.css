@@ -84,9 +84,20 @@
     opacity: 0;
 }
 
-.mobile--account-links-container {
+.mobile--links-container {
     display: flex;
     flex-direction: column;
+}
+
+.mobile--link-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.mobile--link-icon {
+    min-width: 30px;
+    padding-right: 0.5rem;
 }
 
 .mobile--sign-out-btn {
@@ -280,18 +291,18 @@
         transform: rotate(-180deg);
     }
     
-    .dropdown--account-container {
+    .dropdown--link-container {
         display:flex;
         align-items: center;
         margin-bottom: 1rem;
     }
 
-    .dropdown--account-icon {
+    .dropdown--link-icon {
         font-size: 1rem;
         margin-right: 0.5rem;
     }
 
-    .dropdown--account {
+    .dropdown--link {
         font-size: 14px;
     }
 

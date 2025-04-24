@@ -1,0 +1,27 @@
+.section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 5rem;
+}
+
+.title {
+    text-align: center;
+}
+
+.ulContainer {
+    padding-left: 1rem;
+}
+
+.questionUl {
+    padding-left: 1rem;
+}
+
+@media (min-width: 1024px) {
+    ul.Container {
+        padding-left: revert;
+    }
+
+    .questionUl {
+        padding-left: revert;
+    }
+}

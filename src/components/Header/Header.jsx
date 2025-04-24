@@ -12,7 +12,7 @@ import SignUpModal from "../SignUpModal/SignUpModal"
 
 import styles from "./Header.module.css";
 
-import { FaSearch, FaUserCircle, FaChevronUp, FaRegUser } from "react-icons/fa";
+import { FaSearch, FaUserCircle, FaChevronUp, FaRegUser, FaQuestion } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdMovie, MdOutlineTv } from "react-icons/md";
@@ -311,9 +311,13 @@ export default function Header({ user, refreshFavorites}) {
 
                 {showDropdown && (
                   <div className={styles["profile-dropdown"]}>
-                    <div className={styles["dropdown--account-container"]}>
-                      <FaRegUser className={styles["dropdown--account-icon"]}/>
-                      <Link href="/account" className={styles["dropdown--account"]}>My Account</Link>
+                    <div className={styles["dropdown--link-container"]}>
+                      <FaRegUser className={styles["dropdown--link-icon"]}/>
+                      <Link href="/account" className={styles["dropdown--link"]}>My Account</Link>
+                    </div>
+                    <div className={styles["dropdown--link-container"]}>
+                      <FaQuestion className={styles["dropdown--link-icon"]}/>
+                      <Link href="/faq" className={styles["dropdown--link"]}>FAQ</Link>
                     </div>
 
                     <button onClick={handleSignOut} className={styles["desktop--sign-out-btn"]}>Sign Out</button>
@@ -369,7 +373,7 @@ export default function Header({ user, refreshFavorites}) {
               />
             )}
 
-            <Link href="/">
+            <Link href="/" onClick={() => setIsHamburgerVisible(false)}>
               <img
                 src="/images/EsdbLogo.png"
                 alt="Entertainment Streaming Database logo"
@@ -426,18 +430,31 @@ export default function Header({ user, refreshFavorites}) {
               <h2>{username}</h2>
             </div>
             <hr/>
-            <div className={styles["mobile--account-links-container"]}>
-              <Link href="/account" onClick={() => setShowDropdown(false)}>My Account</Link>
+            <div className={styles["mobile--links-container"]}>
+              <div className={styles["mobile--link-container"]}>
+                <FaRegUser className={styles["mobile--link-icon"]}/>
+                <Link href="/account" onClick={() => setIsHamburgerVisible(false)}>My Account</Link>
+              </div>
+              <div className={styles["mobile--link-container"]}>
+                <FaQuestion className={styles["mobile--link-icon"]}/>
+                <Link href="/faq" onClick={() => setIsHamburgerVisible(false)}>FAQ</Link>
+              </div>
               <button className={styles["mobile--sign-out-btn"]} onClick={handleSignOut}>Sign Out</button>
             </div>
           </>
         ) : (
-          <button
-            className={styles["header--login-btn"]}
-            onClick={() => setShowLogin(true)}
-          >
-            Login
-          </button>
+          <>
+            <div className={styles["mobile--link-container"]}>
+              <FaQuestion className={styles["mobile--link-icon"]}/>
+              <Link href="/faq" onClick={() => setIsHamburgerVisible(false)}>FAQ</Link>
+            </div>
+            <button
+              className={styles["header--login-btn"]}
+              onClick={() => setShowLogin(true)}
+            >
+              Login
+            </button>
+          </>
         )}
       </nav>
 
