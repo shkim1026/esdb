@@ -166,7 +166,7 @@ export default function Account() {
                         <p className={styles.userInfo}><strong>Username:</strong></p>
                         {showUsernameInput 
                             ? <input type="text" className={styles.input} value={username} placeholder={username} onChange={(e) => setUsername(e.target.value)}/>
-                            : <p>{username}</p>
+                            : <p className={styles.username}>{username}</p>
                         }
                     </div>
                     {!showUsernameInput 
@@ -184,7 +184,7 @@ export default function Account() {
                         <p className={styles.userInfo}><strong>Email:</strong></p>
                         {showEmailInput 
                             ? <input type="text" className={styles.input} value={email} placeholder={user.email} onChange={(e) => setEmail(e.target.value)}/> 
-                            : <p>{user.email}</p>
+                            : <p className={styles.email}>{user.email}</p>
                         }
                     </div>
                     {!showEmailInput 
@@ -213,7 +213,7 @@ export default function Account() {
 
                 <div className={styles.flex}>
                     <FaCalendarAlt className={styles.marginR}/>
-                    <p><strong>Account Created:</strong> {createdAt}</p>
+                    <p><strong>Created:</strong> {createdAt}</p>
                 </div>
                 
                 <button className={styles.signOutBtn} onClick={handleSignOut}>Sign Out</button>

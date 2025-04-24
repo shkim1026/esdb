@@ -1,6 +1,7 @@
 .container {
     place-self: baseline;
     margin-top: 5rem;
+    margin: 5rem auto auto auto;
 }
 
 .title {
@@ -35,6 +36,11 @@
     padding: 0.3rem;
     border-radius: 5px;
     font-size: 1rem;
+}
+
+.email,
+.username {
+    margin-bottom: 0.2rem;
 }
 
 .userInfo {
@@ -75,21 +81,32 @@
     margin-top: 1rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
     .container {
-        width: calc(50vw - 8rem)
+        max-width: 800px;
     }
 
+    .detailContainer {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .email,
+    .username {
+        margin-bottom: 1rem;
+    }
+
+    .input {
+        margin-bottom: 0.8rem;
+    }
+}
+
+@media (min-width: 1024px) {
     .flex {
         align-items: center;
     }
 
     .userInfo {
         margin-bottom: revert;
-    }
-
-    .detailContainer {
-        display: flex;
-        justify-content: space-between;
     }
   }

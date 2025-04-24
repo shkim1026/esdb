@@ -59,7 +59,7 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
 
 
   return (
-    <main className={styles['categories']}>
+    <div className={styles['categories']}>
       {user && favorites.length > 0 &&
         <section className={styles['categories--section']}>
           <h2 className={styles['categories--title']}>My List</h2>
@@ -148,6 +148,6 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
           refreshFavorites={refreshFavorites}
         />
       }
-    </main>
+    </div>
   )
 }

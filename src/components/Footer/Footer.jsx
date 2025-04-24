@@ -15,10 +15,10 @@ export default function Footer() {
                 <div>
                     <p className={styles.disclaimer}>
                         This website is a personal project created solely for the purpose of showcasing frontend development skills 
-                        using React. It is not affiliated with, endorsed by, or connected to TMDB, Netflix, or any other streaming service. All 
+                        using React. It is not affiliated with or endorsed by TMDB, Netflix, or any other streaming service. All 
                         data displayed is for demonstration purposes only.
                     </p>
-                    <p>No files are hosted on this website's servers. All media content is accessed via links to third-party services.</p>
+                    <p className={styles.hostingDisclaimer}>No files are hosted on this website's servers. All media content is accessed via links to third-party services.</p>
                 </div>
             </div>
             <div>

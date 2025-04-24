@@ -60,9 +60,13 @@ export default function App({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <Header refreshFavorites={fetchFavorites} user={user}/>
-      <Component {...pageProps} user={user} refreshFavorites={fetchFavorites} favorites={favorites}/>
-      <Footer />
+      <div className="app-container">
+        <Header refreshFavorites={fetchFavorites} user={user}/>
+        <main className="main-content">
+          <Component {...pageProps} user={user} refreshFavorites={fetchFavorites} favorites={favorites}/>
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
