@@ -5,6 +5,10 @@ import { useState, useCallback } from 'react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 import styles from './Categories.module.css'
+import { doc, setDoc, deleteDoc } from 'firebase/firestore'
+import { auth, db } from '../../../firebase/firebase'
+
+import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 export default function Categories({data, refreshFavorites, user, favorites}) {
   console.log(data.tv, "tv")
@@ -57,6 +61,36 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     fetchDetails(id, mediaType)
   }, [fetchDetails]);
 
+  // Add or remove from favorites
+  const toggleFavorites = async (item, mediaType) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      alert("Please sign in to modify your list.")
+      return
+    }
+
+    const isFavorited = favorites?.some(fav => fav.id === item.id)
+    const favRef = doc(db, "users", currentUser.uid, "favorites", item.id.toString())
+
+    try {
+      if (isFavorited) {
+        await deleteDoc(favRef);
+        console.log("Removed from favorites")
+      } else {
+        await setDoc(favRef, {
+          ...item,
+          mediaType,
+          addedAt: new Date().toISOString()
+        })
+        console.log("Added to favorites")
+      }
+      refreshFavorites();
+    } catch (error) {
+      console.log("Error toggling favorite:", error)
+      alert("Error updating favorites: " + error.message)
+    }
+  }
+
 
   return (
     <div className={styles['categories']}>
@@ -89,6 +123,7 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
               })
               .map(item => (
                 <SplideSlide key={item.id}>
+                  <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item)}}/>
                   <Card 
                     key={item.id}
                     data={item}
@@ -124,16 +159,25 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
               },
             }}
           >
-            {data[key].map(item => (
+            {data[key].map(item => {
+              const isFavorited = favorites?.some(fav => fav.id === item.id)
+
+              return (
               <SplideSlide key={item.id}>
+                {isFavorited
+                    ? <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
+                    : <BsPlusCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
+                }
                 <Card 
                   key={item.id} 
                   data={item} 
                   mediaType={mediaType}
                   handleClick={(e) => handleClick(item.id, mediaType, e)}
+                  user={user}
                 />
               </SplideSlide>
-            ))}
+              )
+            })}
           </Splide>
         </section>
       ))}

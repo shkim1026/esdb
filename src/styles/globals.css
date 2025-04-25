@@ -108,10 +108,18 @@ hr {
     transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .splide__slide img:hover {
+  .splide__slide:hover img{
     transform: scale(1.1);
     z-index: 10;
     /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
     box-shadow: 0px 0px 50px black;
+  }
+
+  .splide__slide:hover svg {
+    opacity: 1;
+  }
+
+  .splide__slide:not(:hover) svg {
+    transition: none;
   }
 }
