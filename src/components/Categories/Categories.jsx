@@ -1,16 +1,20 @@
 import Card from '../Card/Card'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
-import { useState, useCallback } from 'react'
+
+import { useState, useCallback, useEffect } from 'react'
+
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
+
 import styles from './Categories.module.css'
-import { doc, setDoc, deleteDoc } from 'firebase/firestore'
+
+import { doc, setDoc, deleteDoc, collection, getDocs } from 'firebase/firestore'
 import { auth, db } from '../../../firebase/firebase'
 
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
-export default function Categories({data, refreshFavorites, user, favorites}) {
+export default function Categories({data, refreshFavorites, user}) {
   console.log(data.tv, "tv")
   console.log(data.movies, "movie")
   console.log(data.topMovies, "top movies")
@@ -24,6 +28,7 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [favorites, setFavorites] = useState([])
 
   const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
 
@@ -35,6 +40,21 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     }
   }
 
+  // Loads favorites from Firebase
+  const loadFavorites = async () => {
+    const currentUser = auth.currentUser
+    if (!currentUser) return
+
+    const snapshot = await getDocs(collection(db, "users", currentUser.uid, "favorites"))
+    const data = snapshot.docs.map(doc => doc.data())
+    setFavorites(data)
+  }
+
+  useEffect(() => {
+    loadFavorites()
+  }, [])
+
+  // Fetches movie/TV show details
   const fetchDetails = useCallback(async (id, mediaType) => {
     console.log(`Fetching details for ${mediaType} with ID: ${id}`);
     if (loading) return;
@@ -51,17 +71,19 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     }
   },[])
 
-  const closePopup = () => {
-    setSelectedItem(null)
-  }
-
+  // Calls fetchDetails when user clicks on item
   const handleClick = useCallback((id, mediaType, e) => {
     e.stopPropagation();
     console.log("Card is clicked");
     fetchDetails(id, mediaType)
   }, [fetchDetails]);
 
-  // Add or remove from favorites
+  // Closes Popup Modal
+  const closePopup = () => {
+    setSelectedItem(null)
+  }
+
+  // Adds or removes item from favorites
   const toggleFavorites = async (item, mediaType) => {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -71,6 +93,12 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
 
     const isFavorited = favorites?.some(fav => fav.id === item.id)
     const favRef = doc(db, "users", currentUser.uid, "favorites", item.id.toString())
+
+    const updatedFavorites = isFavorited
+      ? favorites.filter(fav => fav.id !== item.id)
+      : [{ ...item, mediaType, addedAt: new Date().toISOString() }, ...favorites]
+
+    setFavorites(updatedFavorites)
 
     try {
       if (isFavorited) {
@@ -88,6 +116,7 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     } catch (error) {
       console.log("Error toggling favorite:", error)
       alert("Error updating favorites: " + error.message)
+      setFavorites(favorites)
     }
   }
 
@@ -123,12 +152,14 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
               })
               .map(item => (
                 <SplideSlide key={item.id}>
-                  <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item)}}/>
+                  <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, item.mediaType)}}/>
                   <Card 
-                    key={item.id}
                     data={item}
                     mediaType={item.mediaType}
-                    handleClick={(e) => handleClick(item.id, item.mediaType, e)}
+                    fetchDetails={(e) => {
+                      e.stopPropagation(); 
+                      fetchDetails(item.id, item.mediaType, e)
+                    }}
                   />
                 </SplideSlide>
               ))
@@ -169,10 +200,12 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
                     : <BsPlusCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
                 }
                 <Card 
-                  key={item.id} 
                   data={item} 
                   mediaType={mediaType}
-                  handleClick={(e) => handleClick(item.id, mediaType, e)}
+                  fetchDetails={(e) => {
+                    e.stopPropagation(); 
+                    fetchDetails(item.id, mediaType, e)
+                  }}
                   user={user}
                 />
               </SplideSlide>

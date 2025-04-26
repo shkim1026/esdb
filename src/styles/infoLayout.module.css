@@ -16,6 +16,28 @@
     padding-left: 1rem;
 }
 
+.textCenter {
+    text-align: center;
+}
+
+.contactList {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+    text-align: center;
+    border: 1px solid gray;
+    border-radius: 5px;
+    max-width: 500px;
+    margin: 3rem auto auto auto;
+    padding-left: 0;
+    list-style: none;
+}
+
+.contactIcon {
+    font-size: 3rem;
+    padding-bottom: 1rem;
+}
+
 @media (min-width: 1024px) {
     ul.Container {
         padding-left: revert;

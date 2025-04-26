@@ -2,8 +2,7 @@ import React from 'react'
 import EpisodeSelect from '../EpisodeSelect/EpisodeSelect'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
 import styles from './DetailsPopup.module.css'
-import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore'
-import { auth, db } from '../../../firebase/firebase'
+import useFavorites from '../../hooks/useFavorites'
 
 import { IoClose } from 'react-icons/io5'
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
@@ -32,71 +31,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
 
   const movieUrl = `https://vidsrc.xyz/embed/movie/${item.id}/`
 
-  const [isFavorite, setIsFavorite] = React.useState(false)
-
-  // Check if item is in favorites
-  React.useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      try {
-        const user = auth.currentUser
-        if (!user) {
-          setIsFavorite(false)
-          return
-        }
-
-        const favRef = doc(db, "users", user.uid, "favorites", item.id.toString())
-        const favSnap = await getDoc(favRef)
-
-        setIsFavorite(favSnap.exists())
-      } catch (error) {
-        console.error("Failed to fetch favorite status:", error.message)
-      }
-    }
-    checkFavoriteStatus()
-  }, [item.id])
-
-  // User adds to favorites
-  const handleAddToFavorites = async () => {
-    const currentUser = auth.currentUser;
-
-    if (!currentUser) {
-      alert("Please sign in to add items to your list.")
-      return
-    }
-
-    const userFavoritesRef = doc(db, "users", currentUser.uid, "favorites", String(item.id))
-
-    try {
-      await setDoc(userFavoritesRef, {
-        ...item,
-        mediaType: mediaType,
-        addedAt: new Date().toISOString()
-      })
-      setIsFavorite(true)
-      refreshFavorites()
-    } catch (error) {
-      console.log("Error adding to favorites:", error)
-    }
-  }
-
-  // User removes from favorites
-  const removeFromFavorites = async (itemId) => {
-    try {
-      const user = auth.currentUser
-      if (!user) {
-        throw new Error("You must be signed in to remove favorites.")
-      }
-
-      const favRef = doc(db, "users", user.uid, "favorites", itemId.toString())
-      await deleteDoc(favRef)
-      setIsFavorite(false)
-      refreshFavorites()
-      console.log("Item removed from favorites!")
-    } catch (error) {
-      console.log("Error removing from favorites:", error.message)
-      alert("Error removing from favorites:", + error.message)
-    }
-  }
+  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites(item.id)
 
   return (
     <div className={styles["popup-overlay"]} onClick={onClose}>
@@ -147,9 +82,11 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                 className={styles["myList--btn"]} 
                 onClick={() => {
                   if (isFavorite) {
-                    removeFromFavorites(item.id)
+                    removeFromFavorites()
+                    refreshFavorites()
                   } else {
-                    handleAddToFavorites(item)
+                    addToFavorites(item, mediaType)
+                    refreshFavorites()
                   }
                 }}
               >
