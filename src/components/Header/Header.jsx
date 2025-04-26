@@ -15,7 +15,8 @@ import styles from "./Header.module.css";
 import { FaSearch, FaUserCircle, FaChevronUp, FaRegUser, FaQuestion } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { MdMovie, MdOutlineTv } from "react-icons/md";
+import { MdMovie, MdOutlineTv, MdOutlinePrivacyTip, MdOutlineContactSupport } from "react-icons/md";
+import { TbContract } from "react-icons/tb";
 
 export default function Header({ user, refreshFavorites}) {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -423,39 +424,43 @@ export default function Header({ user, refreshFavorites}) {
       )}
 
       <nav className={`${styles["hamburger-nav"]} ${isHamburgerVisible ? styles["mobile-visible"] : ""}`}>
-        {user ? (
+        {user && (
           <>
             <div className={styles["header--logged-in"]}>
               <FaUserCircle className={styles["header--user-profile"]} />
               <h2>{username}</h2>
             </div>
             <hr/>
-            <div className={styles["mobile--links-container"]}>
-              <div className={styles["mobile--link-container"]}>
-                <FaRegUser className={styles["mobile--link-icon"]}/>
-                <Link href="/account" onClick={() => setIsHamburgerVisible(false)}>My Account</Link>
-              </div>
-              <div className={styles["mobile--link-container"]}>
-                <FaQuestion className={styles["mobile--link-icon"]}/>
-                <Link href="/faq" onClick={() => setIsHamburgerVisible(false)}>FAQ</Link>
-              </div>
-              <button className={styles["mobile--sign-out-btn"]} onClick={handleSignOut}>Sign Out</button>
-            </div>
           </>
-        ) : (
-          <>
+        )}
+          <div className={styles["mobile--links-container"]}>
+          {user && (
+            <div className={styles["mobile--link-container"]}>
+              <FaRegUser className={styles["mobile--link-icon"]}/>
+              <Link href="/account" onClick={() => setIsHamburgerVisible(false)}>My Account</Link>
+            </div>
+          )}
             <div className={styles["mobile--link-container"]}>
               <FaQuestion className={styles["mobile--link-icon"]}/>
               <Link href="/faq" onClick={() => setIsHamburgerVisible(false)}>FAQ</Link>
             </div>
-            <button
-              className={styles["header--login-btn"]}
-              onClick={() => setShowLogin(true)}
-            >
-              Login
-            </button>
-          </>
-        )}
+            <div className={styles["mobile--link-container"]}>
+              <TbContract className={styles["mobile--link-icon"]}/>
+              <Link href="/terms" onClick={() => setIsHamburgerVisible(false)}>Terms of Use</Link>
+            </div>
+            <div className={styles["mobile--link-container"]}>
+              <MdOutlinePrivacyTip className={styles["mobile--link-icon"]}/>
+              <Link href="/privacy" onClick={() => setIsHamburgerVisible(false)}>Privacy</Link>
+            </div>
+            <div className={styles["mobile--link-container"]}>
+              <MdOutlineContactSupport className={styles["mobile--link-icon"]}/>
+              <Link href="/contact" onClick={() => setIsHamburgerVisible(false)}>Contact</Link>
+            </div>
+          </div>
+          {user 
+            ? <button className={styles["mobile--sign-out-btn"]} onClick={handleSignOut}>Sign Out</button>
+            : <button className={styles["header--login-btn"]} onClick={() => setShowLogin(true)}>Login</button>
+          }
       </nav>
 
       <LoginModal

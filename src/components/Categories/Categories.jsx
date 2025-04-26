@@ -71,13 +71,6 @@ export default function Categories({data, refreshFavorites, user}) {
     }
   },[])
 
-  // Calls fetchDetails when user clicks on item
-  const handleClick = useCallback((id, mediaType, e) => {
-    e.stopPropagation();
-    console.log("Card is clicked");
-    fetchDetails(id, mediaType)
-  }, [fetchDetails]);
-
   // Closes Popup Modal
   const closePopup = () => {
     setSelectedItem(null)
@@ -152,7 +145,10 @@ export default function Categories({data, refreshFavorites, user}) {
               })
               .map(item => (
                 <SplideSlide key={item.id}>
-                  <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, item.mediaType)}}/>
+                  <div className={styles.iconWrapper}>
+                    <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, item.mediaType)}}/>
+                    <span className={styles.tooltip}>Remove from My List</span>
+                  </div>
                   <Card 
                     data={item}
                     mediaType={item.mediaType}
@@ -196,8 +192,18 @@ export default function Categories({data, refreshFavorites, user}) {
               return (
               <SplideSlide key={item.id}>
                 {isFavorited
-                    ? <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
-                    : <BsPlusCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
+                    ? (
+                      <div className={styles.iconWrapper}>
+                        <BsCheckCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
+                        <span className={styles.tooltip}>Remove from My List</span>
+                      </div>
+                      )
+                    : (
+                      <div className={styles.iconWrapper}>
+                        <BsPlusCircle className={styles.addToListIcon} onClick={(e) => {e.stopPropagation(); toggleFavorites(item, mediaType)}}/>
+                        <span className={styles.tooltip}>Add to My List</span>
+                      </div>
+                      )
                 }
                 <Card 
                   data={item} 

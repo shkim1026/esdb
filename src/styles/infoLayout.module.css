@@ -33,10 +33,41 @@
     list-style: none;
 }
 
+.iconWrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .contactIcon {
     font-size: 3rem;
     padding-bottom: 1rem;
 }
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    width: max-content;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 20;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in;
+    border: 1px solid white;
+  }
+  
+  .iconWrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
 
 @media (min-width: 1024px) {
     ul.Container {

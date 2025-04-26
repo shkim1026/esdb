@@ -12,11 +12,16 @@
     margin: .5rem 0rem;
 }
 
-.addToListIcon {
+.iconWrapper {
+    position: absolute;
+    display: inline-block;
     position: absolute;
     top: -0.3rem;
     right: 0.1rem;
     z-index: 15;
+}
+
+.addToListIcon {
     font-size: 1.5rem;
     cursor: pointer;
     opacity: 0;
@@ -35,4 +40,31 @@
 
 .splide__slide:not(:hover) .addToListIcon {
     transition: none;
-  }
+}
+
+
+.tooltip {
+    visibility: hidden;
+    width: max-content;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.87);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 20;
+    bottom: 125%; /* position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.75rem;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.87);
+}
+
+.iconWrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0.5s;
+}

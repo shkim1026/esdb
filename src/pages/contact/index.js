@@ -13,13 +13,22 @@ export default function Contact() {
             </p>
             <ul className={styles.contactList}>
                 <li><h2>Email</h2>
-                    <a href="mailto:shkim1026@gmail.com"><SiGmail className={styles.contactIcon}/></a>
+                    <div class={styles.iconWrapper}>
+                        <a href="mailto:shkim1026@gmail.com"><SiGmail className={styles.contactIcon}/></a>
+                        <div className={styles.tooltip}>Shkim1026@gmail.com</div>
+                    </div>
                 </li>
                 <li><h2>LinkedIn</h2>
-                    <a href="https://www.linkedin.com/in/shkim1026/"><FaLinkedin className={styles.contactIcon}/></a>
+                    <div class={styles.iconWrapper}>
+                        <a href="https://www.linkedin.com/in/shkim1026/"><FaLinkedin className={styles.contactIcon}/></a>
+                        <div className={styles.tooltip}>https://www.linkedin.com/in/shkim1026/</div>
+                    </div>
                 </li>
                 <li><h2>Github</h2>
-                    <a href="https://github.com/shkim1026"><FaGithub className={styles.contactIcon}/></a>
+                    <div class={styles.iconWrapper}>
+                        <a href="https://github.com/shkim1026"><FaGithub className={styles.contactIcon}/></a>
+                        <div className={styles.tooltip}>https://github.com/shkim1026</div>
+                    </div>
                 </li>
             </ul>
         </section>
