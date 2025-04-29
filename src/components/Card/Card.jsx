@@ -1,13 +1,21 @@
 import styles from './Card.module.css'
-export default function Card({ data, handleClick }) {
+
+export default function Card({ data, fetchDetails }) {
 
   return (
     <>  
       <img 
         className={styles['card--image']}
-        src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} 
+        src={`https://image.tmdb.org/t/p/w342/${data.poster_path}`} 
         alt={data.title}
-        onClick={handleClick}
+        role="button"
+        tabIndex="0"
+        onClick={fetchDetails}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            fetchDetails();
+          }
+        }}
       />
     </>
   );

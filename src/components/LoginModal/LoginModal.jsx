@@ -1,55 +1,124 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./LoginModal.module.css";
-import { IoClose } from 'react-icons/io5'
+import { IoClose } from 'react-icons/io5';
 import { FaUser, FaLock } from 'react-icons/fa';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase/firebase";
 
-export default function LoginModal({ open, onClose, onLogin }) {
+export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const emailInputRef = useRef(null);
 
-  if (!open) return null
- 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onLogin(email, password)
-  }
+  useEffect(() => {
+    if (open && emailInputRef.current) {
+      emailInputRef.current.focus(); // Focus the input when modal is opened
+    }
+  }, [open]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('Signed in as user:', user);
+
+      if (onLogin) {
+        onLogin(email, password);
+      }
+    } catch (err) {
+      console.log(err.message);
+      setError("Invalid email and/or password");
+    }
+  };
 
   return (
-    <div className={styles.overlay}>
+    <div
+      className={`${styles.overlay} ${open ? styles.open : ''}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="login-modal-title"
+      aria-describedby="login-modal-description"
+    >
       <div className={styles.modal}>
-        <button className={styles.closeButton} onClick={onClose}>
+        <button
+          className={styles.closeButton}
+          onClick={onClose}
+          aria-label="Close sign-in modal"
+        >
           <IoClose />
         </button>
-        <h2 className={styles.title}>Sign In</h2>
+
+        <img
+          className={styles.logo}
+          src="/images/EsdbRel.png"
+          alt="Esdb Logo"
+        />
+
+        <h2 id="login-modal-title" className={styles.title}>Sign In</h2>
+        <p id="login-modal-description" className={styles.SROnly}>
+          Please enter your email and password to sign in.
+        </p>
+
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputWrapper}>
-            <FaUser className={styles.icon}/>
-            <input 
-              type="email"
-              placeholder="Email"
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <div className={styles.formGroup}>
+            <label htmlFor="login-email">Email</label>
+            <div className={styles.inputWrapper}>
+              <FaUser className={styles.icon} aria-hidden="true"/>
+              <input
+                id="login-email"
+                type="email"
+                placeholder="Email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                ref={emailInputRef}
+              />
+            </div>
           </div>
-          <div className={styles.inputWrapper}>
-            <FaLock className={styles.icon}/>
-            <input 
-              type="password"
-              placeholder="Password"
-              className={styles.input}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+
+          <div className={styles.formGroup}>
+            <label htmlFor="login-password">Password</label>
+            <div className={styles.inputWrapper}>
+              <FaLock className={styles.icon} aria-hidden="true"/>
+              <input
+                id="login-password"
+                type="password"
+                placeholder="Password"
+                className={styles.input}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
+
+          {error && <p className={styles.errorMessage} role="alert">{error}</p>}
+
           <button type="submit" className={styles.submitButton}>
             Sign In
           </button>
-          <p className={styles.noAccount}><small>Don't have an account? <span><a className={styles.signUp}>Sign up</a></span></small></p>
         </form>
+
+        <p className={styles.noAccount}>
+            <small>
+              Don't have an account?{" "}
+              <button
+                type="button"
+                className={styles.signUp}
+                onClick={onSwitchToSignup}
+                aria-label="Switch to sign-up form"
+              >
+                Sign up
+              </button>
+            </small>
+        </p>
       </div>
     </div>
-  )
+  );
 }

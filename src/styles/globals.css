@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -15,11 +15,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #c6000a;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  text-decoration: underline;
 }
 
 /* Prevents carousel from overflowing while keeping hover effects */
@@ -30,7 +30,6 @@ html, body {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   font-family: "Roboto", sans-serif;
@@ -52,22 +51,26 @@ h1, h2, h3 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  /* padding: 0.6em 1.2em; */
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
+  font-family: "Bebas neue", sans-serif;
   transition: border-color 0.25s;
+  padding: 12px;
+  background-color: #c6000a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
 }
 button:hover {
-  border-color: #c6000a;
+  background-color: #f40612;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #f40612;;
+}
+
+hr {
+  color: #292929;
 }
 
 /* Splide */
@@ -105,10 +108,18 @@ button:focus-visible {
     transition: transform 0.3s ease, z-index 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .splide__slide img:hover {
+  .splide__slide:hover img{
     transform: scale(1.1);
     z-index: 10;
     /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); */
-    box-shadow: 0px 0px 100px black;
+    box-shadow: 0px 0px 50px black;
+  }
+
+  .splide__slide:hover svg {
+    opacity: 1;
+  }
+
+  .splide__slide:not(:hover) svg {
+    transition: none;
   }
 }

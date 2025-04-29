@@ -6,20 +6,24 @@
     padding: 1rem 3.5rem;
     z-index: 2000;
     padding: 1rem 0rem;
-    background: rgba(17, 17, 17, 0.8) url('/images/asfalt-dark.png') repeat;
+    background: #111111e8 url('/images/asfalt-dark.png') repeat;
 }
 
-.header--mobile {
-    display: block;
-    max-width: 100%;
-    margin: 0 auto;
-}
-
-.header--mobile-inner-div {
+.header--container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    max-width: calc(100vw - 1rem);
+    margin: 0 auto;
+}
+
+.header--search-container {
+    display: flex;
+    align-items: center;
+}
+
+.header--profile-wrapper {
+    display: none;
 }
 
 .header--logo {
@@ -30,11 +34,23 @@
 .header--login-btn {
     padding: 0.6em 1.2em;
     color: white;
+    font-family: 'Bebas neue', sans-serif;
+}
+
+.header--logged-in {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header--user-profile {
+    font-size: 2.5rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
 }
 
 .header--search-btn {
     padding: 1rem;
-    cursor: pointer;
 }
 
 .search-btn--close {
@@ -53,6 +69,18 @@
     pointer-events: auto;
     background-color: #30303a;
     color: white;
+    display: none;
+}
+
+.searchbar-visible {
+    display: block;
+    height: 2rem;
+    width: calc(100vw - 2.5rem);
+    opacity: 1;
+    left: 50%;
+    top: 6rem;
+    position: fixed;
+    transform: translate(-50%, -30%);
 }
 
 .header--mobile-hamburger {
@@ -65,47 +93,81 @@
     width: 0;
     background-color: #111;
     height: 95vh;
-    z-index: 9999;
+    z-index: 2000;
     transition: opacity 0.3s ease, width 0.3s ease;
     margin-top: 5rem;
     left: 0;
     opacity: 0;
 }
 
+.mobile--links-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile--link-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.mobile--link-icon {
+    min-width: 30px;
+    padding-right: 0.5rem;
+}
+
+.mobile--sign-out-btn {
+    margin-top: 1rem;
+}
+
+.mobile--sign-out-btn,
+.desktop--sign-out-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: white;
+    background-color: #c6000a;
+    width: fit-content;
+    font-family: "Bebas neue", sans-serif;
+}
+
 .mobile-visible {
-    width: 90vw;
+    width: 87vw;
     opacity: 1;
-    padding-left: 1rem;
+    padding: 1rem;
+    display: block;
 }
 
 .searchbar-mobile {
     margin-top: 5rem;
     left: 0;
     position: fixed;
-    z-index: 9999;
+    z-index: 2000;
     padding: 1.5rem;
 }
 
-.header--desktop {
-    display: none;
-}
-
-.header--search-results {
+.header--search-results-container {
     border: 1px solid #30303a;
     position: fixed;
     z-index: 1000;
     top: 8rem;
-    width: 92vw;
+    left: 50%;
+    width: calc(100vw - 2.5rem);
+    transform: translate(-50%, 0%);
     background-color: #111;
     max-height: 65vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
-.search-results--container {
+.search-results--item {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #30303a;
     cursor: pointer;
+}
+
+.search-results--item:hover,
+.highlighted {
+    background-color: #30303a;
 }
 
 .search-results--title {
@@ -132,16 +194,7 @@
         max-width: calc(100vw - 2rem);
     }
 
-    .header--desktop {
-        display: none;
-    }
-
-    .header--searchbar {
-        left: 2rem;
-        width: 87.5vw;
-    }
-
-    .header--search-results {
+    .header--search-results-container {
         width: 93vw;
     }
 
@@ -151,67 +204,114 @@
 }
 
 @media (min-width: 768px) and (min-height: 600px) {
-    .header--searchbar {
-        left: 2rem;
-        width: 86vw;
-    }
 
-    .header--search-results {
-        left: 2rem;
-        width: 91.7vw;
+    .header--search-results-container {
+        width: calc(100vw - 4rem);
+    }
+    .searchbar-visible {
+        width: calc(100vw - 5rem);
     }
 }
 
 @media (min-width: 1024px) {
 
-    .header--desktop {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: calc(100vw - 8rem);
+    .header--container {
         margin: 0 auto;
+        max-width: calc(100vw - 8rem)
     }
 
-    .header--flex-right-container {
-        display: flex;
-        align-items: center;
+    .hamburger-nav {
+        display: none;
     }
 
+    .header--search-btn {
+        cursor: pointer;
+    }
+    
     .search-btn--close {
         padding: 0rem 0.75rem;
     }
 
     .header--searchbar {
+        position: initial;
         transition: opacity 0.3s ease, width 0.3s ease;
         width: 0;
         opacity: 0;
         border-radius: 4px;
+        position: initial;
     }
 
-    .desktop-visible {
+    .searchbar-visible {
+        display: block;
         height: 2rem;
         width: 30rem;
         opacity: 1;
+        left: auto;
+        top: auto;
+        position: inherit;
+        transform: none;
     }
 
-    .header--search-results {
-        width: 30.9rem;
-        top: 4.25rem;
+    .header--search-results-container {
+        width: 30.5rem;
+        top: 5rem;
         left: auto;
+        transform: none;
     }
 
     .search-results--title {
         max-width: 23rem;
     }
 
-    .search-results--container:hover {
-        background-color: #30303a;
+    .header--mobile-hamburger {
+        display: none;
     }
 
-    .header--mobile,
-    .searchbar-mobile,
-    .results-mobile {
-        display: none;
+    .header--profile-wrapper {
+        display: block;
+        position: relative;
+    }
+
+    .header--logged-in {
+        position: relative;
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 155%;
+        right: 0;
+        background: rgba(17, 17, 17, 0.8);
+        border: 1px solid #464646;
+        border-radius: 5px;
+        padding: 1rem 0.5rem;
+        z-index: 99;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        min-width: 140px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chevron-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(-180deg);
+    }
+    
+    .dropdown--link-container {
+        display:flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .dropdown--link-icon {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+    }
+
+    .dropdown--link {
+        font-size: 14px;
     }
 
 }

@@ -1,5 +1,6 @@
-.input-label {
-    margin-right: 2rem;
+
+.episode-select--container {
+    margin-top: 1rem;
 }
 
 .input-select,
@@ -13,7 +14,15 @@
     margin-left: 0.5rem;
 }
 
+.margin-left {
+    margin-left: 2rem;
+}
+
 @media (min-width: 1024px) {
+
+    .input-label {
+        margin-right: auto;
+    }
     .episode-select--container {
         margin-top: 2rem;
     }

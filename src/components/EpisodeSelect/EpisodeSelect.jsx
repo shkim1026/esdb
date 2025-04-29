@@ -18,7 +18,7 @@ export default function EpisodeSelect({ seasons, showId, title }) {
     return validSeason ? validSeason.episodes : [];
   })
 
-  // Parameters for API call to VicSrc
+  // Parameters for API call to VidSrc
   const [selection, setSelection] = useState({
     id: showId,
     season: 1,
@@ -43,33 +43,50 @@ export default function EpisodeSelect({ seasons, showId, title }) {
   
   const url = `https://vidsrc.xyz/embed/tv?tmdb=${selection.id}&season=${selection.season}&episode=${selection.episode}&ds_lang=en`
 
-  return (
-    <>
-      <div className={styles["episode-select--container"]}>
-        <label className={styles["input-label"]}>
-          Season:
-          <select className={styles["input-select"]} onChange={handleSeasonChange}>
-            {tvShow.map((show) => 
-              show.seasonNo !== 0 && (
-                <option key={show.id} value={show.seasonNo}>{show.seasonNo}</option>
-              )
-            )}
-          </select>
-        </label>
-        <label className={styles["input-label"]}>
-          Episode:
-          <select className={styles["input-select"]} onChange={handleEpisodeChange}>
-            {episodesList.length === 0 || episodesList === null ? (
-              <option value="n/a">N/A</option>
-            ) : (
-              episodesList.map((ep, i) => (
-                <option key={i} value={ep}>{ep}</option>
-              ))
-            )}
-          </select>
-        </label>
-      </div>
-      <EmbedVideoModal url={url} title={title}/>
-    </>
-  )
+return (
+  <>
+    <div className={styles["episode-select--container"]}>
+      <label className={styles["input-label"]} htmlFor="season-select">
+        Season:
+      </label>
+      <select
+        id="season-select"
+        className={styles["input-select"]}
+        onChange={handleSeasonChange}
+        aria-label="Select Season"
+      >
+        {tvShow.map(
+          (show) =>
+            show.seasonNo !== 0 && (
+              <option key={show.id} value={show.seasonNo}>
+                {show.seasonNo}
+              </option>
+            )
+        )}
+      </select>
+
+      <label className={`${styles["input-label"]} ${styles["margin-left"]}`} htmlFor="episode-select">
+        Episode:
+      </label>
+      <select
+        id="episode-select"
+        className={styles["input-select"]}
+        onChange={handleEpisodeChange}
+        aria-label="Select Episode"
+      >
+        {episodesList.length === 0 || episodesList === null ? (
+          <option value="n/a">N/A</option>
+        ) : (
+          episodesList.map((ep, i) => (
+            <option key={i} value={ep}>
+              {ep}
+            </option>
+          ))
+        )}
+      </select>
+    </div>
+    <EmbedVideoModal url={url} title={title} />
+  </>
+)
+
 }

@@ -51,6 +51,10 @@
     color: #FFF;
 }
 
+.close-btn:hover {
+    background-color: transparent;
+}
+
 .popup-content--img {
     width: 100%;
     border-radius: 8px;
@@ -100,6 +104,32 @@
 
 .low {
     color: #d00;
+}
+
+.myList--btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.myList--btn:hover {
+    background-color: transparent;
+}
+
+.myList--btn:focus {
+    outline: 2px solid #0070f3;
+    border-radius: 5px;
+}
+
+.myList--icon {
+    font-size: 2rem;
+}
+.myList--text {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.25rem;
+    margin: 0 0 0 0.5rem;
 }
 
 /* Media Queries */
@@ -157,6 +187,10 @@
 
     .popup-content {
         height: auto;
+    }
+
+    .popup-content--img {
+        margin-bottom: 0;
     }
 
     .popup-content--flex {
