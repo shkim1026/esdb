@@ -149,7 +149,7 @@ export default function Header({ user, refreshFavorites}) {
     });
   }
 
-  // Scrolls search result into view with keyboard **BUGGED
+  // Scrolls search result into view with keyboard
   useEffect(() => {
     if (highlightedIndex < 0 || !resultRefs.current) return;
   
@@ -281,6 +281,11 @@ export default function Header({ user, refreshFavorites}) {
     }, 300)
   }
 
+  // Dropdown on click for bigger tablets
+  const dropdownClick = () => {
+    setShowDropdown(!showDropdown)
+  }
+
   return (
     <>
       <header className={styles["header"]}>
@@ -386,6 +391,7 @@ export default function Header({ user, refreshFavorites}) {
                 onMouseLeave={handleMouseLeave}
                 aria-haspopup="true"
                 aria-expanded={showDropdown ? "true" : "false"}
+                onClick={dropdownClick}
               >
                 <div className={styles["header--logged-in"]}>
                   <FaUserCircle className={styles["header--user-profile"]} />
