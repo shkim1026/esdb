@@ -1,4 +1,8 @@
 .overlay {
+    display: none;
+  }
+
+  .overlay.open {
     position: fixed;
     top: 0;
     left: 0;
@@ -140,4 +144,15 @@
   
   .signIn:focus {
     outline: 2px solid #f40612;
+  }
+
+  .SROnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    overflow: hidden;
   }

@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Categories from '../components/Categories/Categories';
 import SkeletonCategories from '../components/SkeletonCategories/SkeletonCategories';
 
-export default function Home({ refreshFavorites, user }) {
+export default function Home({ refreshFavorites, user, favorites }) {
   const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
 
   const [data, setData] = useState({
@@ -55,10 +55,14 @@ export default function Home({ refreshFavorites, user }) {
     <>
       <Head>
         <title>Entertainment Streaming Database (ESDB)</title>
+        <meta 
+          name="description" 
+          content="Stream your favorite movies and TV shows instantly. Browse trending titles, top rated, and build your personal watchlist." 
+        />
       </Head>
       {isLoading 
         ? <SkeletonCategories /> 
-        : <Categories data={data} refreshFavorites={refreshFavorites} user={user}/>
+        : <Categories data={data} refreshFavorites={refreshFavorites} user={user} favorites={favorites}/>
       }
     </>
   );

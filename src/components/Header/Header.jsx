@@ -15,7 +15,8 @@ import styles from "./Header.module.css";
 import { FaSearch, FaUserCircle, FaChevronUp, FaRegUser, FaQuestion } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { MdMovie, MdOutlineTv, MdOutlinePrivacyTip, MdOutlineContactSupport } from "react-icons/md";
+import { MdOutlineTv, MdOutlinePrivacyTip, MdOutlineContactSupport } from "react-icons/md";
+import { BiCameraMovie } from "react-icons/bi";
 import { TbContract } from "react-icons/tb";
 
 export default function Header({ user, refreshFavorites}) {
@@ -29,6 +30,10 @@ export default function Header({ user, refreshFavorites}) {
   const resultsRef = useRef(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isResultsFocused, setIsResultsFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const resultRefs = useRef([]);
+
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -79,14 +84,14 @@ export default function Header({ user, refreshFavorites}) {
     return cleanup;
   }, [debouncedFetch]);
 
-  console.log(searchResults.results, "Input Search results");
-
+  
+  // Displays searchbar query results
   const filteredResults = searchResults.results.filter(
     (result) => result.media_type !== "person"
   );
 
-  // Displays searchbar query results
   let data;
+  
   if (
     !loading &&
     query.trim() !== "" &&
@@ -94,25 +99,33 @@ export default function Header({ user, refreshFavorites}) {
     isInputFocused
   ) {
     data = (
-      <div className={styles["search-results--container"]}>
+      <div className={styles["search-results--item"]}>
         <p className={styles["search-results--no-results"]}>
           No results found.
         </p>
       </div>
     );
   } else {
-    data = filteredResults.map((result) => {
+    resultRefs.current = [];
+    data = filteredResults.map((result, index) => {
       const date =
         result.media_type === "movie"
           ? result.release_date
           : result.first_air_date;
-      const year = date.split("-")[0];
-
+      const year = date?.split("-")[0] || "N/A";
+    
+      const isHighlighted = index === highlightedIndex;
+    
       return (
         <div
           key={result.id}
-          className={styles["search-results--container"]}
+          className={`${styles["search-results--item"]} ${isHighlighted ? styles["highlighted"] : ""}`}
           onMouseDown={(e) => handleClick(result.id, result.media_type, e)}
+          // onMouseEnter={() => setHighlightedIndex(index)}
+          tabIndex="0"
+          aria-selected={isHighlighted ? "true" : "false"}
+          role="option"
+          ref={(el) => (resultRefs.current[index] = el)}
         >
           <img
             className={styles["search-results--img"]}
@@ -121,12 +134,13 @@ export default function Header({ user, refreshFavorites}) {
                 ? "/images/NoImage.png"
                 : `https://image.tmdb.org/t/p/w92/${result.poster_path}`
             }
+            alt={result.title || result.name}
           />
           <p className={styles["search-results--title"]}>
             <strong>{result.title || result.name}</strong> ({year})
           </p>
           {result.media_type === "movie" ? (
-            <MdMovie className={styles["mediaType-icon"]} />
+            <BiCameraMovie className={styles["mediaType-icon"]} />
           ) : (
             <MdOutlineTv className={styles["mediaType-icon"]} />
           )}
@@ -134,6 +148,22 @@ export default function Header({ user, refreshFavorites}) {
       );
     });
   }
+
+  // Scrolls search result into view with keyboard **BUGGED
+  useEffect(() => {
+    if (highlightedIndex < 0 || !resultRefs.current) return;
+  
+    const currentItem = resultRefs.current[highlightedIndex];
+    console.log('highlightedIndex:', highlightedIndex);
+    console.log('currentItem:', currentItem);
+  
+    if (currentItem) {
+      currentItem.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [highlightedIndex]);
 
   // Hides search results when user clicks outside of results element
   useEffect(() => {
@@ -254,20 +284,40 @@ export default function Header({ user, refreshFavorites}) {
   return (
     <>
       <header className={styles["header"]}>
-        <div className={styles["header--desktop"]}>
-          <Link href="/">
+        <div className={styles["header--container"]}>
+          {isHamburgerVisible ? (
+            <IoClose
+              className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
+              onClick={toggleBurger}
+              aria-label="Close navigation menu"
+              role="button"
+            />
+          ) : (
+            <GiHamburgerMenu
+              className={styles["header--mobile-hamburger"]}
+              onClick={() => {
+                toggleBurger();
+                setIsSearchVisible(false);
+              }}
+              aria-label="Open navigation menu"
+              role="button"
+            />
+          )}
+          <Link href="/" aria-label="Go to homepage">
             <img
               src="/images/EsdbLogo.png"
               alt="Entertainment Streaming Database logo"
               className={styles["header--logo"]}
             />
           </Link>
-          <div className={styles["header--flex-right-container"]}>
 
+          {/* Search Input */}
+          <div className={styles["header--search-container"]}>
             <input
               type="text"
-              className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["desktop-visible"] : ""}`}
+              className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["searchbar-visible"] : ""}`}
               placeholder="Search for a TV Show or Movie..."
+              value={query}
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => {
                 setIsInputFocused(true);
@@ -279,23 +329,53 @@ export default function Header({ user, refreshFavorites}) {
                 setTimeout(() => setIsInputFocused(false), 100);
               }}
               ref={inputRef}
+              aria-label="Search for a movie or TV show"
+              aria-expanded={isSearchVisible ? "true" : "false"}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
+                } else if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+                } else if (e.key === "Enter" && highlightedIndex >= 0) {
+                  e.preventDefault();
+                  const selected = filteredResults[highlightedIndex];
+                  handleClick(selected.id, selected.media_type, e);
+                  setHighlightedIndex(-1);
+                }
+              }}
             />
 
-            {query.trim() !== "" && isInputFocused && (
-              <div ref={resultsRef} className={styles["header--search-results"]}>
+            {query.trim() !== "" && isInputFocused || isResultsFocused ? (
+              <div 
+                ref={resultsRef} 
+                className={styles["header--search-results-container"]} 
+                aria-live="polite"
+                onFocus={() => setIsResultsFocused(true)}
+                onBlur={() => setIsResultsFocused(false)}
+                onMouseLeave={() => setHighlightedIndex(-1)}
+              >
                 {data}
               </div>
-            )}
+            ) : null}
 
             {isSearchVisible ? (
               <IoClose
                 className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
                 onClick={toggleSearch}
+                aria-label="Close search"
+                role="button"
               />
             ) : (
               <FaSearch
                 className={styles["header--search-btn"]}
-                onClick={toggleSearch}
+                onClick={() => {
+                  toggleSearch();
+                  setIsHamburgerVisible(false);
+                }}
+                aria-label="Open search"
+                role="button"
               />
             )}
 
@@ -304,24 +384,33 @@ export default function Header({ user, refreshFavorites}) {
                 className={styles["header--profile-wrapper"]} 
                 onMouseEnter={handleMouseEnter} 
                 onMouseLeave={handleMouseLeave}
+                aria-haspopup="true"
+                aria-expanded={showDropdown ? "true" : "false"}
               >
                 <div className={styles["header--logged-in"]}>
                   <FaUserCircle className={styles["header--user-profile"]} />
-                  <FaChevronUp className={`${styles["chevron-icon"]} ${showDropdown ? styles["rotate"] : ""}`}/>
+                  <FaChevronUp className={`${styles["chevron-icon"]} ${showDropdown ? styles["rotate"] : ""}`} />
                 </div>
 
                 {showDropdown && (
-                  <div className={styles["profile-dropdown"]}>
+                  <div className={styles["profile-dropdown"]} role="menu">
                     <div className={styles["dropdown--link-container"]}>
                       <FaRegUser className={styles["dropdown--link-icon"]}/>
-                      <Link href="/account" className={styles["dropdown--link"]}>My Account</Link>
+                      <Link href="/account" className={styles["dropdown--link"]} role="menuitem">My Account</Link>
                     </div>
                     <div className={styles["dropdown--link-container"]}>
                       <FaQuestion className={styles["dropdown--link-icon"]}/>
-                      <Link href="/faq" className={styles["dropdown--link"]}>FAQ</Link>
+                      <Link href="/faq" className={styles["dropdown--link"]} role="menuitem">FAQ</Link>
                     </div>
 
-                    <button onClick={handleSignOut} className={styles["desktop--sign-out-btn"]}>Sign Out</button>
+                    <button
+                      onClick={handleSignOut}
+                      className={styles["desktop--sign-out-btn"]}
+                      role="menuitem"
+                      aria-label="Sign out"
+                    >
+                      Sign Out
+                    </button>
                   </div>
                 )}
               </div>
@@ -329,6 +418,7 @@ export default function Header({ user, refreshFavorites}) {
               <button
                 className={styles["header--login-btn"]}
                 onClick={() => setShowLogin(true)}
+                aria-label="Login"
               >
                 Login
               </button>
@@ -342,6 +432,7 @@ export default function Header({ user, refreshFavorites}) {
                 setShowLogin(false);
                 setShowSignup(true);
               }}
+              aria-labelledby="login-modal"
             />
 
             <SignUpModal
@@ -352,117 +443,73 @@ export default function Header({ user, refreshFavorites}) {
                 setShowSignup(false);
                 setShowLogin(true);
               }}
+              aria-labelledby="signup-modal"
             />
-          </div>
-        </div>
-
-        {/* Mobile Nav */}
-        <div className={styles["header--mobile"]}>
-          <div className={styles["header--mobile-inner-div"]}>
-            {isHamburgerVisible ? (
-              <IoClose
-                className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
-                onClick={toggleBurger}
-              />
-            ) : (
-              <GiHamburgerMenu
-                className={styles["header--mobile-hamburger"]}
-                onClick={() => {
-                  toggleBurger()
-                  setIsSearchVisible(false)
-                }}
-              />
-            )}
-
-            <Link href="/" onClick={() => setIsHamburgerVisible(false)}>
-              <img
-                src="/images/EsdbLogo.png"
-                alt="Entertainment Streaming Database logo"
-                className={styles["header--logo"]}
-              />
-            </Link>
-
-            {isSearchVisible ? (
-              <IoClose
-                className={`${styles["header--search-btn"]} ${styles["search-btn--close"]}`}
-                onClick={toggleSearch}
-              />
-            ) : (
-              <FaSearch
-                className={styles["header--search-btn"]}
-                onClick={() => {
-                  toggleSearch();
-                  setIsHamburgerVisible(false)
-                }}
-              />
-            )}
-
           </div>
         </div>
       </header>
 
-      <input
-        type="text"
-        className={`${styles["header--searchbar"]} ${
-          styles["searchbar-mobile"]
-        } ${isSearchVisible ? styles["mobile-visible"] : ""}`}
-        placeholder="Search for a TV Show or Movie..."
-        onChange={(e) => setQuery(e.target.value)}
-        onFocus={() => {
-          searchResults.results.length === 0 && fetchItem(query);
-        }}
-        ref={inputRef}
-      />
-
-      {searchResults.results.length > 0 && (
-        <div
-          ref={resultsRef}
-          className={`${styles["header--search-results"]} ${styles["results-mobile"]}`}
-        >
-          {data}
-        </div>
-      )}
-
-      <nav className={`${styles["hamburger-nav"]} ${isHamburgerVisible ? styles["mobile-visible"] : ""}`}>
+      {/* Mobile Navigation */}
+      <nav
+        className={`${styles["hamburger-nav"]} ${isHamburgerVisible ? styles["mobile-visible"] : ""}`}
+        aria-label="Main menu"
+      >
         {user && (
           <>
             <div className={styles["header--logged-in"]}>
               <FaUserCircle className={styles["header--user-profile"]} />
-              <h2>{username}</h2>
+              <h2 id="username" aria-live="polite">{username}</h2>
             </div>
-            <hr/>
+            <hr />
           </>
         )}
-          <div className={styles["mobile--links-container"]}>
+
+        <div className={styles["mobile--links-container"]}>
           {user && (
             <div className={styles["mobile--link-container"]}>
-              <FaRegUser className={styles["mobile--link-icon"]}/>
-              <Link href="/account" onClick={() => setIsHamburgerVisible(false)}>My Account</Link>
+              <FaRegUser className={styles["mobile--link-icon"]} />
+              <Link href="/account" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to My Account">My Account</Link>
             </div>
           )}
-            <div className={styles["mobile--link-container"]}>
-              <FaQuestion className={styles["mobile--link-icon"]}/>
-              <Link href="/faq" onClick={() => setIsHamburgerVisible(false)}>FAQ</Link>
-            </div>
-            <div className={styles["mobile--link-container"]}>
-              <TbContract className={styles["mobile--link-icon"]}/>
-              <Link href="/terms" onClick={() => setIsHamburgerVisible(false)}>Terms of Use</Link>
-            </div>
-            <div className={styles["mobile--link-container"]}>
-              <MdOutlinePrivacyTip className={styles["mobile--link-icon"]}/>
-              <Link href="/privacy" onClick={() => setIsHamburgerVisible(false)}>Privacy</Link>
-            </div>
-            <div className={styles["mobile--link-container"]}>
-              <MdOutlineContactSupport className={styles["mobile--link-icon"]}/>
-              <Link href="/contact" onClick={() => setIsHamburgerVisible(false)}>Contact</Link>
-            </div>
+          <div className={styles["mobile--link-container"]}>
+            <FaQuestion className={styles["mobile--link-icon"]} />
+            <Link href="/faq" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to FAQ">FAQ</Link>
           </div>
-          {user 
-            ? <button className={styles["mobile--sign-out-btn"]} onClick={handleSignOut}>Sign Out</button>
-            : <button className={styles["header--login-btn"]} onClick={() => setShowLogin(true)}>Login</button>
-          }
+          <div className={styles["mobile--link-container"]}>
+            <TbContract className={styles["mobile--link-icon"]} />
+            <Link href="/terms" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Terms of Use">Terms of Use</Link>
+          </div>
+          <div className={styles["mobile--link-container"]}>
+            <MdOutlinePrivacyTip className={styles["mobile--link-icon"]} />
+            <Link href="/privacy" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Privacy Policy">Privacy</Link>
+          </div>
+          <div className={styles["mobile--link-container"]}>
+            <MdOutlineContactSupport className={styles["mobile--link-icon"]} />
+            <Link href="/contact" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Contact Page">Contact</Link>
+          </div>
+        </div>
+
+        {/* Sign Out / Login Button */}
+        {user ? (
+          <button
+            className={styles["mobile--sign-out-btn"]}
+            onClick={handleSignOut}
+            aria-label="Sign out"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <button
+            className={styles["header--login-btn"]}
+            onClick={() => setShowLogin(true)}
+            aria-label="Login"
+          >
+            Login
+          </button>
+        )}
       </nav>
 
+      {/* Login Modal */}
       <LoginModal
         open={showLogin}
         onClose={() => setShowLogin(false)}
@@ -471,8 +518,11 @@ export default function Header({ user, refreshFavorites}) {
           setShowLogin(false);
           setShowSignup(true);
         }}
+        aria-labelledby="login-modal"
+        aria-hidden={showLogin ? "false" : "true"}
       />
 
+      {/* Sign Up Modal */}
       <SignUpModal
         open={showSignup}
         onClose={() => setShowSignup(false)}
@@ -481,14 +531,19 @@ export default function Header({ user, refreshFavorites}) {
           setShowSignup(false);
           setShowLogin(true);
         }}
+        aria-labelledby="signup-modal"
+        aria-hidden={showSignup ? "false" : "true"}
       />
 
+      {/* Details Popup */}
       {selectedItem && (
         <DetailsPopup
           item={selectedItem}
           onClose={closePopup}
           mediaType={selectedItem.mediaType}
           refreshFavorites={refreshFavorites}
+          aria-labelledby="details-popup"
+          aria-hidden={selectedItem ? "false" : "true"}
         />
       )}
     </>

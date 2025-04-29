@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./LoginModal.module.css";
 import { IoClose } from 'react-icons/io5';
 import { FaUser, FaLock } from 'react-icons/fa';
@@ -10,28 +10,40 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  if (!open) return null;
+  const emailInputRef = useRef(null);
+
+  useEffect(() => {
+    if (open && emailInputRef.current) {
+      emailInputRef.current.focus(); // Focus the input when modal is opened
+    }
+  }, [open]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      const user = userCredential.user
-      console.log('Signed in as user:', user)
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('Signed in as user:', user);
 
       if (onLogin) {
-        onLogin(email, password)
+        onLogin(email, password);
       }
     } catch (err) {
-      console.log(err.message)
-      setError("Invalid email and/or password")
+      console.log(err.message);
+      setError("Invalid email and/or password");
     }
   };
 
   return (
-    <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+    <div
+      className={`${styles.overlay} ${open ? styles.open : ''}`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="login-modal-title"
+      aria-describedby="login-modal-description"
+    >
       <div className={styles.modal}>
         <button
           className={styles.closeButton}
@@ -48,6 +60,9 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
         />
 
         <h2 id="login-modal-title" className={styles.title}>Sign In</h2>
+        <p id="login-modal-description" className={styles.SROnly}>
+          Please enter your email and password to sign in.
+        </p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
@@ -62,6 +77,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                ref={emailInputRef}
               />
             </div>
           </div>
@@ -101,7 +117,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
                 Sign up
               </button>
             </small>
-          </p>
+        </p>
       </div>
     </div>
   );

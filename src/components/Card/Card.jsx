@@ -8,7 +8,14 @@ export default function Card({ data, fetchDetails }) {
         className={styles['card--image']}
         src={`https://image.tmdb.org/t/p/w342/${data.poster_path}`} 
         alt={data.title}
+        role="button"
+        tabIndex="0"
         onClick={fetchDetails}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            fetchDetails();
+          }
+        }}
       />
     </>
   );

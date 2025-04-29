@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { 
     getAuth, 
     onAuthStateChanged, 
-    updateProfile, 
     deleteUser, 
     signOut, 
     updateEmail, 
@@ -150,76 +149,145 @@ export default function Account() {
     }
 
     if (loading) return <p>Loading...</p>
-    if (!user) return <p>Please log in to view your account.</p>
+    if (!user) return <p className={styles.notLoggedIn}>Please log in to view your account.</p>
 
     return (
         <>
         <Head>
             <title>My Account</title>
+            <meta name="description" content="View or change my account details"/>
         </Head>
             <div className={styles.container}>
                 <h1 className={styles.title}>Account Details</h1>
 
-                <div className={styles.detailContainer}>
-                    <div className={styles.flex}>
-                        <FaUser className={styles.marginR}/>
-                        <p className={styles.userInfo}><strong>Username:</strong></p>
-                        {showUsernameInput 
-                            ? <input type="text" className={styles.input} value={username} placeholder={username} onChange={(e) => setUsername(e.target.value)}/>
-                            : <p className={styles.username}>{username}</p>
+                {/* Username Section */}
+                <section aria-labelledby="username-section">
+                    <h2 id="username-section" className={styles.SROnly}>Username Section</h2>
+                    <div className={styles.detailContainer}>
+                        <div className={styles.flex}>
+                            <FaUser className={styles.marginR}/>
+                            <p className={styles.userInfo}><strong>Username:</strong></p>
+                            {showUsernameInput 
+                                ? <input 
+                                    type="text" 
+                                    className={styles.input} 
+                                    value={username} 
+                                    placeholder={username} 
+                                    onChange={(e) => setUsername(e.target.value)} 
+                                    aria-label="Edit Username" 
+                                />
+                                : <p className={styles.username}>{username}</p>
+                            }
+                        </div>
+                        {!showUsernameInput 
+                            ? <button 
+                                className={styles.changeBtn} 
+                                onClick={handleToggleUsernameInput} 
+                                aria-label="Change username">
+                                <small>Change username</small>
+                            </button>
+                            : <div className={styles.changeCancelContainer}>
+                                <button 
+                                    className={`${styles.changeBtn} ${styles.confirmBtn}`} 
+                                    onClick={handleUsernameChange} 
+                                    aria-label="Confirm username change">
+                                    <small>Confirm</small>
+                                </button>
+                                <button 
+                                    className={styles.changeBtn} 
+                                    onClick={() => {setUsername(originalUsername); setShowUsernameInput(false)}} 
+                                    aria-label="Cancel username change">
+                                    <small>Cancel</small>
+                                </button>
+                            </div>
                         }
                     </div>
-                    {!showUsernameInput 
-                        ? <button className={styles.changeBtn} onClick={handleToggleUsernameInput}><small>Change username</small></button>
-                        : <div className={styles.changeCancelContainer}>
-                            <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleUsernameChange}><small>Confirm</small></button>
-                            <button className={styles.changeBtn} onClick={() => {setUsername(originalUsername); setShowUsernameInput(false)}}><small>Cancel</small></button>
-                        </div>
-                    }
-                </div>
+                </section>
 
-                <div className={styles.detailContainer}>
-                    <div className={styles.flex}>
-                        <IoMdMail className={styles.marginR}/>
-                        <p className={styles.userInfo}><strong>Email:</strong></p>
-                        {showEmailInput 
-                            ? <input type="text" className={styles.input} value={email} placeholder={user.email} onChange={(e) => setEmail(e.target.value)}/> 
-                            : <p className={styles.email}>{user.email}</p>
+                {/* Email Section */}
+                <section aria-labelledby="email-section">
+                    <h2 id="email-section" className={styles.SROnly}>Email Section</h2>
+                    <div className={styles.detailContainer}>
+                        <div className={styles.flex}>
+                            <IoMdMail className={styles.marginR}/>
+                            <p className={styles.userInfo}><strong>Email:</strong></p>
+                            {showEmailInput 
+                                ? <input 
+                                    type="text" 
+                                    className={styles.input} 
+                                    value={email} 
+                                    placeholder={user.email} 
+                                    onChange={(e) => setEmail(e.target.value)} 
+                                    aria-label="Edit email address"
+                                /> 
+                                : <p className={styles.email}>{user.email}</p>
+                            }
+                        </div>
+                        {!showEmailInput 
+                            ? <button 
+                                className={styles.changeBtn} 
+                                onClick={handleToggleEmailInput} 
+                                aria-label="Change email address">
+                                <small>Change email address</small>
+                            </button>
+                            : <div className={styles.changeCancelContainer}>
+                                <button 
+                                    className={`${styles.changeBtn} ${styles.confirmBtn}`} 
+                                    onClick={handleEmailChange} 
+                                    aria-label="Confirm email change">
+                                    <small>Confirm</small>
+                                </button>
+                                <button 
+                                    className={styles.changeBtn} 
+                                    onClick={() => setShowEmailInput(false)} 
+                                    aria-label="Cancel email change">
+                                    <small>Cancel</small>
+                                </button>
+                            </div>
                         }
                     </div>
-                    {!showEmailInput 
-                        ? <button className={styles.changeBtn} onClick={handleToggleEmailInput}><small>Change email address</small></button>
-                        : <div className={styles.changeCancelContainer}>
-                            <button className={`${styles.changeBtn} ${styles.confirmBtn}`} onClick={handleEmailChange}><small>Confirm</small></button>
-                            <button className={styles.changeBtn} onClick={() => setShowEmailInput(false)}><small>Cancel</small></button>
+                </section>
+
+                {/* Email Status Section */}
+                <section aria-labelledby="email-status-section">
+                    <h2 id="email-status-section" className={styles.SROnly}>Email Status Section</h2>
+                    <div className={styles.detailContainer}>
+                        <div className={styles.flex}>
+                            <MdVerifiedUser className={styles.marginR}/>
+                            <p>
+                                <strong>Email status:</strong>{" "}
+                                {user.emailVerified ? (
+                                    <> Verified <span className={`${styles.vAlign} ${styles.verified}`}><MdVerified className={styles.vAlign}/></span> </>
+                                ) : (
+                                    <> Not verified <span className={`${styles.vAlign} ${styles.warning}`}><MdWarning /></span> </>
+                                )}
+                            </p>
                         </div>
-                    }
-                </div>
-
-                <div className={styles.detailContainer}>
-                    <div className={styles.flex}>
-                        <MdVerifiedUser className={styles.marginR}/>
-                        <p>
-                            <strong>Email status:</strong>{" "}
-                            {user.emailVerified ? (
-                                <> Verified <span className={`${styles.vAlign} ${styles.verified}`}><MdVerified className={styles.vAlign}/></span> </>
-                            ) : (
-                                <> Not verified <span className={`${styles.vAlign} ${styles.warning}`}><MdWarning /></span> </>
-                            )}
-                        </p>
+                        {!user.emailVerified && <button 
+                            className={styles.changeBtn} 
+                            onClick={sendEmailVerificationToUser} 
+                            aria-label="Send email verification">
+                            <small>Send Verification</small>
+                        </button>}
                     </div>
-                    {!user.emailVerified && <button className={styles.changeBtn} onClick={sendEmailVerificationToUser}><small>Send Verification</small></button>}
-                </div>
+                </section>
 
-                <div className={styles.flex}>
-                    <FaCalendarAlt className={styles.marginR}/>
-                    <p><strong>Created:</strong> {createdAt}</p>
-                </div>
-                
-                <button className={styles.signOutBtn} onClick={handleSignOut}>Sign Out</button>
-                <hr/>
-                <button className={styles.deleteAccBtn} onClick={handleDeleteAccount}>Delete Account</button>
+                {/* Account Created Date */}
+                <section>
+                    <div className={styles.flex}>
+                        <FaCalendarAlt className={styles.marginR}/>
+                        <p><strong>Created:</strong> {createdAt}</p>
+                    </div>
+                </section>
 
+                {/* Sign Out & Delete Account Buttons */}
+                <section>
+                    <button className={styles.signOutBtn} onClick={handleSignOut} aria-label="Sign out of account">Sign Out</button>
+                    <hr/>
+                    <button className={styles.deleteAccBtn} onClick={handleDeleteAccount} aria-label="Delete account">Delete Account</button>
+                </section>
+
+                {/* Status Updates */}
                 {status && <p>{status}</p>}
             </div>
         </>

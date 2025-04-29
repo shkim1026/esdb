@@ -113,9 +113,16 @@
     align-items: center;
     cursor: pointer;
 }
+
 .myList--btn:hover {
     background-color: transparent;
 }
+
+.myList--btn:focus {
+    outline: 2px solid #0070f3;
+    border-radius: 5px;
+}
+
 .myList--icon {
     font-size: 2rem;
 }

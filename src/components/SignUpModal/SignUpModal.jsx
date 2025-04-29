@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './SignUpModal.module.css'
 import { IoClose } from 'react-icons/io5'
 import { FaUser, FaLock, FaUnlock } from 'react-icons/fa'
@@ -14,7 +14,14 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
 
-  if (!open) return null
+  const usernameInputRef = useRef(null)
+
+  // Always render the component but control visibility with `open` prop
+  useEffect(() => {
+    if (open && usernameInputRef.current) {
+      usernameInputRef.current.focus()
+    }
+  }, [open])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -60,10 +67,11 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
 
   return (
     <div
-      className={styles.overlay}
+      className={`${styles.overlay} ${open ? styles.open : ''}`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="signup-title"
+      aria-hidden={!open}
     >
       <div className={styles.modal}>
         <button
@@ -77,6 +85,10 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
         <img className={styles.logo} src="/images/EsdbRel.png" alt="Esdb Logo" />
 
         <h2 className={styles.title} id="signup-title">Create Account</h2>
+
+        <p id="signup-description" className={styles.SROnly}>
+          Please enter your username, email, and password to create a new account.
+        </p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputWrapper}>
@@ -92,6 +104,8 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
                 className={styles.input}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                ref={usernameInputRef}
+                aria-labelledby="signup-username"
               />
             </div>
           </div>
@@ -109,8 +123,13 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
                 className={styles.input}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                aria-labelledby="signup-email"
+                aria-describedby="email-helper"
               />
             </div>
+            <p id="email-helper" className={styles.SROnly}>
+              Enter a valid email address to sign up.
+            </p>
           </div>
 
           <div className={styles.inputWrapper}>
@@ -126,8 +145,13 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
                 className={styles.input}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                aria-labelledby="signup-password"
+                aria-describedby="password-helper"
               />
             </div>
+            <p id="password-helper" className={styles.SROnly}>
+              Password must be at least 6 characters long.
+            </p>
           </div>
 
           <div className={styles.inputWrapper}>
@@ -143,17 +167,22 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin }
                 className={styles.input}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                aria-labelledby="signup-confirm-password"
+                aria-describedby="confirm-password-helper"
               />
             </div>
+            <p id="confirm-password-helper" className={styles.SROnly}>
+              Re-enter your password to confirm.
+            </p>
           </div>
 
-          {error && <p className={styles.errorMessage} role="alert">{error}</p>}
+          {error && <p className={styles.errorMessage} role="alert" aria-live="assertive">{error}</p>}
 
-          <button type="submit" className={styles.submitButton}>
+          <button type="submit" className={styles.submitButton} aria-label="Submit sign-up form">
             Sign Up
           </button>
         </form>
-        
+
         <p className={styles.switchText}>
           <small>
             Already have an account?{' '}

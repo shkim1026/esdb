@@ -43,6 +43,19 @@
     padding-bottom: 1rem;
 }
 
+.iconWrapper a {
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem; 
+    border-radius: 0.5rem; 
+  }
+  
+  .iconWrapper a:focus {
+    outline: 2px solid #0070f3;
+    outline-offset: 4px;
+  }
+
 .tooltip {
     visibility: hidden;
     opacity: 0;
@@ -61,13 +74,28 @@
     pointer-events: none;
     transition: opacity 0.3s ease-in;
     border: 1px solid white;
-  }
+}
   
-  .iconWrapper:hover .tooltip {
+.iconWrapper:hover .tooltip {
     visibility: visible;
     opacity: 1;
     transition-delay: 0.3s;
-  }
+}
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    z-index: 100;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
 
 @media (min-width: 1024px) {
     ul.Container {

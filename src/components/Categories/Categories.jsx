@@ -1,20 +1,19 @@
 import Card from '../Card/Card'
 import DetailsPopup from '../DetailsPopup/DetailsPopup'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
+import styles from './Categories.module.css'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 
-import styles from './Categories.module.css'
-
-import { doc, setDoc, deleteDoc, collection, getDocs } from 'firebase/firestore'
+import { doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { auth, db } from '../../../firebase/firebase'
 
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
-export default function Categories({data, refreshFavorites, user}) {
+export default function Categories({data, refreshFavorites, user, favorites}) {
   console.log(data.tv, "tv")
   console.log(data.movies, "movie")
   console.log(data.topMovies, "top movies")
@@ -28,7 +27,6 @@ export default function Categories({data, refreshFavorites, user}) {
 
   const [selectedItem, setSelectedItem] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [favorites, setFavorites] = useState([])
 
   const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
 
@@ -39,20 +37,6 @@ export default function Categories({data, refreshFavorites, user}) {
       Authorization: `Bearer ${apiKeyReadAccess}`
     }
   }
-
-  // Loads favorites from Firebase
-  const loadFavorites = async () => {
-    const currentUser = auth.currentUser
-    if (!currentUser) return
-
-    const snapshot = await getDocs(collection(db, "users", currentUser.uid, "favorites"))
-    const data = snapshot.docs.map(doc => doc.data())
-    setFavorites(data)
-  }
-
-  useEffect(() => {
-    loadFavorites()
-  }, [])
 
   // Fetches movie/TV show details
   const fetchDetails = useCallback(async (id, mediaType) => {
@@ -87,12 +71,6 @@ export default function Categories({data, refreshFavorites, user}) {
     const isFavorited = favorites?.some(fav => fav.id === item.id)
     const favRef = doc(db, "users", currentUser.uid, "favorites", item.id.toString())
 
-    const updatedFavorites = isFavorited
-      ? favorites.filter(fav => fav.id !== item.id)
-      : [{ ...item, mediaType, addedAt: new Date().toISOString() }, ...favorites]
-
-    setFavorites(updatedFavorites)
-
     try {
       if (isFavorited) {
         await deleteDoc(favRef);
@@ -109,7 +87,6 @@ export default function Categories({data, refreshFavorites, user}) {
     } catch (error) {
       console.log("Error toggling favorite:", error)
       alert("Error updating favorites: " + error.message)
-      setFavorites(favorites)
     }
   }
 
@@ -129,6 +106,7 @@ export default function Categories({data, refreshFavorites, user}) {
               pagination: false,
               autoWidth: true,
               autoHeight: true,
+              keyboard: 'focused',
               breakpoints: {
                 1024: {
                   arrows: true,
@@ -178,6 +156,7 @@ export default function Categories({data, refreshFavorites, user}) {
               pagination: false,
               autoWidth: true,
               autoHeight: true,
+              keyboard: 'focused',
               breakpoints: {
                 1024: {
                   arrows: true,
