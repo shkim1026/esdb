@@ -318,39 +318,41 @@ export default function Header({ user, refreshFavorites}) {
 
           {/* Search Input */}
           <div className={styles["header--search-container"]}>
-            <input
-              type="text"
-              className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["searchbar-visible"] : ""}`}
-              placeholder="Search for a TV Show or Movie..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => {
-                setIsInputFocused(true);
-                if (query.trim() !== "" && searchResults.results.length === 0) {
-                  fetchItem(query);
-                }
-              }}
-              onBlur={() => {
-                setTimeout(() => setIsInputFocused(false), 100);
-              }}
-              ref={inputRef}
-              aria-label="Search for a movie or TV show"
-              aria-expanded={isSearchVisible ? "true" : "false"}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
-                } else if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setHighlightedIndex((prev) => Math.max(prev - 1, 0));
-                } else if (e.key === "Enter" && highlightedIndex >= 0) {
-                  e.preventDefault();
-                  const selected = filteredResults[highlightedIndex];
-                  handleClick(selected.id, selected.media_type, e);
-                  setHighlightedIndex(-1);
-                }
-              }}
-            />
+            <div className={`${styles["header--searchbar-container"]} ${isSearchVisible ? styles["searchbarContainer-visible"] : ""}`}>
+              <input
+                type="text"
+                className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["searchbar-visible"] : ""}`}
+                placeholder="Search for a TV Show or Movie..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => {
+                  setIsInputFocused(true);
+                  if (query.trim() !== "" && searchResults.results.length === 0) {
+                    fetchItem(query);
+                  }
+                }}
+                onBlur={() => {
+                  setTimeout(() => setIsInputFocused(false), 100);
+                }}
+                ref={inputRef}
+                aria-label="Search for a movie or TV show"
+                aria-expanded={isSearchVisible ? "true" : "false"}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+                  } else if (e.key === "Enter" && highlightedIndex >= 0) {
+                    e.preventDefault();
+                    const selected = filteredResults[highlightedIndex];
+                    handleClick(selected.id, selected.media_type, e);
+                    setHighlightedIndex(-1);
+                  }
+                }}
+              />
+            </div>
 
             {query.trim() !== "" && isInputFocused || isResultsFocused ? (
               <div 
