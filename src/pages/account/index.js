@@ -5,9 +5,6 @@ import {
     onAuthStateChanged, 
     deleteUser, 
     signOut, 
-    updateEmail, 
-    EmailAuthProvider, 
-    reauthenticateWithCredential,
     sendEmailVerification
 } from 'firebase/auth'
 import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
@@ -24,8 +21,6 @@ export default function Account() {
     const [username, setUsername] = useState('')
     const [originalUsername, setOriginalUsername] = useState('')
     const [showUsernameInput, setShowUsernameInput] = useState(false)
-    const [email, setEmail] = useState('')
-    const [showEmailInput, setShowEmailInput] = useState(false)
     const [createdAt, setCreatedAt] = useState('')
     const [loading, setLoading] = useState(true)
     const [status, setStatus] = useState('')
@@ -87,40 +82,6 @@ export default function Account() {
             setStatus("Error updating username.")
         }
     }
-
-    const handleToggleEmailInput = () => {
-        setEmail(user.email)
-        setShowEmailInput(true)
-    }
-
-    const handleEmailChange = async () => {
-        const user = auth.currentUser;
-
-        await user.reload(); // refresh user data
-        if (!auth.currentUser.emailVerified) {
-        alert("Please verify your current email address first.");
-        return;
-        }
-      
-        if (!user || !email) return;
-      
-        try {
-          const password = prompt("Please enter your password to confirm email change:");
-      
-          if (!password) throw new Error("Password is required to reauthenticate.");
-      
-          const credential = EmailAuthProvider.credential(user.email, password);
-      
-          await reauthenticateWithCredential(user, credential);
-      
-          await updateEmail(user, email);
-          setStatus("Email updated successfully!");
-          setShowEmailInput(false);
-        } catch (err) {
-          console.error("Failed to update email:", err.message);
-          alert("Failed to update email: " + err.message);
-        }
-      };
 
     const handleDeleteAccount = async () => {
         const auth = getAuth()
@@ -211,40 +172,8 @@ export default function Account() {
                         <div className={styles.flex}>
                             <IoMdMail className={styles.marginR}/>
                             <p className={styles.userInfo}><strong>Email:</strong></p>
-                            {showEmailInput 
-                                ? <input 
-                                    type="text" 
-                                    className={styles.input} 
-                                    value={email} 
-                                    placeholder={user.email} 
-                                    onChange={(e) => setEmail(e.target.value)} 
-                                    aria-label="Edit email address"
-                                /> 
-                                : <p className={styles.email}>{user.email}</p>
-                            }
+                            <p className={styles.email}>{user.email}</p>
                         </div>
-                        {!showEmailInput 
-                            ? <button 
-                                className={styles.changeBtn} 
-                                onClick={handleToggleEmailInput} 
-                                aria-label="Change email address">
-                                <small>Change email address</small>
-                            </button>
-                            : <div className={styles.changeCancelContainer}>
-                                <button 
-                                    className={`${styles.changeBtn} ${styles.confirmBtn}`} 
-                                    onClick={handleEmailChange} 
-                                    aria-label="Confirm email change">
-                                    <small>Confirm</small>
-                                </button>
-                                <button 
-                                    className={styles.changeBtn} 
-                                    onClick={() => setShowEmailInput(false)} 
-                                    aria-label="Cancel email change">
-                                    <small>Cancel</small>
-                                </button>
-                            </div>
-                        }
                     </div>
                 </section>
 
