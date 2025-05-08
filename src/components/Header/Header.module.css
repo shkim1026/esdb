@@ -1,0 +1,343 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 3.5rem;
+    z-index: 2000;
+    padding: 1rem 0rem;
+    background: #111111e8 url('/images/asfalt-dark.png') repeat;
+}
+
+.header--container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: calc(100vw - 1rem);
+    margin: 0 auto;
+}
+
+.header--search-container {
+    display: flex;
+    align-items: center;
+}
+
+.header--profile-wrapper {
+    display: none;
+}
+
+.header--logo {
+    max-width: 10rem;
+    height: auto;
+}
+
+.header--login-btn {
+    padding: 0.6em 1.2em;
+    color: white;
+    font-family: 'Bebas neue', sans-serif;
+}
+
+.header--logged-in {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header--user-profile {
+    font-size: 2.5rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.header--search-btn {
+    padding: 1rem;
+}
+
+.search-btn--close {
+    font-size: 1.75rem;
+    padding: 0rem 0.6rem;
+}
+
+.header--searchbar-container {
+    background-color: #111111e8;
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+    width: 100%;
+}
+
+.searchbarContainer-visible {
+    max-height: 6rem;
+    opacity: 1;
+    padding: 0.5rem 0;
+    pointer-events: auto;
+}
+
+.header--searchbar {
+    padding: 0.3rem;
+    border: none;
+    font-size: 1rem;
+    background-color: #30303a;
+    color: white;
+    position: relative;
+    height: 2rem;
+    width: calc(100vw - 2.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.searchbar-visible {
+    opacity: 1;
+}
+
+.hamburger-nav {
+    position: fixed;
+    width: 0;
+    background-color: #111;
+    height: 95vh;
+    z-index: 2000;
+    transition: opacity 0.3s ease, width 0.3s ease;
+    margin-top: 5rem;
+    left: 0;
+    opacity: 0;
+}
+
+.mobile--links-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile--link-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.mobile--link-icon {
+    min-width: 30px;
+    padding-right: 0.5rem;
+}
+
+.mobile--sign-out-btn {
+    margin-top: 1rem;
+}
+
+.mobile--sign-out-btn,
+.desktop--sign-out-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: white;
+    background-color: #c6000a;
+    width: fit-content;
+    font-family: "Bebas neue", sans-serif;
+}
+
+.mobile-visible {
+    width: 87vw;
+    opacity: 1;
+    padding: 1rem;
+    display: block;
+}
+
+.searchbar-mobile {
+    margin-top: 5rem;
+    left: 0;
+    position: fixed;
+    z-index: 2000;
+    padding: 1.5rem;
+}
+
+.header--search-results-container {
+    border: 1px solid #30303a;
+    position: fixed;
+    z-index: 1000;
+    top: 8.5rem;
+    left: 50%;
+    width: calc(100vw - 2rem);
+    transform: translate(-50%, 0%);
+    background-color: #111;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.search-results--item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30303a;
+    cursor: pointer;
+}
+
+.search-results--item:hover,
+.highlighted {
+    background-color: #30303a;
+}
+
+.search-results--title {
+    max-width: 17rem;
+}
+
+.search-results--no-results {
+    padding-left: 1rem;
+}
+
+.search-results--img {
+    width: 2rem;
+    margin: 0.5rem 1rem;
+}
+
+.mediaType-icon {
+    position: absolute;
+    right: 1rem;
+}
+
+.header--mobile-hamburger {
+    padding: 1rem;
+}
+
+/* Media Queries */
+@media (min-width: 640px) {
+    .header--mobile {
+        max-width: calc(100vw - 2rem);
+    }
+
+    .header--search-results-container {
+        width: 93vw;
+    }
+
+    .search-results--title {
+        max-width: fit-content;
+    }
+}
+
+@media (min-width: 768px) and (min-height: 600px) {
+
+    .header--search-results-container {
+        width: calc(100vw - 4rem);
+    }
+    .searchbar-visible {
+        width: calc(100vw - 4.5rem);
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .header--container {
+        margin: 0 auto;
+        max-width: calc(100vw - 8rem)
+    }
+
+    .hamburger-nav {
+        display: none;
+    }
+
+    .header--search-btn {
+        cursor: pointer;
+    }
+    
+    .search-btn--close {
+        padding: 0rem 0.75rem;
+    }
+
+    .header--searchbar-container {
+        position: initial;
+        background-color: transparent;
+        transform: none;
+        height: auto;
+        transition: opacity 0.3s ease, width 0.3s ease;
+        width: 0;
+        opacity: 0;
+        padding: 0;
+    }
+
+    .searchbarContainer-visible {
+        width: 30rem;
+        opacity: 1;
+        display: block;
+        left: auto;
+        top: auto;
+        transform: none;
+    }
+
+    .header--searchbar {
+        position: initial;
+        border-radius: 4px;
+        width: 100%;
+        transform: none;
+    }
+
+    .searchbar-visible {
+        opacity: 1;
+    }
+
+    .header--search-results-container {
+        width: 30.5rem;
+        top: 5rem;
+        left: auto;
+        transform: none;
+    }
+
+    .search-results--title {
+        max-width: 23rem;
+    }
+
+    .header--mobile-hamburger {
+        display: none;
+    }
+
+    .header--profile-wrapper {
+        display: block;
+        position: relative;
+    }
+
+    .header--logged-in {
+        position: relative;
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 155%;
+        right: 0;
+        background: rgba(17, 17, 17, 0.8);
+        border: 1px solid #464646;
+        border-radius: 5px;
+        padding: 1rem 0.5rem;
+        z-index: 99;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        min-width: 140px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chevron-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .rotate {
+        transform: rotate(-180deg);
+    }
+    
+    .dropdown--link-container {
+        display:flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .dropdown--link-icon {
+        font-size: 1rem;
+        margin-right: 0.5rem;
+    }
+
+    .dropdown--link {
+        font-size: 14px;
+    }
+
+}

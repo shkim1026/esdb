@@ -1,0 +1,70 @@
+/* Categories */
+.categories {
+    margin-top: 6rem;
+}
+
+.categories--section {
+    margin: 2rem 0;
+}
+
+.categories--title {
+    font-size: 2.5rem;
+    margin: .5rem 0rem;
+}
+
+.iconWrapper {
+    position: absolute;
+    display: inline-block;
+    position: absolute;
+    top: -0.3rem;
+    right: 0.1rem;
+    z-index: 15;
+}
+
+.addToListIcon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+    filter: drop-shadow(-0.5px -0.5px 0 rgb(74, 74, 74)) 
+    drop-shadow(0.5px -0.5px 0 rgb(74, 74, 74)) 
+    drop-shadow(-0.5px 0.5px 0 rgb(74, 74, 74)) 
+    drop-shadow(0.5px 0.5px 0 rgb(74, 74, 74));
+    box-sizing: border-box;
+    width: 1.6rem;
+    height: 1.6rem;
+    will-change: opacity;
+    outline: 1px solid transparent;
+}
+
+.splide__slide:not(:hover) .addToListIcon {
+    transition: none;
+}
+
+
+.tooltip {
+    visibility: hidden;
+    width: max-content;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.87);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 20;
+    bottom: 125%; /* position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.75rem;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.87);
+}
+
+.iconWrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0.5s;
+}

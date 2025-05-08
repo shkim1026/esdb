@@ -1,0 +1,8 @@
+
+.card--image {
+    border-radius: 5px;
+    max-width: 300px;
+    cursor: pointer;
+    position: relative;
+}
+
