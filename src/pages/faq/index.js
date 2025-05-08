@@ -54,8 +54,8 @@ export default function FAQ() {
                 <li>
                     <h2>What Features Are Connected to User Data?</h2>
                     <p>
-                        Logged-in users can add or remove favorites from their personal "My List", change their username, and 
-                        change their email address (after verification) which is stored in Firebase and retrieved on each visit.
+                        Logged-in users can add or remove favorites from their personal "My List" and change their username which is stored 
+                        in Firebase and retrieved on each visit.
                     </p>
                 </li>
                 <hr aria-hidden="true" />
