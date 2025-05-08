@@ -62,7 +62,7 @@ export default function FAQ() {
                 <li>
                     <h2>What Features Could Be Added in the Future?</h2>
                     <ul className={styles.questionUl}>
-                        <li>Social logins (Google, Github)</li>
+                        <li>&#10004; <s>Social logins (Google, Github)</s></li>
                         <li>User reviews & ratings</li>
                         <li>Continue Watching section</li>
                         <li>Light & dark mode toggle</li>
