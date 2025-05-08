@@ -1,11 +1,12 @@
 module.exports = {
+  root: true,
   env: {
     browser: true,
     node: true,
+    es2021: true,
   },
   extends: ['next', 'next/core-web-vitals'],
   rules: {
-    // Optional: customize rules
-    'no-undef': 'off', // Temporarily suppresses the "process is not defined" warning
+    'no-undef': 'off',
   },
 };
