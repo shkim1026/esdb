@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./LoginModal.module.css";
+import socialLoginStyles from "../../styles/socialLogin.module.css"
 import { IoClose } from 'react-icons/io5';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaUser, FaLock, FaGoogle, FaGithub } from 'react-icons/fa';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
 
-export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup }) {
+export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, onGoogleLogin, onGitHubLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -118,6 +119,17 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup })
               </button>
             </small>
         </p>
+
+        <button className={socialLoginStyles.socialLoginBtn} onClick={onGoogleLogin}>
+          <span className={socialLoginStyles.socialIcon}><FaGoogle /></span>
+          Sign in with Google
+        </button>
+
+        <button className={`${socialLoginStyles.socialLoginBtn} ${socialLoginStyles.marginTop}`} onClick={onGitHubLogin}>
+          <span className={socialLoginStyles.socialIcon}><FaGithub /></span>
+          Sign in with GitHub
+        </button>
+
       </div>
     </div>
   );

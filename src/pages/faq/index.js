@@ -54,15 +54,15 @@ export default function FAQ() {
                 <li>
                     <h2>What Features Are Connected to User Data?</h2>
                     <p>
-                        Logged-in users can add or remove favorites from their personal "My List", change their username, and 
-                        change their email address (after verification) which is stored in Firebase and retrieved on each visit.
+                        Logged-in users can add or remove favorites from their personal "My List" and change their username which is stored 
+                        in Firebase and retrieved on each visit.
                     </p>
                 </li>
                 <hr aria-hidden="true" />
                 <li>
                     <h2>What Features Could Be Added in the Future?</h2>
                     <ul className={styles.questionUl}>
-                        <li>Social logins (Google, Github)</li>
+                        <li>&#10004; <s>Social logins (Google, Github)</s></li>
                         <li>User reviews & ratings</li>
                         <li>Continue Watching section</li>
                         <li>Light & dark mode toggle</li>

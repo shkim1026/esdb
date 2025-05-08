@@ -58,34 +58,45 @@
     padding: 0rem 0.6rem;
 }
 
+.header--searchbar-container {
+    background-color: #111111e8;
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    pointer-events: none;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+    width: 100%;
+}
+
+.searchbarContainer-visible {
+    max-height: 6rem;
+    opacity: 1;
+    padding: 0.5rem 0;
+    pointer-events: auto;
+}
+
 .header--searchbar {
     padding: 0.3rem;
     border: none;
     font-size: 1rem;
-    transition: opacity 0.3s ease, height 0.3s ease;
-    height: 0;
-    width: 100%;
-    opacity: 0;
-    pointer-events: auto;
     background-color: #30303a;
     color: white;
-    display: none;
+    position: relative;
+    height: 2rem;
+    width: calc(100vw - 2.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .searchbar-visible {
-    display: block;
-    height: 2rem;
-    width: calc(100vw - 2.5rem);
     opacity: 1;
-    left: 50%;
-    top: 6rem;
-    position: fixed;
-    transform: translate(-50%, -30%);
-}
-
-.header--mobile-hamburger {
-    padding: 1rem;
-    cursor: pointer;
 }
 
 .hamburger-nav {
@@ -149,9 +160,9 @@
     border: 1px solid #30303a;
     position: fixed;
     z-index: 1000;
-    top: 8rem;
+    top: 8.5rem;
     left: 50%;
-    width: calc(100vw - 2.5rem);
+    width: calc(100vw - 2rem);
     transform: translate(-50%, 0%);
     background-color: #111;
     max-height: 65vh;
@@ -188,6 +199,10 @@
     right: 1rem;
 }
 
+.header--mobile-hamburger {
+    padding: 1rem;
+}
+
 /* Media Queries */
 @media (min-width: 640px) {
     .header--mobile {
@@ -209,7 +224,7 @@
         width: calc(100vw - 4rem);
     }
     .searchbar-visible {
-        width: calc(100vw - 5rem);
+        width: calc(100vw - 4.5rem);
     }
 }
 
@@ -232,24 +247,35 @@
         padding: 0rem 0.75rem;
     }
 
-    .header--searchbar {
+    .header--searchbar-container {
         position: initial;
+        background-color: transparent;
+        transform: none;
+        height: auto;
         transition: opacity 0.3s ease, width 0.3s ease;
         width: 0;
         opacity: 0;
-        border-radius: 4px;
+        padding: 0;
+    }
+
+    .searchbarContainer-visible {
+        width: 30rem;
+        opacity: 1;
+        display: block;
+        left: auto;
+        top: auto;
+        transform: none;
+    }
+
+    .header--searchbar {
         position: initial;
+        border-radius: 4px;
+        width: 100%;
+        transform: none;
     }
 
     .searchbar-visible {
-        display: block;
-        height: 2rem;
-        width: 30rem;
         opacity: 1;
-        left: auto;
-        top: auto;
-        position: inherit;
-        transform: none;
     }
 
     .header--search-results-container {

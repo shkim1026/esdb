@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { getDoc, doc } from "firebase/firestore"
-import { auth, db } from "../../../firebase/firebase";
+import { onAuthStateChanged, signOut, signInWithPopup } from "firebase/auth";
+import { getDoc, doc, setDoc } from "firebase/firestore"
+import { auth, db, gitHubProvider, googleProvider } from "../../../firebase/firebase";
 
 import Link from "next/link";
 
@@ -235,6 +235,65 @@ export default function Header({ user, refreshFavorites}) {
     setShowSignup(false)
   }
 
+  // Google sign in
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider)
+      const user = result.user
+
+      const userDocRef = doc(db, "users", user.uid)
+
+      const userSnapshot = await getDoc(userDocRef)
+
+      if (!userSnapshot.exists()) {
+        await setDoc(userDocRef, {
+          username: user.displayName,
+          createdAt: new Date()
+        })
+        console.log("User document created")
+      } else {
+        console.log("User already exists in Firestore")
+      }
+
+      setShowLogin(false)
+      setShowSignup(false)
+
+      console.log("Signed in with user:", user)
+    } catch (error) {
+      console.error("Google sign in error", error)
+    }
+  }
+
+  // Github sign in
+  const handleGitHubLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, gitHubProvider)
+      const user = result.user;
+
+      const userDocRef = doc(db, "users", user.uid)
+
+      const userSnapshot = await getDoc(userDocRef)
+
+      if (!userSnapshot.exists()) {
+        await setDoc(userDocRef, {
+          username: user.displayName,
+          email: user.email,
+          createdAt: new Date()
+        })
+        console.log("User document created")
+      } else {
+        console.log("User already exists in Firestore")
+      }
+
+      setShowLogin(false)
+      setShowSignup(false)
+
+      console.log("GitHub user:", user)
+    } catch (error) {
+      console.error("GitHub sign in error:", error)
+    }
+  }
+
   // Track user auth state
   const [authUser, setAuthUser] = useState(null)
   const [username, setUsername] = useState(null)
@@ -318,39 +377,41 @@ export default function Header({ user, refreshFavorites}) {
 
           {/* Search Input */}
           <div className={styles["header--search-container"]}>
-            <input
-              type="text"
-              className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["searchbar-visible"] : ""}`}
-              placeholder="Search for a TV Show or Movie..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => {
-                setIsInputFocused(true);
-                if (query.trim() !== "" && searchResults.results.length === 0) {
-                  fetchItem(query);
-                }
-              }}
-              onBlur={() => {
-                setTimeout(() => setIsInputFocused(false), 100);
-              }}
-              ref={inputRef}
-              aria-label="Search for a movie or TV show"
-              aria-expanded={isSearchVisible ? "true" : "false"}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
-                } else if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setHighlightedIndex((prev) => Math.max(prev - 1, 0));
-                } else if (e.key === "Enter" && highlightedIndex >= 0) {
-                  e.preventDefault();
-                  const selected = filteredResults[highlightedIndex];
-                  handleClick(selected.id, selected.media_type, e);
-                  setHighlightedIndex(-1);
-                }
-              }}
-            />
+            <div className={`${styles["header--searchbar-container"]} ${isSearchVisible ? styles["searchbarContainer-visible"] : ""}`}>
+              <input
+                type="text"
+                className={`${styles["header--searchbar"]} ${isSearchVisible ? styles["searchbar-visible"] : ""}`}
+                placeholder="Search for a TV Show or Movie..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => {
+                  setIsInputFocused(true);
+                  if (query.trim() !== "" && searchResults.results.length === 0) {
+                    fetchItem(query);
+                  }
+                }}
+                onBlur={() => {
+                  setTimeout(() => setIsInputFocused(false), 100);
+                }}
+                ref={inputRef}
+                aria-label="Search for a movie or TV show"
+                aria-expanded={isSearchVisible ? "true" : "false"}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    setHighlightedIndex((prev) => Math.max(prev - 1, 0));
+                  } else if (e.key === "Enter" && highlightedIndex >= 0) {
+                    e.preventDefault();
+                    const selected = filteredResults[highlightedIndex];
+                    handleClick(selected.id, selected.media_type, e);
+                    setHighlightedIndex(-1);
+                  }
+                }}
+              />
+            </div>
 
             {query.trim() !== "" && isInputFocused || isResultsFocused ? (
               <div 
@@ -434,6 +495,8 @@ export default function Header({ user, refreshFavorites}) {
               open={showLogin}
               onClose={() => setShowLogin(false)}
               onLogin={handleLogin}
+              onGoogleLogin={handleGoogleSignIn}
+              onGitHubLogin={handleGitHubLogin}
               onSwitchToSignup={() => {
                 setShowLogin(false);
                 setShowSignup(true);
@@ -445,6 +508,8 @@ export default function Header({ user, refreshFavorites}) {
               open={showSignup}
               onClose={() => setShowSignup(false)}
               onSignup={handleSignup}
+              onGoogleLogin={handleGoogleSignIn}
+              onGitHubLogin={handleGitHubLogin}
               onSwitchToLogin={() => {
                 setShowSignup(false);
                 setShowLogin(true);
@@ -520,6 +585,8 @@ export default function Header({ user, refreshFavorites}) {
         open={showLogin}
         onClose={() => setShowLogin(false)}
         onLogin={handleLogin}
+        onGoogleLogin={handleGoogleSignIn}
+        onGitHubLogin={handleGitHubLogin}
         onSwitchToSignup={() => {
           setShowLogin(false);
           setShowSignup(true);
@@ -533,6 +600,8 @@ export default function Header({ user, refreshFavorites}) {
         open={showSignup}
         onClose={() => setShowSignup(false)}
         onSignup={handleSignup}
+        onGoogleLogin={handleGoogleSignIn}
+        onGitHubLogin={handleGitHubLogin}
         onSwitchToLogin={() => {
           setShowSignup(false);
           setShowLogin(true);
