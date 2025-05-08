@@ -3,7 +3,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 
 const SkeletonCategories = () => {
-  const sections = [&apos;Trending Movies&apos;, &apos;Top Movies&apos;, &apos;Trending TV&apos;, &apos;Top TV&apos;];
+  const sections = ['Trending Movies', 'Top Movies', 'Trending TV', 'Top TV'];
 
   return (
     <div className={styles.container}>

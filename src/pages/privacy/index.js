@@ -16,7 +16,7 @@ export default function Privacy() {
             <p><strong>Last updated:</strong> <time dateTime="2025-04-24">April 24, 2025</time></p>
             <p>
                 This Privacy Policy explains how your information is collected, used, and protected when using this 
-                application (&quot;App&quot;). This App is a personal portfolio project built and maintained by Steven H. Kim, and is not 
+                application ("App"). This App is a personal portfolio project built and maintained by Steven H. Kim, and is not 
                 affiliated with TMDB, VidSrc, or Netflix, Inc.
             </p>
             <hr aria-hidden="true" />
@@ -73,7 +73,7 @@ export default function Privacy() {
                     <section aria-labelledby="security-heading">
                         <h2 id="security-heading">Data Security</h2>
                         <p>
-                            All user data is stored using Firebase&apos;s secure cloud infrastructure. While best efforts are made to ensure 
+                            All user data is stored using Firebase's secure cloud infrastructure. While best efforts are made to ensure 
                             data security, this is a demonstration project and should not be used for sensitive or critical information.
                         </p>
                     </section>
@@ -91,7 +91,7 @@ export default function Privacy() {
                 <hr aria-hidden="true" />
                 <li>
                     <section aria-labelledby="children-heading">
-                        <h2 id="children-heading">Children&apos;s Privacy</h2>
+                        <h2 id="children-heading">Children's Privacy</h2>
                         <p>
                             This App is not intended for children under the age of 13. No personally identifiable information is 
                             knowingly collected from children.
@@ -113,7 +113,7 @@ export default function Privacy() {
                         <h2 id="contact-heading">Contact</h2>
                         <p>
                             For questions, concerns, or data removal requests, please contact the developer at: 
-                            {&quot; &quot;}<a href="mailto:shkim1026@gmail.com">shkim1026@gmail.com</a>
+                            {" "}<a href="mailto:shkim1026@gmail.com">shkim1026@gmail.com</a>
                         </p>
                     </section>
                 </li>

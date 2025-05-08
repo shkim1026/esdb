@@ -46,10 +46,10 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     try {
       const res = await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?language=en-US`, options)
       const data = await res.json()
-      console.log(&quot;Fetched details:&quot;, data);
+      console.log("Fetched details:", data);
       setSelectedItem({...data, mediaType});
     } catch (error) {
-      console.log(&quot;Error fetching details:&quot;, error)
+      console.log("Error fetching details:", error)
     } finally {
       setLoading(false)
     }
@@ -64,29 +64,29 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
   const toggleFavorites = async (item, mediaType) => {
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      alert(&quot;Please sign in to modify your list.&quot;)
+      alert("Please sign in to modify your list.")
       return
     }
 
     const isFavorited = favorites?.some(fav => fav.id === item.id)
-    const favRef = doc(db, &quot;users&quot;, currentUser.uid, &quot;favorites&quot;, item.id.toString())
+    const favRef = doc(db, "users", currentUser.uid, "favorites", item.id.toString())
 
     try {
       if (isFavorited) {
         await deleteDoc(favRef);
-        console.log(&quot;Removed from favorites&quot;)
+        console.log("Removed from favorites")
       } else {
         await setDoc(favRef, {
           ...item,
           mediaType,
           addedAt: new Date().toISOString()
         })
-        console.log(&quot;Added to favorites&quot;)
+        console.log("Added to favorites")
       }
       refreshFavorites();
     } catch (error) {
-      console.log(&quot;Error toggling favorite:&quot;, error)
-      alert(&quot;Error updating favorites: &quot; + error.message)
+      console.log("Error toggling favorite:", error)
+      alert("Error updating favorites: " + error.message)
     }
   }
 

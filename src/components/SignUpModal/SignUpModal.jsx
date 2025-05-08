@@ -26,19 +26,19 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setError(&apos;&apos;)
+    setError('')
 
     if (password !== confirmPassword) {
-      setError(&apos;Passwords do not match!&apos;)
+      setError('Passwords do not match!')
       return
     }
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
-      console.log(&apos;Signed up user:&apos;, user)
+      console.log('Signed up user:', user)
 
-      await setDoc(doc(db, &apos;users&apos;, user.uid), {
+      await setDoc(doc(db, 'users', user.uid), {
         username: username,
         email: email,
         createdAt: new Date(),
@@ -49,17 +49,17 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
       }
 
       if (onClose) {
-        console.log(&apos;Closing modal...&apos;)
+        console.log('Closing modal...')
         onClose()
       }
     } catch (err) {
       console.log(err)
-      if (err.message === &quot;Firebase: Error (auth/invalid-email).&quot;) {
-        setError(&quot;Please enter a valid email address&quot;)
-      } else if (err.message === &quot;Firebase: Error (auth/email-already-in-use).&quot;) {
-        setError(&quot;Email is already in use&quot;)
-      } else if (err.message === &quot;Firebase: Password should be at least 6 characters (auth/weak-password).&quot;){
-        setError(&quot;Password must be at least 6 characters long&quot;)
+      if (err.message === "Firebase: Error (auth/invalid-email).") {
+        setError("Please enter a valid email address")
+      } else if (err.message === "Firebase: Error (auth/email-already-in-use).") {
+        setError("Email is already in use")
+      } else if (err.message === "Firebase: Password should be at least 6 characters (auth/weak-password)."){
+        setError("Password must be at least 6 characters long")
       } else {
         setError(err.message)
       }
@@ -106,7 +106,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 ref={usernameInputRef}
-                aria-labelledby=&quot;signup-username&quot;
+                aria-labelledby="signup-username"
               />
             </div>
           </div>
@@ -124,8 +124,8 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                aria-labelledby=&quot;signup-email&quot;
-                aria-describedby=&quot;email-helper&quot;
+                aria-labelledby="signup-email"
+                aria-describedby="email-helper"
               />
             </div>
             <p id="email-helper" className={styles.SROnly}>
@@ -146,8 +146,8 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                aria-labelledby=&quot;signup-password&quot;
-                aria-describedby=&quot;password-helper&quot;
+                aria-labelledby="signup-password"
+                aria-describedby="password-helper"
               />
             </div>
             <p id="password-helper" className={styles.SROnly}>
@@ -168,8 +168,8 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                aria-labelledby=&quot;signup-confirm-password&quot;
-                aria-describedby=&quot;confirm-password-helper&quot;
+                aria-labelledby="signup-confirm-password"
+                aria-describedby="confirm-password-helper"
               />
             </div>
             <p id="confirm-password-helper" className={styles.SROnly}>
@@ -186,7 +186,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
 
         <p className={styles.switchText}>
           <small>
-            Already have an account?{&apos; &apos;}
+            Already have an account?{' '}
             <button
               type="button"
               className={styles.signIn}

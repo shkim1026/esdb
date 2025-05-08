@@ -12,14 +12,14 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   console.log("Selected Item in DetailsPopup", item)
   console.log("Selected Item in", mediaType)
 
-  const genres = item.genres.map(genre => genre.name).join(&quot;, &quot;)
+  const genres = item.genres.map(genre => genre.name).join(", ")
 
-  const releaseDate = mediaType === &apos;movie&apos;
+  const releaseDate = mediaType === 'movie'
                       ? item.release_date
                       : item.first_air_date
 
-  const date = mediaType === &apos;movie&apos; ? item.release_date : item.first_air_date
-  const year = date.split(&quot;-&quot;)[0]
+  const date = mediaType === 'movie' ? item.release_date : item.first_air_date
+  const year = date.split("-")[0]
 
   function convertRuntimeToHours(min) {
     const hours = Math.floor(min / 60)
@@ -46,12 +46,12 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundImage: `linear-gradient(to right, rgba(0, 0, 0), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/w1280/${item.backdrop_path})`,
-          backgroundSize: &quot;cover&quot;,
-          backgroundPosition: &quot;300px center&quot;,
-          backgroundRepeat: &quot;no-repeat&quot;,
-          color: &quot;white&quot;,
-          padding: &quot;20px&quot;,
-          borderRadius: &quot;8px&quot;
+          backgroundSize: "cover",
+          backgroundPosition: "300px center",
+          backgroundRepeat: "no-repeat",
+          color: "white",
+          padding: "20px",
+          borderRadius: "8px"
         }}
       >
         <button
@@ -90,7 +90,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   
             <div className={styles["popup-content--facts"]}>
               <span className={styles["popup-content--facts--release-date"]}>
-                {releaseDate} &#x2022;{&quot; &quot;}
+                {releaseDate} &#x2022;{" "}
               </span>
               <span className={styles["popup-content--facts--genres"]}>
                 {genres}
@@ -100,9 +100,9 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
               )}
             </div>
   
-            {item.tagline !== &quot;&quot; && (
+            {item.tagline !== "" && (
               <p className={styles["popup-content--tagline"]}>
-                &quot;{item.tagline}&quot;
+                "{item.tagline}"
               </p>
             )}
   
@@ -113,7 +113,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
             </p>
   
             <p>
-              Rating:{&quot; &quot;}
+              Rating:{" "}
               <span
                 className={`${styles.rating} ${
                   rating >= 8
@@ -125,7 +125,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                     : ""
                 }`}
               >
-                {rating !== 0 ? `${rating}/10` : &quot;N/A&quot;}
+                {rating !== 0 ? `${rating}/10` : "N/A"}
               </span>
             </p>
   
@@ -140,7 +140,7 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                   refreshFavorites();
                 }
               }}
-              aria-label={isFavorite ? &quot;Remove from My List&quot; : &quot;Add to My List&quot;}
+              aria-label={isFavorite ? "Remove from My List" : "Add to My List"}
             >
               {isFavorite ? (
                 <BsCheckCircle className={styles["myList--icon"]} />
@@ -148,18 +148,18 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
                 <BsPlusCircle className={styles["myList--icon"]} />
               )}
               <p className={styles["myList--text"]}>
-                {isFavorite ? &quot;On My List&quot; : &quot;Add to My List&quot;}
+                {isFavorite ? "On My List" : "Add to My List"}
               </p>
             </button>
   
-            {mediaType === &quot;tv&quot; && (
+            {mediaType === "tv" && (
               <EpisodeSelect
                 seasons={item.seasons}
                 showId={item.id}
                 title={item.name}
               />
             )}
-            {mediaType === &quot;movie&quot; && (
+            {mediaType === "movie" && (
               <EmbedVideoModal url={movieUrl} title={item.name} />
             )}
           </div>

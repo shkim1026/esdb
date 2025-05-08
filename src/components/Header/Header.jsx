@@ -44,9 +44,9 @@ export default function Header({ user, refreshFavorites}) {
 
   const apiKeyReadAccess = process.env.NEXT_PUBLIC_API_KEY_READ_ACCESS;
   const options = {
-    method: &quot;GET&quot;,
+    method: "GET",
     headers: {
-      accept: &quot;application/json&quot;,
+      accept: "application/json",
       Authorization: `Bearer ${apiKeyReadAccess}`,
     },
   };
@@ -62,10 +62,10 @@ export default function Header({ user, refreshFavorites}) {
         options
       );
       const data = await res.json();
-      console.log(&quot;Fetched item:&quot;, data);
+      console.log("Fetched item:", data);
       setSearchResults(data);
     } catch (error) {
-      console.log(&quot;Error fetching details:&quot;, error);
+      console.log("Error fetching details:", error);
     } finally {
       setLoading(false);
     }
@@ -87,14 +87,14 @@ export default function Header({ user, refreshFavorites}) {
   
   // Displays searchbar query results
   const filteredResults = searchResults.results.filter(
-    (result) => result.media_type !== &quot;person&quot;
+    (result) => result.media_type !== "person"
   );
 
   let data;
   
   if (
     !loading &&
-    query.trim() !== &quot;&quot; &&
+    query.trim() !== "" &&
     filteredResults.length === 0 &&
     isInputFocused
   ) {
@@ -109,10 +109,10 @@ export default function Header({ user, refreshFavorites}) {
     resultRefs.current = [];
     data = filteredResults.map((result, index) => {
       const date =
-        result.media_type === &quot;movie&quot;
+        result.media_type === "movie"
           ? result.release_date
           : result.first_air_date;
-      const year = date?.split(&quot;-&quot;)[0] || &quot;N/A&quot;;
+      const year = date?.split("-")[0] || "N/A";
     
       const isHighlighted = index === highlightedIndex;
     
@@ -122,9 +122,9 @@ export default function Header({ user, refreshFavorites}) {
           className={`${styles["search-results--item"]} ${isHighlighted ? styles["highlighted"] : ""}`}
           onMouseDown={(e) => handleClick(result.id, result.media_type, e)}
           // onMouseEnter={() => setHighlightedIndex(index)}
-          tabIndex=&quot;0&quot;
-          aria-selected={isHighlighted ? &quot;true&quot; : &quot;false&quot;}
-          role=&quot;option&quot;
+          tabIndex="0"
+          aria-selected={isHighlighted ? "true" : "false"}
+          role="option"
           ref={(el) => (resultRefs.current[index] = el)}
         >
           <img
@@ -139,7 +139,7 @@ export default function Header({ user, refreshFavorites}) {
           <p className={styles["search-results--title"]}>
             <strong>{result.title || result.name}</strong> ({year})
           </p>
-          {result.media_type === &quot;movie&quot; ? (
+          {result.media_type === "movie" ? (
             <BiCameraMovie className={styles["mediaType-icon"]} />
           ) : (
             <MdOutlineTv className={styles["mediaType-icon"]} />
@@ -179,9 +179,9 @@ export default function Header({ user, refreshFavorites}) {
         }, 100);
       }
     }
-    document.addEventListener(&quot;mousedown&quot;, handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener(&quot;mousedown&quot;, handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -196,10 +196,10 @@ export default function Header({ user, refreshFavorites}) {
         options
       );
       const data = await res.json();
-      console.log(&quot;Fetched details:&quot;, data);
+      console.log("Fetched details:", data);
       setSelectedItem({ ...data, mediaType });
     } catch (error) {
-      console.log(&quot;Error fetching details:&quot;, error);
+      console.log("Error fetching details:", error);
     } finally {
       setLoading(false);
     }
@@ -213,7 +213,7 @@ export default function Header({ user, refreshFavorites}) {
     (id, mediaType, e) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(&quot;Card is clicked&quot;);
+      console.log("Card is clicked");
       fetchDetails(id, mediaType).then(() => {
         setSearchResults({ results: [] });
       });
@@ -226,12 +226,12 @@ export default function Header({ user, refreshFavorites}) {
   const [showSignup, setShowSignup] = useState(false)
 
   const handleLogin = (email, password) => {
-    console.log(&apos;Login attempt with:&apos;, email, password)
+    console.log('Login attempt with:', email, password)
     setShowLogin(false)
   }
 
   const handleSignup = (username, email, password, confirmPassword) => {
-    console.log(&apos;Sign up:&apos;, username, email, password, confirmPassword)
+    console.log('Sign up:', username, email, password, confirmPassword)
     setShowSignup(false)
   }
 
@@ -241,7 +241,7 @@ export default function Header({ user, refreshFavorites}) {
       const result = await signInWithPopup(auth, googleProvider)
       const user = result.user
 
-      const userDocRef = doc(db, &quot;users&quot;, user.uid)
+      const userDocRef = doc(db, "users", user.uid)
 
       const userSnapshot = await getDoc(userDocRef)
 
@@ -250,17 +250,17 @@ export default function Header({ user, refreshFavorites}) {
           username: user.displayName,
           createdAt: new Date()
         })
-        console.log(&quot;User document created&quot;)
+        console.log("User document created")
       } else {
-        console.log(&quot;User already exists in Firestore&quot;)
+        console.log("User already exists in Firestore")
       }
 
       setShowLogin(false)
       setShowSignup(false)
 
-      console.log(&quot;Signed in with user:&quot;, user)
+      console.log("Signed in with user:", user)
     } catch (error) {
-      console.error(&quot;Google sign in error&quot;, error)
+      console.error("Google sign in error", error)
     }
   }
 
@@ -270,7 +270,7 @@ export default function Header({ user, refreshFavorites}) {
       const result = await signInWithPopup(auth, gitHubProvider)
       const user = result.user;
 
-      const userDocRef = doc(db, &quot;users&quot;, user.uid)
+      const userDocRef = doc(db, "users", user.uid)
 
       const userSnapshot = await getDoc(userDocRef)
 
@@ -280,17 +280,17 @@ export default function Header({ user, refreshFavorites}) {
           email: user.email,
           createdAt: new Date()
         })
-        console.log(&quot;User document created&quot;)
+        console.log("User document created")
       } else {
-        console.log(&quot;User already exists in Firestore&quot;)
+        console.log("User already exists in Firestore")
       }
 
       setShowLogin(false)
       setShowSignup(false)
 
-      console.log(&quot;GitHub user:&quot;, user)
+      console.log("GitHub user:", user)
     } catch (error) {
-      console.error(&quot;GitHub sign in error:&quot;, error)
+      console.error("GitHub sign in error:", error)
     }
   }
 
@@ -302,9 +302,9 @@ export default function Header({ user, refreshFavorites}) {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setAuthUser(currentUser)
-        const userDoc = await getDoc(doc(db, &quot;users&quot;, currentUser.uid))
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid))
         if (userDoc.exists()) {
-          console.log(&quot;username:&quot;, userDoc.data().username)
+          console.log("username:", userDoc.data().username)
           setUsername(userDoc.data().username)
         }
       } else {
@@ -320,10 +320,10 @@ export default function Header({ user, refreshFavorites}) {
   const handleSignOut = async () => {
     try {
       await signOut(auth)
-      console.log(&quot;User signed out&quot;)
+      console.log("User signed out")
       setIsHamburgerVisible(false)
     } catch (error) {
-      console.log(&quot;Error signing out:&quot;, error)
+      console.log("Error signing out:", error)
     }
   }
 
@@ -363,8 +363,8 @@ export default function Header({ user, refreshFavorites}) {
                 toggleBurger();
                 setIsSearchVisible(false);
               }}
-              aria-label=&quot;Open navigation menu&quot;
-              role=&quot;button&quot;
+              aria-label="Open navigation menu"
+              role="button"
             />
           )}
           <Link href="/" aria-label="Go to homepage">
@@ -386,7 +386,7 @@ export default function Header({ user, refreshFavorites}) {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => {
                   setIsInputFocused(true);
-                  if (query.trim() !== &quot;&quot; && searchResults.results.length === 0) {
+                  if (query.trim() !== "" && searchResults.results.length === 0) {
                     fetchItem(query);
                   }
                 }}
@@ -394,16 +394,16 @@ export default function Header({ user, refreshFavorites}) {
                   setTimeout(() => setIsInputFocused(false), 100);
                 }}
                 ref={inputRef}
-                aria-label=&quot;Search for a movie or TV show&quot;
-                aria-expanded={isSearchVisible ? &quot;true&quot; : &quot;false&quot;}
+                aria-label="Search for a movie or TV show"
+                aria-expanded={isSearchVisible ? "true" : "false"}
                 onKeyDown={(e) => {
-                  if (e.key === &quot;ArrowDown&quot;) {
+                  if (e.key === "ArrowDown") {
                     e.preventDefault();
                     setHighlightedIndex((prev) => Math.min(prev + 1, filteredResults.length - 1));
-                  } else if (e.key === &quot;ArrowUp&quot;) {
+                  } else if (e.key === "ArrowUp") {
                     e.preventDefault();
                     setHighlightedIndex((prev) => Math.max(prev - 1, 0));
-                  } else if (e.key === &quot;Enter&quot; && highlightedIndex >= 0) {
+                  } else if (e.key === "Enter" && highlightedIndex >= 0) {
                     e.preventDefault();
                     const selected = filteredResults[highlightedIndex];
                     handleClick(selected.id, selected.media_type, e);
@@ -413,7 +413,7 @@ export default function Header({ user, refreshFavorites}) {
               />
             </div>
 
-            {query.trim() !== &quot;&quot; && isInputFocused || isResultsFocused ? (
+            {query.trim() !== "" && isInputFocused || isResultsFocused ? (
               <div 
                 ref={resultsRef} 
                 className={styles["header--search-results-container"]} 
@@ -440,8 +440,8 @@ export default function Header({ user, refreshFavorites}) {
                   toggleSearch();
                   setIsHamburgerVisible(false);
                 }}
-                aria-label=&quot;Open search&quot;
-                role=&quot;button&quot;
+                aria-label="Open search"
+                role="button"
               />
             )}
 
@@ -485,7 +485,7 @@ export default function Header({ user, refreshFavorites}) {
               <button
                 className={styles["header--login-btn"]}
                 onClick={() => setShowLogin(true)}
-                aria-label=&quot;Login&quot;
+                aria-label="Login"
               >
                 Login
               </button>
@@ -501,7 +501,7 @@ export default function Header({ user, refreshFavorites}) {
                 setShowLogin(false);
                 setShowSignup(true);
               }}
-              aria-labelledby=&quot;login-modal&quot;
+              aria-labelledby="login-modal"
             />
 
             <SignUpModal
@@ -514,7 +514,7 @@ export default function Header({ user, refreshFavorites}) {
                 setShowSignup(false);
                 setShowLogin(true);
               }}
-              aria-labelledby=&quot;signup-modal&quot;
+              aria-labelledby="signup-modal"
             />
           </div>
         </div>
@@ -539,24 +539,24 @@ export default function Header({ user, refreshFavorites}) {
           {user && (
             <div className={styles["mobile--link-container"]}>
               <FaRegUser className={styles["mobile--link-icon"]} />
-              <Link href="/account" onClick={() => setIsHamburgerVisible(false)} aria-label=&quot;Go to My Account&quot;>My Account</Link>
+              <Link href="/account" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to My Account">My Account</Link>
             </div>
           )}
           <div className={styles["mobile--link-container"]}>
             <FaQuestion className={styles["mobile--link-icon"]} />
-            <Link href="/faq" onClick={() => setIsHamburgerVisible(false)} aria-label=&quot;Go to FAQ&quot;>FAQ</Link>
+            <Link href="/faq" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to FAQ">FAQ</Link>
           </div>
           <div className={styles["mobile--link-container"]}>
             <TbContract className={styles["mobile--link-icon"]} />
-            <Link href="/terms" onClick={() => setIsHamburgerVisible(false)} aria-label=&quot;Go to Terms of Use&quot;>Terms of Use</Link>
+            <Link href="/terms" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Terms of Use">Terms of Use</Link>
           </div>
           <div className={styles["mobile--link-container"]}>
             <MdOutlinePrivacyTip className={styles["mobile--link-icon"]} />
-            <Link href="/privacy" onClick={() => setIsHamburgerVisible(false)} aria-label=&quot;Go to Privacy Policy&quot;>Privacy</Link>
+            <Link href="/privacy" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Privacy Policy">Privacy</Link>
           </div>
           <div className={styles["mobile--link-container"]}>
             <MdOutlineContactSupport className={styles["mobile--link-icon"]} />
-            <Link href="/contact" onClick={() => setIsHamburgerVisible(false)} aria-label=&quot;Go to Contact Page&quot;>Contact</Link>
+            <Link href="/contact" onClick={() => setIsHamburgerVisible(false)} aria-label="Go to Contact Page">Contact</Link>
           </div>
         </div>
 
@@ -573,7 +573,7 @@ export default function Header({ user, refreshFavorites}) {
           <button
             className={styles["header--login-btn"]}
             onClick={() => setShowLogin(true)}
-            aria-label=&quot;Login&quot;
+            aria-label="Login"
           >
             Login
           </button>
@@ -591,8 +591,8 @@ export default function Header({ user, refreshFavorites}) {
           setShowLogin(false);
           setShowSignup(true);
         }}
-        aria-labelledby=&quot;login-modal&quot;
-        aria-hidden={showLogin ? &quot;false&quot; : &quot;true&quot;}
+        aria-labelledby="login-modal"
+        aria-hidden={showLogin ? "false" : "true"}
       />
 
       {/* Sign Up Modal */}
@@ -606,8 +606,8 @@ export default function Header({ user, refreshFavorites}) {
           setShowSignup(false);
           setShowLogin(true);
         }}
-        aria-labelledby=&quot;signup-modal&quot;
-        aria-hidden={showSignup ? &quot;false&quot; : &quot;true&quot;}
+        aria-labelledby="signup-modal"
+        aria-hidden={showSignup ? "false" : "true"}
       />
 
       {/* Details Popup */}

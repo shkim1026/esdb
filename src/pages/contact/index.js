@@ -16,7 +16,7 @@ export default function Contact() {
                 <p className={styles.textCenter}>
                     Have questions about this project?
                     <br />Want to chat about frontend development, React, or potential job opportunities? 
-                    <br />I&apos;d love to hear from you!
+                    <br />I'd love to hear from you!
                 </p>
 
                 <ul className={styles.contactList} role="list">

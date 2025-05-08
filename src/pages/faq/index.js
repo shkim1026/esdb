@@ -38,8 +38,8 @@ export default function FAQ() {
                 <li>
                     <h2>How is the Project Structured?</h2>
                     <p>
-                        This project uses a modular structure, with reusable UI components in a &apos;/components&apos; folder and page-specific
-                        logic split into &apos;/pages&apos;. Global state (user, favorites) is managed using custom hooks.
+                        This project uses a modular structure, with reusable UI components in a '/components' folder and page-specific
+                        logic split into '/pages'. Global state (user, favorites) is managed using custom hooks.
                     </p>
                 </li>
                 <hr aria-hidden="true" />
@@ -54,7 +54,7 @@ export default function FAQ() {
                 <li>
                     <h2>What Features Are Connected to User Data?</h2>
                     <p>
-                        Logged-in users can add or remove favorites from their personal &quot;My List&quot; and change their username which is stored 
+                        Logged-in users can add or remove favorites from their personal "My List" and change their username which is stored 
                         in Firebase and retrieved on each visit.
                     </p>
                 </li>
