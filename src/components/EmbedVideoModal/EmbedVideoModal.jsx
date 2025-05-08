@@ -7,7 +7,7 @@ export default function EmbedVideoModal({ url, title }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const openModal = (e) => {
-    console.log('Opening video modal')
+    console.log(&apos;Opening video modal&apos;)
     e.stopPropagation();
     e.preventDefault();
     setIsOpen(true)
@@ -17,11 +17,11 @@ export default function EmbedVideoModal({ url, title }) {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = &apos;hidden&apos;
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = &apos;&apos;
     }
-    return () => document.body.style.overflow = '';
+    return () => document.body.style.overflow = &apos;&apos;;
   }, [isOpen])
 
   const modal = (
@@ -45,12 +45,12 @@ export default function EmbedVideoModal({ url, title }) {
             className={styles["video-iframe"]}
             width="80%"
             height="80%"
-            onError={() => console.log("Video failed to load")}
+            onError={() => console.log(&quot;Video failed to load&quot;)}
             src={url}
             title={title}
-            frameBorder="0"
+            frameBorder=&quot;0&quot;
             allowFullScreen
-            aria-describedby="video-description"
+            aria-describedby=&quot;video-description&quot;
           />
         </div>
       </div>

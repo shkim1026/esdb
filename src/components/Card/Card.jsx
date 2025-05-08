@@ -12,7 +12,7 @@ export default function Card({ data, fetchDetails }) {
         tabIndex="0"
         onClick={fetchDetails}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
             fetchDetails();
           }
         }}

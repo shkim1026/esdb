@@ -26,25 +26,25 @@ export default function App({ Component, pageProps }) {
   // Fetch favorites from firestore
   const fetchFavorites = useCallback(async () => {
     if (!user) {
-      console.error("User not logged in")
+      console.error(&quot;User not logged in&quot;)
       setFavorites([])
       return [];
     }
 
     try {
-      const favoritesRef = collection(db, "users", user.uid, "favorites")
+      const favoritesRef = collection(db, &quot;users&quot;, user.uid, &quot;favorites&quot;)
       const snapshot = await getDocs(favoritesRef)
 
       const fetchedFavorites = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
-      console.log("Favorites fetched from Firestore:", fetchedFavorites)
+      console.log(&quot;Favorites fetched from Firestore:&quot;, fetchedFavorites)
       setFavorites(fetchedFavorites)
       return fetchedFavorites
 
     } catch (error) {
-      console.log("Error fetching favorites:", error)
+      console.log(&quot;Error fetching favorites:&quot;, error)
       return []
     }
   }, [user])
