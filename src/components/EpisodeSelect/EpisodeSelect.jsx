@@ -9,8 +9,8 @@ export default function EpisodeSelect({ seasons, showId, title }) {
     seasonNo: season.season_number, 
     episodes: Array.from({ length: season.episode_count }, (_, i) => i +1 ),
   }))
-  console.log(seasons, 'Seasons prop returns an array of seasons')
-  console.log(tvShow, "Array of Seasons w/ array of Episodes")
+  console.log(seasons, &apos;Seasons prop returns an array of seasons&apos;)
+  console.log(tvShow, &quot;Array of Seasons w/ array of Episodes&quot;)
 
   //Sets initial episodes select options
   const [episodesList, setEpisodesList] = useState(() => {
@@ -39,7 +39,7 @@ export default function EpisodeSelect({ seasons, showId, title }) {
     setSelection(prev => ({...prev, episode: selectedEpisode}))
   }
 
-  console.log(selection, "URL PARAM FOR API")
+  console.log(selection, &quot;URL PARAM FOR API&quot;)
   
   const url = `https://vidsrc.xyz/embed/tv?tmdb=${selection.id}&season=${selection.season}&episode=${selection.episode}&ds_lang=en`
 

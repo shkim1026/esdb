@@ -33,11 +33,11 @@ export default function Account() {
                 setUser(firebaseUser)
                 setCreatedAt(new Date(firebaseUser.metadata.creationTime).toLocaleString())
 
-                const docRef = doc(db, "users", firebaseUser.uid);
+                const docRef = doc(db, &quot;users&quot;, firebaseUser.uid);
                 const docSnap = await getDoc(docRef)
                 if (docSnap.exists()) {
-                    setUsername(docSnap.data().username || "")
-                    setOriginalUsername(docSnap.data().username || "")
+                    setUsername(docSnap.data().username || &quot;&quot;)
+                    setOriginalUsername(docSnap.data().username || &quot;&quot;)
                 }
                 setLoading(false)
             } else {
@@ -55,13 +55,13 @@ export default function Account() {
         if (user && !user.emailVerified) {
             try {
                 await sendEmailVerification(user)
-                alert("Verification email sent! Please check your inbox and verify your email.")
+                alert(&quot;Verification email sent! Please check your inbox and verify your email.&quot;)
             } catch (error) {
-                console.log("Error sending verification email:", error)
-                alert("Failed to send verification email: " + error.message)
+                console.log(&quot;Error sending verification email:&quot;, error)
+                alert(&quot;Failed to send verification email: &quot; + error.message)
             }
         } else {
-            alert("Your email is already verified")
+            alert(&quot;Your email is already verified&quot;)
         }
     }
 
@@ -73,13 +73,13 @@ export default function Account() {
     const handleUsernameChange = async () => {
         if (!username) return;
         try {
-            const docRef = doc(db, "users", user.uid)
+            const docRef = doc(db, &quot;users&quot;, user.uid)
             await updateDoc(docRef, { username })
-            setStatus("Username updated sucessfully.")
+            setStatus(&quot;Username updated sucessfully.&quot;)
             setShowUsernameInput(false)
         } catch (error) {
             console.log(error)
-            setStatus("Error updating username.")
+            setStatus(&quot;Error updating username.&quot;)
         }
     }
 
@@ -87,14 +87,14 @@ export default function Account() {
         const auth = getAuth()
         const currentUser = auth.currentUser
 
-        if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+        if (confirm(&quot;Are you sure you want to delete your account? This cannot be undone.&quot;)) {
             try {
-                await deleteDoc(doc(db, "users", currentUser.uid))
+                await deleteDoc(doc(db, &quot;users&quot;, currentUser.uid))
                 await deleteUser(currentUser)
-                setStatus("Account deleted.")
+                setStatus(&quot;Account deleted.&quot;)
             } catch (error) {
                 console.log(error)
-                setStatus("Error deleting account. You may need to re-authenticate.")
+                setStatus(&quot;Error deleting account. You may need to re-authenticate.&quot;)
             }
         }
     }
@@ -102,10 +102,10 @@ export default function Account() {
     const handleSignOut = async () => {
         try {
             await signOut(auth)
-            console.log("User signed out")
-            router.push('/')
+            console.log(&quot;User signed out&quot;)
+            router.push(&apos;/&apos;)
         } catch (error) {
-            console.log("Error signing out:", error)
+            console.log(&quot;Error signing out:&quot;, error)
         }
     }
 
@@ -135,7 +135,7 @@ export default function Account() {
                                     value={username} 
                                     placeholder={username} 
                                     onChange={(e) => setUsername(e.target.value)} 
-                                    aria-label="Edit Username" 
+                                    aria-label=&quot;Edit Username&quot; 
                                 />
                                 : <p className={styles.username}>{username}</p>
                             }
@@ -157,7 +157,7 @@ export default function Account() {
                                 <button 
                                     className={styles.changeBtn} 
                                     onClick={() => {setUsername(originalUsername); setShowUsernameInput(false)}} 
-                                    aria-label="Cancel username change">
+                                    aria-label=&quot;Cancel username change&quot;>
                                     <small>Cancel</small>
                                 </button>
                             </div>
@@ -184,7 +184,7 @@ export default function Account() {
                         <div className={styles.flex}>
                             <MdVerifiedUser className={styles.marginR}/>
                             <p>
-                                <strong>Email status:</strong>{" "}
+                                <strong>Email status:</strong>{&quot; &quot;}
                                 {user.emailVerified ? (
                                     <> Verified <span className={`${styles.vAlign} ${styles.verified}`}><MdVerified className={styles.vAlign}/></span> </>
                                 ) : (

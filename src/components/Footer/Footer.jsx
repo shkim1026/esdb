@@ -23,7 +23,7 @@ export default function Footer() {
                         data displayed is for demonstration purposes only.
                     </p>
                     <p className={styles.hostingDisclaimer}>
-                        No files are hosted on this website's servers. All media content is accessed via links to third-party services.
+                        No files are hosted on this website&apos;s servers. All media content is accessed via links to third-party services.
                     </p>
                 </div>
             </div>

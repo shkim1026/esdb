@@ -21,19 +21,19 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(&apos;&apos;);
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log('Signed in as user:', user);
+      console.log(&apos;Signed in as user:&apos;, user);
 
       if (onLogin) {
         onLogin(email, password);
       }
     } catch (err) {
       console.log(err.message);
-      setError("Invalid email and/or password");
+      setError(&quot;Invalid email and/or password&quot;);
     }
   };
 
@@ -108,7 +108,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
 
         <p className={styles.noAccount}>
             <small>
-              Don't have an account?{" "}
+              Don&apos;t have an account?{&quot; &quot;}
               <button
                 type="button"
                 className={styles.signUp}

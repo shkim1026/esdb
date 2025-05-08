@@ -15,7 +15,7 @@ export default function Terms() {
             <h1 id="terms-title" className={styles.title}>Terms of Use</h1>
             <p><strong>Last updated:</strong> <time dateTime="2025-04-24">April 24, 2025</time></p>
             <p>
-                Welcome to the Entertainment Streaming Database ("App"), developed and maintained as a portfolio project 
+                Welcome to the Entertainment Streaming Database (&quot;App&quot;), developed and maintained as a portfolio project 
                 by Steven H. Kim. By accessing or using this App, you agree to the following terms and conditions. 
                 If you do not agree with these terms, please do not use the App.
             </p>
@@ -59,7 +59,7 @@ export default function Terms() {
                     <section aria-labelledby="warranties-heading">
                         <h2 id="warranties-heading">No Warranties</h2>
                         <p>
-                            This App is provided "as-is" without warranties of any kind. While the developer has made efforts to ensure 
+                            This App is provided &quot;as-is&quot; without warranties of any kind. While the developer has made efforts to ensure 
                             functionality and stability, there are no guarantees regarding uptime, data accuracy, or performance.
                         </p>
                     </section>
@@ -101,7 +101,7 @@ export default function Terms() {
                         <h2 id="contact-heading">Contact</h2>
                         <p>
                             If you have questions or concerns about these Terms of Use, you can contact the developer at 
-                            {" "}<a href="mailto:shkim1026@gmail.com">shkim1026@gmail.com</a>
+                            {&quot; &quot;}<a href="mailto:shkim1026@gmail.com">shkim1026@gmail.com</a>
                         </p>
                     </section>
                 </li>

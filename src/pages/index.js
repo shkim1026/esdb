@@ -15,9 +15,9 @@ export default function Home({ refreshFavorites, user, favorites }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const options = useMemo(() => ({
-    method: 'GET',
+    method: &apos;GET&apos;,
     headers: {
-      accept: 'application/json',
+      accept: &apos;application/json&apos;,
       Authorization: `Bearer ${apiKeyReadAccess}`
     }
   }), [apiKeyReadAccess]);
@@ -26,10 +26,10 @@ export default function Home({ refreshFavorites, user, favorites }) {
     const fetchData = async () => {
       try {
         const urls = [
-          'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
-          'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
-          'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
-          'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1'
+          &apos;https://api.themoviedb.org/3/trending/movie/day?language=en-US&apos;,
+          &apos;https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&apos;,
+          &apos;https://api.themoviedb.org/3/trending/tv/day?language=en-US&apos;,
+          &apos;https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1&apos;
         ];
         const [movieRes, topMovieRes, tvRes, topTvRes] = await Promise.all(
           urls.map(url => fetch(url, options).then(res => res.json()))
