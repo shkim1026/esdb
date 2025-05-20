@@ -483,7 +483,7 @@ export default function Header({ user, refreshFavorites}) {
               </div>
             ) : (
               <button
-                className={styles["header--login-btn"]}
+                className={`${styles["header--login-btn"]} ${styles["login-btn--desktop"]}`}
                 onClick={() => setShowLogin(true)}
                 aria-label="Login"
               >

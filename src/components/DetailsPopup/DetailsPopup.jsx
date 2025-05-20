@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import EpisodeSelect from '../EpisodeSelect/EpisodeSelect'
 import EmbedVideoModal from '../EmbedVideoModal/EmbedVideoModal'
 import styles from './DetailsPopup.module.css'
@@ -8,6 +8,18 @@ import { IoClose } from 'react-icons/io5'
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType, refreshFavorites }) {
+
+  useEffect(() => {
+    document.documentElement.classList.add('no-scroll');
+    document.body.classList.add('no-scroll')
+
+    return () => {
+      document.documentElement.classList.remove('no-scroll');
+      document.body.classList.remove('no-scroll')
+    }
+  }, [])
+
+  if (!item) return null;
 
   console.log("Selected Item in DetailsPopup", item)
   console.log("Selected Item in", mediaType)
