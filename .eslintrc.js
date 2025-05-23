@@ -8,5 +8,8 @@ module.exports = {
   extends: ['next', 'next/core-web-vitals'],
   rules: {
     'no-undef': 'off',
+    'react/no-unescaped-entities': 'off',
+    '@next/next/no-img-element': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 };
