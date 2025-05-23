@@ -53,7 +53,7 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
     } finally {
       setLoading(false)
     }
-  },[loading])
+  },[loading, options])
 
   // Closes Popup Modal
   const closePopup = () => {

@@ -9,6 +9,8 @@ import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType, refreshFavorites }) {
 
+  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites(item.id)
+
   useEffect(() => {
     document.documentElement.classList.add('no-scroll');
     document.body.classList.add('no-scroll')
@@ -42,8 +44,6 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
   const rating = Math.floor(item.vote_average * 10) / 10
 
   const movieUrl = `https://vidsrc.xyz/embed/movie/${item.id}/`
-
-  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites(item.id)
 
   return (
     <div
