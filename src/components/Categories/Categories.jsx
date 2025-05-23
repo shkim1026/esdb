@@ -202,14 +202,14 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
 
       {loading && <LoadingSpinner />}
 
-      {selectedItem && 
+      {selectedItem && (
         <DetailsPopup 
           item={selectedItem} 
           onClose={closePopup} 
           mediaType={selectedItem.mediaType} 
           refreshFavorites={refreshFavorites}
         />
-      }
+      )}
     </div>
   )
 }

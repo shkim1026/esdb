@@ -37,6 +37,10 @@
     font-family: 'Bebas neue', sans-serif;
 }
 
+.login-btn--desktop {
+    display: none;
+}
+
 .header--logged-in {
     display: flex;
     align-items: center;
@@ -238,6 +242,10 @@
     .hamburger-nav {
         display: none;
     }
+
+    .login-btn--desktop {
+        display: block;
+    }   
 
     .header--search-btn {
         cursor: pointer;

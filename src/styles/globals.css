@@ -27,6 +27,12 @@ html, body {
   overflow-x: hidden; 
 }
 
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
 body {
   margin: 0;
   display: flex;

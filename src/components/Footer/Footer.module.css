@@ -17,7 +17,9 @@
 
 .logo {
     width: 10rem;
-    height: fit-content;
+    /* height: fit-content; */
+    height: auto;
+    display: block;
     justify-self: center;
 }
 
