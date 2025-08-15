@@ -14,10 +14,7 @@ import { auth, db } from '../../../firebase/firebase'
 import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 export default function Categories({data, refreshFavorites, user, favorites}) {
-  console.log(data.tv, "tv")
-  console.log(data.movies, "movie")
-  console.log(data.topMovies, "top movies")
-  console.log(data.topTv, "top tv")
+
   const categories = [
     {title: "Trending Movies", key: "movies", mediaType: "movie"},
     {title: "Trending TV Series", key: "tv", mediaType: "tv"},
@@ -40,13 +37,12 @@ export default function Categories({data, refreshFavorites, user, favorites}) {
 
   // Fetches movie/TV show details
   const fetchDetails = useCallback(async (id, mediaType) => {
-    console.log(`Fetching details for ${mediaType} with ID: ${id}`);
+
     if (loading) return;
     setLoading(true)
     try {
       const res = await fetch(`https://api.themoviedb.org/3/${mediaType}/${id}?language=en-US`, options)
       const data = await res.json()
-      console.log("Fetched details:", data);
       setSelectedItem({...data, mediaType});
     } catch (error) {
       console.log("Error fetching details:", error)

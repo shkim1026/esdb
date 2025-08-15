@@ -299,9 +299,12 @@ export default function Header({ user, refreshFavorites}) {
   const [username, setUsername] = useState(null)
 
   useEffect(() => {
+    console.log('Setting up auth listener');
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log('Auth state changed:', currentUser);
       if (currentUser) {
         setAuthUser(currentUser)
+        console.log('Fetching user data for:', currentUser.uid)
         const userDoc = await getDoc(doc(db, "users", currentUser.uid))
         if (userDoc.exists()) {
           console.log("username:", userDoc.data().username)
@@ -310,11 +313,34 @@ export default function Header({ user, refreshFavorites}) {
       } else {
         setAuthUser(null)
         setUsername(null)
+        console.log('User does not exist')
       }
     })
 
     return () => unsubscribe();
   }, [])
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+  //     setAuthUser(currentUser);
+
+  //     if (currentUser) {
+  //       fetchUsername(currentUser.uid);
+  //     } else {
+  //       setUsername(null);
+  //     }
+  //   });
+
+  //   async function fetchUsername(uid) {
+  //     const userRef = doc(db, 'users', uid);
+  //     const userDoc = await getDoc(userRef);
+  //     if (userDoc.exists()) {
+  //       setUsername(userDoc.data().username);
+  //     }
+  //   }
+
+  //   return () => unsubscribe();
+  // }, []);
 
   // User sign out
   const handleSignOut = async () => {
@@ -345,6 +371,7 @@ export default function Header({ user, refreshFavorites}) {
     setShowDropdown(!showDropdown)
   }
 
+  console.log('Render state - user:', !!user, 'username:', username, 'isHamburgerVisible:', isHamburgerVisible);
   return (
     <>
       <header className={styles["header"]}>
@@ -358,6 +385,7 @@ export default function Header({ user, refreshFavorites}) {
             />
           ) : (
             <GiHamburgerMenu
+              data-testid="open-hamburger-menu"
               className={styles["header--mobile-hamburger"]}
               onClick={() => {
                 toggleBurger();
@@ -447,6 +475,7 @@ export default function Header({ user, refreshFavorites}) {
 
             {user ? (
               <div 
+                data-testid={'profile-wrapper-desktop'}
                 className={styles["header--profile-wrapper"]} 
                 onMouseEnter={handleMouseEnter} 
                 onMouseLeave={handleMouseLeave}
@@ -483,6 +512,7 @@ export default function Header({ user, refreshFavorites}) {
               </div>
             ) : (
               <button
+                data-testid="login-button-desktop"
                 className={`${styles["header--login-btn"]} ${styles["login-btn--desktop"]}`}
                 onClick={() => setShowLogin(true)}
                 aria-label="Login"
@@ -492,6 +522,11 @@ export default function Header({ user, refreshFavorites}) {
             )}
 
             <LoginModal
+              data-testid="login-modal-desktop"
+              closeTestId="login-modal-close-desktop"
+              switchTestId="switch-to-signup-btn-desktop"
+              submitLogin="submit-login-desktop"
+              googleSignIn="google-signin-desktop"
               open={showLogin}
               onClose={() => setShowLogin(false)}
               onLogin={handleLogin}
@@ -505,6 +540,7 @@ export default function Header({ user, refreshFavorites}) {
             />
 
             <SignUpModal
+              data-testid="signup-modal-desktop"
               open={showSignup}
               onClose={() => setShowSignup(false)}
               onSignup={handleSignup}
@@ -529,7 +565,7 @@ export default function Header({ user, refreshFavorites}) {
           <>
             <div className={styles["header--logged-in"]}>
               <FaUserCircle className={styles["header--user-profile"]} />
-              <h2 id="username" aria-live="polite">{username}</h2>
+              <h2 id="username" data-testid="username-mobile" aria-live="polite">{username}</h2>
             </div>
             <hr />
           </>
@@ -563,6 +599,7 @@ export default function Header({ user, refreshFavorites}) {
         {/* Sign Out / Login Button */}
         {user ? (
           <button
+            data-testid="signout-button-mobile"
             className={styles["mobile--sign-out-btn"]}
             onClick={handleSignOut}
             aria-label="Sign out"
@@ -571,6 +608,7 @@ export default function Header({ user, refreshFavorites}) {
           </button>
         ) : (
           <button
+            data-testid="login-button-mobile"
             className={styles["header--login-btn"]}
             onClick={() => setShowLogin(true)}
             aria-label="Login"
@@ -582,6 +620,8 @@ export default function Header({ user, refreshFavorites}) {
 
       {/* Login Modal */}
       <LoginModal
+        data-testid="login-modal-mobile"
+        closeTestId="login-modal-close-mobile"
         open={showLogin}
         onClose={() => setShowLogin(false)}
         onLogin={handleLogin}
@@ -597,6 +637,7 @@ export default function Header({ user, refreshFavorites}) {
 
       {/* Sign Up Modal */}
       <SignUpModal
+        data-testid="signup-modal-mobile"
         open={showSignup}
         onClose={() => setShowSignup(false)}
         onSignup={handleSignup}

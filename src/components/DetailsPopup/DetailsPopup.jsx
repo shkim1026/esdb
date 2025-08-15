@@ -9,6 +9,8 @@ import { BsCheckCircle, BsPlusCircle } from 'react-icons/bs'
 
 const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType, refreshFavorites }) {
 
+  if (!item) return null;
+
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites(item.id)
 
   useEffect(() => {
@@ -20,11 +22,6 @@ const DetailsPopup = React.memo(function DetailsPopup({ item, onClose, mediaType
       document.body.classList.remove('no-scroll')
     }
   }, [])
-
-  if (!item) return null;
-
-  console.log("Selected Item in DetailsPopup", item)
-  console.log("Selected Item in", mediaType)
 
   const genres = item.genres.map(genre => genre.name).join(", ")
 

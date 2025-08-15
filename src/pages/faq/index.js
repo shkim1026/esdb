@@ -63,10 +63,10 @@ export default function FAQ() {
                     <h2>What Features Could Be Added in the Future?</h2>
                     <ul className={styles.questionUl}>
                         <li>&#10004; <s>Social logins (Google, Github)</s></li>
+                        <li>&#10004; <s>Unit/integration testing with Jest + React Testing Library</s></li>
                         <li>User reviews & ratings</li>
                         <li>Continue Watching section</li>
                         <li>Light & dark mode toggle</li>
-                        <li>Unit/integration testing with Jest + React Testing Library</li>
                     </ul>
                 </li>
             </ul>

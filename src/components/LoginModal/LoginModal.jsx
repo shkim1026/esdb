@@ -6,7 +6,20 @@ import { FaUser, FaLock, FaGoogle, FaGithub } from 'react-icons/fa';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
 
-export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, onGoogleLogin, onGitHubLogin }) {
+export default function LoginModal({ 
+  open, 
+  onClose, 
+  onLogin, 
+  onSwitchToSignup, 
+  onGoogleLogin, 
+  onGitHubLogin,
+  closeTestId, 
+  switchTestId,
+  submitLogin,
+  googleSignIn,
+  ...rest
+}) 
+{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,7 +39,6 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log('Signed in as user:', user);
 
       if (onLogin) {
         onLogin(email, password);
@@ -37,8 +49,11 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
     }
   };
 
+  if (!open) return null;
+
   return (
     <div
+      {...rest}
       className={`${styles.overlay} ${open ? styles.open : ''}`}
       role="dialog"
       aria-modal="true"
@@ -50,6 +65,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
           className={styles.closeButton}
           onClick={onClose}
           aria-label="Close sign-in modal"
+          data-testid={closeTestId}
         >
           <IoClose />
         </button>
@@ -101,7 +117,12 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
 
           {error && <p className={styles.errorMessage} role="alert">{error}</p>}
 
-          <button type="submit" className={styles.submitButton}>
+          <button 
+            type="submit" 
+            className={styles.submitButton} 
+            aria-label="submit login"
+            data-testid={submitLogin}
+          >
             Sign In
           </button>
         </form>
@@ -110,6 +131,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
             <small>
               Don't have an account?{" "}
               <button
+                data-testid={switchTestId}
                 type="button"
                 className={styles.signUp}
                 onClick={onSwitchToSignup}
@@ -120,7 +142,7 @@ export default function LoginModal({ open, onClose, onLogin, onSwitchToSignup, o
             </small>
         </p>
 
-        <button className={socialLoginStyles.socialLoginBtn} onClick={onGoogleLogin}>
+        <button className={socialLoginStyles.socialLoginBtn} onClick={onGoogleLogin} data-testid={googleSignIn}>
           <span className={socialLoginStyles.socialIcon}><FaGoogle /></span>
           Sign in with Google
         </button>

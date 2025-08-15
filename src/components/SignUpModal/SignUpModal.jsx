@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '../../../firebase/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 
-export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, onGoogleLogin, onGitHubLogin }) {
+export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, onGoogleLogin, onGitHubLogin, ...rest }) {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -66,8 +66,11 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
     }
   }
 
+  if (!open) return null;
+
   return (
     <div
+      {...rest}
       className={`${styles.overlay} ${open ? styles.open : ''}`}
       role="dialog"
       aria-modal="true"
@@ -93,7 +96,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputWrapper}>
-            <label htmlFor="signup-username">Username</label>
+            <label htmlFor="signup-username" id="label-username">Username</label>
             <div className={styles.inputGroup}>
               <FaUser className={styles.icon} aria-hidden="true" />
               <input
@@ -106,13 +109,13 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 ref={usernameInputRef}
-                aria-labelledby="signup-username"
+                aria-labelledby="label-username"
               />
             </div>
           </div>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="signup-email">Email</label>
+            <label htmlFor="signup-email" id="label-email">Email</label>
             <div className={styles.inputGroup}>
               <IoMdMail className={styles.icon} aria-hidden="true" />
               <input
@@ -124,7 +127,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                aria-labelledby="signup-email"
+                aria-labelledby="label-email"
                 aria-describedby="email-helper"
               />
             </div>
@@ -134,7 +137,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
           </div>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="signup-password">Password</label>
+            <label htmlFor="signup-password" id="label-password">Password</label>
             <div className={styles.inputGroup}>
               <FaUnlock className={styles.icon} aria-hidden="true" />
               <input
@@ -146,7 +149,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                aria-labelledby="signup-password"
+                aria-labelledby="label-password"
                 aria-describedby="password-helper"
               />
             </div>
@@ -156,7 +159,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
           </div>
 
           <div className={styles.inputWrapper}>
-            <label htmlFor="signup-confirm-password">Confirm Password</label>
+            <label htmlFor="signup-confirm-password" id="label-confirm-password">Confirm Password</label>
             <div className={styles.inputGroup}>
               <FaLock className={styles.icon} aria-hidden="true" />
               <input
@@ -168,7 +171,7 @@ export default function SignUpModal({ open, onClose, onSignup, onSwitchToLogin, 
                 className={styles.input}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                aria-labelledby="signup-confirm-password"
+                aria-labelledby="label-confirm-password"
                 aria-describedby="confirm-password-helper"
               />
             </div>

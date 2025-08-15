@@ -8,21 +8,23 @@ export default function useFavorites(itemId) {
 
 //   Set item to isFavorite state
   useEffect(() => {
+    const user = auth.currentUser;
+    if (!itemId || !user) return setIsFavorite(false);
+
     const checkStatus = async () => {
       try {
-        const user = auth.currentUser
-        if (!user) return setIsFavorite(false)
-
-        const favRef = doc(db, "users", user.uid, "favorites", itemId.toString())
-        const favSnap = await getDoc(favRef)
-        setIsFavorite(favSnap.exists())
+        const favRef = doc(db, "users", user.uid, "favorites", itemId.toString());
+        const favSnap = await getDoc(favRef);
+        console.log("favSnap.exists:", favSnap.exists());
+        setIsFavorite(favSnap.exists());
       } catch (err) {
-        console.error("Error checking favorite status:", err)
+        console.error("Error checking favorite status:", err);
       }
-    }
+    };
 
-    if (itemId) checkStatus()
-  }, [itemId])
+    checkStatus();
+  }, [itemId, auth.currentUser?.uid]); 
+
 
 //   Add To Favorites
   const addToFavorites = async (item, mediaType) => {

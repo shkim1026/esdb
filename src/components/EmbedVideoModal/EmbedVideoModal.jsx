@@ -7,7 +7,6 @@ export default function EmbedVideoModal({ url, title }) {
   const [isOpen, setIsOpen] = useState(false)
 
   const openModal = (e) => {
-    console.log('Opening video modal')
     e.stopPropagation();
     e.preventDefault();
     setIsOpen(true)
